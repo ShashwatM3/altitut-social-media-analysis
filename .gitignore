@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+dist/
+.env
+.env.*
+!.env.example
+
+# Node / frontend
+node_modules/
+.next/
+dist/
+.cache/
+
+# Terraform
+**/.terraform/
+*.tfstate
+*.tfstate.backup
+*.tfvars
+!example.tfvars
+
+# Misc
+.DS_Store
+*.log
