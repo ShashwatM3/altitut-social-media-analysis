@@ -16,8 +16,10 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Install tooling
-        run: pip install ruff mypy bandit
+      - name: Install backend deps and tooling
+        run: |
+          pip install -r backend/api/requirements.txt
+          pip install ruff mypy bandit
 
       - name: Ruff
         run: ruff check backend/

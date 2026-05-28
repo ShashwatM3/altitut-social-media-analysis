@@ -22,15 +22,15 @@ def _env(name: str, default: str = "") -> str:
     return value.strip() if value and value.strip() else default
 
 
-@dataclass(slots=True)
+@dataclass
 class AppConfig:
     name: str = "ALTITUT Social Media Analysis API"
     version: str = "0.1.0"
 
 
-@dataclass(slots=True)
+@dataclass
 class DatabaseConfig:
-    dsn: str = "postgresql://localhost:5432/altitut_social_media_analysis"
+    dsn: str = "postgresql://localhost"
     schema: str = "public"
 
     @property
@@ -38,13 +38,13 @@ class DatabaseConfig:
         return _env("DATABASE_URL", self.dsn)
 
 
-@dataclass(slots=True)
+@dataclass
 class RuntimeConfig:
     app: AppConfig = field(default_factory=AppConfig)
     database: DatabaseConfig = field(default_factory=DatabaseConfig)
 
 
-@dataclass(slots=True)
+@dataclass
 class ApifyProviderConfig:
     name: str = "apify"
     enabled: bool = True
@@ -66,12 +66,12 @@ def load_runtime_config() -> RuntimeConfig:
     database = raw.get("database", {})
     return RuntimeConfig(
         app=AppConfig(
-            name=app.get("name", AppConfig.name),
-            version=app.get("version", AppConfig.version),
+            name=app.get("name", "ALTITUT Social Media Analysis API"),
+            version=app.get("version", "0.1.0"),
         ),
         database=DatabaseConfig(
-            dsn=database.get("dsn", DatabaseConfig.dsn),
-            schema=database.get("schema", DatabaseConfig.schema),
+            dsn=database.get("dsn", "postgresql://localhost"),
+            schema=database.get("schema", "public"),
         ),
     )
 
@@ -80,12 +80,12 @@ def load_apify_config() -> ApifyProviderConfig:
     raw = _load_toml(CONFIG_DIR / "providers" / "apify.toml")
     provider = raw.get("provider", {})
     return ApifyProviderConfig(
-        name=provider.get("name", ApifyProviderConfig.name),
-        enabled=bool(provider.get("enabled", ApifyProviderConfig.enabled)),
-        token_env=provider.get("token_env", ApifyProviderConfig.token_env),
-        actor_id=provider.get("actor_id", ApifyProviderConfig.actor_id),
-        dataset_id=provider.get("dataset_id", ApifyProviderConfig.dataset_id),
-        default_platform=provider.get("default_platform", ApifyProviderConfig.default_platform),
-        docs_url=provider.get("docs_url", ApifyProviderConfig.docs_url),
+        name=provider.get("name", "apify"),
+        enabled=bool(provider.get("enabled", True)),
+        token_env=provider.get("token_env", "APIFY_TOKEN"),
+        actor_id=provider.get("actor_id", ""),
+        dataset_id=provider.get("dataset_id", ""),
+        default_platform=provider.get("default_platform", "instagram"),
+        docs_url=provider.get("docs_url", "https://docs.apify.com/"),
         setup_steps=list(provider.get("setup_steps", [])),
     )
