@@ -1,10 +1,9 @@
 from __future__ import annotations
 
-from pathlib import Path
 import os
+from pathlib import Path
 
 from backend.settings import ROOT_DIR, load_runtime_config
-
 
 MIGRATIONS_DIR = ROOT_DIR / "backend" / "migrations"
 

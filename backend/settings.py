@@ -1,11 +1,10 @@
 from __future__ import annotations
 
+import os
+import tomllib
 from dataclasses import dataclass, field
 from pathlib import Path
-import os
 from typing import Any
-import tomllib
-
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
 CONFIG_DIR = ROOT_DIR / "configs"

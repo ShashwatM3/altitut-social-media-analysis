@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
 from uuid import uuid4
 
@@ -11,7 +11,7 @@ from backend.db.client import connection
 
 
 def _utcnow() -> datetime:
-    return datetime.now(timezone.utc)
+    return datetime.now(UTC)
 
 
 def _json_payload(value: dict[str, Any] | list[Any] | None) -> Json:
@@ -155,8 +155,7 @@ def list_competitors(approved: bool | None = None) -> list[dict[str, Any]]:
         query += " WHERE approved = %s"
         params.append(approved)
     query += " ORDER BY created_at DESC, name ASC"
-    with connection() as conn:
-        with conn.cursor(row_factory=dict_row) as cur:
-            cur.execute(query, params)
-            rows = cur.fetchall()
+    with connection() as conn, conn.cursor(row_factory=dict_row) as cur:
+        cur.execute(query, params)
+        rows = cur.fetchall()
     return [dict(row) for row in rows]
