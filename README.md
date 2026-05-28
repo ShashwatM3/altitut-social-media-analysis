@@ -47,7 +47,7 @@ pip install -r backend/api/requirements.txt
 
 2. If you want to run the API with a real local PostgreSQL database or use the migration helpers, set `DATABASE_URL` in your shell or update `configs/runtime.toml`.
 
-3. If you want to enable the Apify integration later, set `APIFY_TOKEN` in your shell and fill in `configs/providers/apify.toml`.
+3. If you want to enable the Apify integration later, set `APIFY_TOKEN` in your shell and fill in `configs/providers/apify.toml` with the Apify actor you want to run.
 
 4. Start the API:
 
@@ -58,7 +58,7 @@ uvicorn backend.api.main:app --reload
 ## Usage
 - Open `http://localhost:8000/health` to verify the backend is running.
 - Open `http://localhost:8000/integrations/apify/status` to see whether the Apify integration is ready or still needs setup.
-- Use `POST /competitor-scout` to create a scout run record and see setup-required handling when Apify is not configured.
+- Use `POST /competitor-scout` to run the Apify-backed scout flow when configured; it records setup-required state until `APIFY_TOKEN` and `provider.actor_id` are present.
 - Use `GET /competitors`, `POST /competitors`, and `POST /competitors/{competitor_id}/approve` to manage competitor records in local PostgreSQL.
 - Apply `backend/migrations/001_init.sql` to your local PostgreSQL database, or run `python -m backend.db.apply` after installing `psycopg[binary]`.
 - Docker support still exists at the repository root via `docker-compose.yml` and the root Dockerfile; this quickstart uses the local Uvicorn path.

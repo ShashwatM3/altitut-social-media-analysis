@@ -86,3 +86,16 @@ Verification: compileall passed; app routes load; Apify status returns setup_req
 Notes: Documentation clarified that Docker support still exists at the repo root and that DATABASE_URL is needed for migration/helper flows
 Outstanding: Move on to the next BMAD phase or begin QA-driven issue triage if desired.
 ---
+[DEVELOPER] [SESSION-2026-05-28] [TURN #11] [2026-05-28 12:19]
+Phase: 2 — Competitor Scout Backend
+Task: Wired the real Apify-backed competitor scout execution path, normalization, and persistence flow.
+Plan approved: Yes
+Files created/modified: backend/api/main.py, backend/connectors/apify.py, backend/settings.py, backend/README.md, README.md
+Config files touched: .github/workflows/lint.yml unchanged; no config changes needed for this step
+Design system conventions applied: the backend still returns explicit setup-required states, but now executes Apify when configured and persists normalized competitor records in PostgreSQL
+Dependencies verified: backend compileall passed; ruff passed; mypy passed; app imports and routes load successfully
+Branch: main
+Handed off to QA: No
+Phase transition: Phase 2 execution advanced
+Outstanding: Need the actual Apify actor ID and compatible input schema from the user to make the scout call fully operational in their environment.
+---
