@@ -1,12 +1,11 @@
 from __future__ import annotations
 
+import http.client
 import json
 import re
 from dataclasses import dataclass
 from typing import Any
-from urllib.error import HTTPError, URLError
-from urllib.parse import quote
-from urllib.request import Request, urlopen
+from urllib.parse import quote, urlparse
 
 from backend.connectors.base import IntegrationStatus, SetupRequiredResponse
 from backend.settings import load_apify_config
@@ -205,37 +204,47 @@ class ApifyConnector:
         token: str,
         payload: dict[str, Any] | None = None,
     ) -> Any:
-        data = None
+        parsed = urlparse(url)
+        if parsed.scheme != "https":
+            raise ApifyExecutionError("Apify API requests must use HTTPS.")
+        host = parsed.hostname or "api.apify.com"
+        connection = http.client.HTTPSConnection(host, parsed.port or 443, timeout=180)
+        body = json.dumps(payload).encode("utf-8") if payload is not None else None
         headers = {
             "Accept": "application/json",
             "Authorization": f"Bearer {token}",
         }
-        if payload is not None:
-            data = json.dumps(payload).encode("utf-8")
+        if body is not None:
             headers["Content-Type"] = "application/json"
-        request = Request(url, data=data, headers=headers, method=method)
+        path = parsed.path or "/"
+        if parsed.query:
+            path = f"{path}?{parsed.query}"
         try:
-            with urlopen(request, timeout=180) as response:
-                body = response.read().decode("utf-8")
-        except HTTPError as exc:
-            raise _error_from_http(exc) from exc
-        except URLError as exc:
-            raise ApifyExecutionError(f"Unable to reach Apify API: {exc.reason}") from exc
-        if not body:
+            connection.request(method, path, body=body, headers=headers)
+            response = connection.getresponse()
+            body_text = response.read().decode("utf-8")
+        except OSError as exc:
+            raise ApifyExecutionError(f"Unable to reach Apify API: {exc}") from exc
+        finally:
+            connection.close()
+        if response.status >= 400:
+            raise _error_from_status(response.status, body_text)
+        if not body_text:
             return {}
         try:
-            return json.loads(body)
+            return json.loads(body_text)
         except json.JSONDecodeError as exc:
             raise ApifyExecutionError("Apify returned invalid JSON.") from exc
 
 
-def _error_from_http(exc: HTTPError) -> ApifyExecutionError:
-    message = exc.read().decode("utf-8", errors="replace") if hasattr(exc, "read") else str(exc)
-    if exc.code in {401, 403, 404, 422}:
+def _error_from_status(status_code: int, message: str) -> ApifyExecutionError:
+    if status_code in {401, 403, 404, 422}:
         return ApifySetupRequiredError(
-            f"Apify setup needs attention (HTTP {exc.code}): {message or exc.reason}"
+            f"Apify setup needs attention (HTTP {status_code}): {message or 'no response body'}"
         )
-    return ApifyExecutionError(f"Apify request failed (HTTP {exc.code}): {message or exc.reason}")
+    return ApifyExecutionError(
+        f"Apify request failed (HTTP {status_code}): {message or 'no response body'}"
+    )
 
 
 def _unwrap_data(payload: Any) -> dict[str, Any]:

@@ -112,3 +112,16 @@ Handed off to QA: No
 Phase transition: Phase 2 still active
 Outstanding: Ready to run against the provided Instagram profiles once the Apify token is exported in the local environment.
 ---
+[DEVELOPER] [SESSION-2026-05-28] [TURN #13] [2026-05-28 21:46]
+Phase: 2 — Competitor Scout Backend
+Task: Replaced urllib urlopen usage with http.client HTTPS requests to satisfy Bandit B310.
+Plan approved: Yes
+Files created/modified: backend/connectors/apify.py
+Config files touched: none
+Design system conventions applied: outbound Apify calls now use explicit HTTPSConnection handling instead of blacklisted urlopen
+Dependencies verified: bandit passed; ruff passed; mypy passed; compileall passed
+Branch: main
+Handed off to QA: No
+Phase transition: Phase 2 hardened
+Outstanding: Ready to continue with the next development step.
+---
