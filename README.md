@@ -32,18 +32,34 @@ The BMAD workflow docs in `bmad-docs/` define the project plan, scope, and actio
 | /backend/api | HTTP routes for competitor scouting and posts analysis |
 | /backend/connectors | Third-party data-access adapters |
 | /backend/migrations | Local PostgreSQL schema migrations |
-| /backend/db | Database layer placeholder |
-| /backend/agent | Agent runtime placeholder |
+| /backend/db | Database helpers |
 | /frontend | Dashboard UI |
 | /frontend/components | Reusable dashboard UI pieces |
 | /guides | Human-readable setup notes |
 | /bmad-docs | BMAD workflow artifacts |
 
 ## Setup
-_To be filled in by Developer Agent after initial setup._
+1. Install Python dependencies:
+
+```bash
+pip install -r backend/api/requirements.txt
+```
+
+2. If you want to run the API with a real local PostgreSQL database or use the migration helpers, set `DATABASE_URL` in your shell or update `configs/runtime.toml`.
+
+3. If you want to enable the Apify integration later, set `APIFY_TOKEN` in your shell and fill in `configs/providers/apify.toml`.
+
+4. Start the API:
+
+```bash
+uvicorn backend.api.main:app --reload
+```
 
 ## Usage
-_To be filled in by Developer Agent after initial setup._
+- Open `http://localhost:8000/health` to verify the backend is running.
+- Open `http://localhost:8000/integrations/apify/status` to see whether the Apify integration is ready or still needs setup.
+- Apply `backend/migrations/001_init.sql` to your local PostgreSQL database, or run `python -m backend.db.apply` after installing `psycopg[binary]`.
+- Docker support still exists at the repository root via `docker-compose.yml` and the root Dockerfile; this quickstart uses the local Uvicorn path.
 
 ## Evaluation
 Success means the system can discover competitors, analyze posts, persist approved items locally, and clearly guide the user whenever a third-party tool requires external setup.

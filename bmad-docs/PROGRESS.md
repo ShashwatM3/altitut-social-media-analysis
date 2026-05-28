@@ -41,3 +41,35 @@ Outputs written: PRD.md, NEW_CHANGES.md, README.md, PROGRESS.md
 Key decisions: Apify selected as the initial default third-party data-access path.
 Outstanding: None.
 ---
+[DEVELOPER] [SESSION-2026-05-28] [TURN #8] [2026-05-28 12:19]
+Phase: N/A — repository initialization
+Task: Committed and pushed the current scaffold to GitHub.
+Plan approved: N/A
+Files created/modified: git metadata only; repo pushed to remote
+Config files touched: none
+Design system conventions applied: none
+Dependencies verified: GitHub auth via gh; remote origin set to github.com/ShashwatM3/altitut-social-media-analysis.git
+Branch: main
+Handed off to QA: No
+Phase transition: Still in setup/planning stage
+Outstanding: Proceed to Phase 1 implementation when ready.
+---
+[DEVELOPER] [SESSION-2026-05-28] [TURN #9] [2026-05-28 12:19]
+Phase: 1 — Foundation, Data Model, and Integration Contracts
+Task: Built the first backend foundation for the Altitut social media analysis dashboard.
+Plan approved: Yes
+Files created/modified: backend/settings.py, backend/api/main.py, backend/connectors/*, backend/db/*, backend/migrations/001_init.sql, configs/*, backend/api/requirements.txt, backend/README.md, README.md
+Config files touched: configs/runtime.toml, configs/providers/apify.toml
+Design system conventions applied: backend responses are structured JSON; setup-required status is explicit and machine-readable
+Dependencies verified: FastAPI import, Apify connector status flow, migration plan listing, migration apply module import, backend routes load successfully
+Branch: main
+Handed off to QA: No
+Phase transition: Still in Phase 1
+Outstanding: Need to decide whether to harden the migration runner further or move to Phase 2 planning.
+---
+[QA] [SESSION-2026-05-28] [TURN #10] [2026-05-28 12:19]
+Action: Handoff to QA after backend foundation review
+Verification: compileall passed; app routes load; Apify status returns setup_required as expected when credentials are missing; independent reviewer found no blocking issues
+Notes: Documentation clarified that Docker support still exists at the repo root and that DATABASE_URL is needed for migration/helper flows
+Outstanding: Move on to the next BMAD phase or begin QA-driven issue triage if desired.
+---

@@ -2,24 +2,26 @@
 
 This folder contains backend services:
 - `api/` FastAPI service
-- `db/` database layer (placeholder)
-- `agent/` agent service (placeholder)
+- `db/` database helpers and migration utilities
+- `connectors/` third-party social/data provider adapters
 
 ## Run API locally
 
-cd api
-pip install -r requirements.txt
-uvicorn main:app --reload
+From the repository root:
 
-## Build Docker image
+```bash
+pip install -r backend/api/requirements.txt
+uvicorn backend.api.main:app --reload
+```
 
-cd ..
-docker build -t project-backend-api .
-
-## Run Docker container
-
-docker run --rm -p 8000:8000 project-backend-api
-
-Then open:
+Open:
 - http://localhost:8000
-- http://localhost:8000/docs
+- http://localhost:8000/health
+- http://localhost:8000/integrations/apify/status
+
+Docker support still exists at the repository root via `docker-compose.yml` and the root Dockerfile; this quickstart uses the local Uvicorn path.
+
+## Database
+
+The initial schema lives in `backend/migrations/001_init.sql`.
+Use that migration against your local PostgreSQL instance before running the full backend flows.
