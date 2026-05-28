@@ -136,10 +136,21 @@ app.add_api_route("/competitors/{competitor_id}/approve", approve_competitor_rou
 def _validate_scout_request(payload: dict[str, Any]) -> dict[str, Any]:
     if not isinstance(payload, dict):
         raise HTTPException(status_code=422, detail="Request body must be a JSON object.")
-    altitut_context = _require_text(payload.get("altitut_context"), "altitut_context", min_length=10)
+    raw_usernames = payload.get("usernames")
+    raw_profile_urls = payload.get("profile_urls")
+    usernames = _coerce_instagram_usernames(raw_usernames, "usernames")
+    if not usernames:
+        usernames = _coerce_instagram_usernames(raw_profile_urls, "profile_urls")
+    if not usernames:
+        raise HTTPException(
+            status_code=422,
+            detail="usernames or profile_urls must contain at least one Instagram profile.",
+        )
+    altitut_context = _optional_text(payload.get("altitut_context"))
     focus_keywords = _coerce_string_list(payload.get("focus_keywords"), "focus_keywords")
     notes = _coerce_string_list(payload.get("notes"), "notes")
     return {
+        "usernames": usernames,
         "altitut_context": altitut_context,
         "focus_keywords": focus_keywords,
         "notes": notes,
@@ -186,6 +197,14 @@ def _require_text(value: Any, field_name: str, *, min_length: int = 1) -> str:
     return text
 
 
+def _optional_text(value: Any) -> str:
+    if value is None:
+        return ""
+    if isinstance(value, str):
+        return value.strip()
+    return str(value).strip()
+
+
 def _coerce_string_list(value: Any, field_name: str) -> list[str]:
     if value is None:
         return []
@@ -223,3 +242,26 @@ def _coerce_string_mapping(value: Any, field_name: str) -> dict[str, str]:
             if text:
                 result[key] = text
     return result
+
+
+def _coerce_instagram_usernames(value: Any, field_name: str) -> list[str]:
+    raw_values = _coerce_string_list(value, field_name)
+    usernames: list[str] = []
+    seen: set[str] = set()
+    for raw in raw_values:
+        cleaned = raw.strip()
+        if not cleaned:
+            continue
+        if cleaned.startswith("http://") or cleaned.startswith("https://"):
+            cleaned = cleaned.split("?")[0].rstrip("/")
+            if "/instagram.com/" in cleaned:
+                cleaned = cleaned.rsplit("/", 1)[-1]
+        cleaned = cleaned.strip().lstrip("@").split("/")[0]
+        if not cleaned:
+            continue
+        if cleaned not in seen:
+            seen.add(cleaned)
+            usernames.append(cleaned)
+    return usernames
+
+

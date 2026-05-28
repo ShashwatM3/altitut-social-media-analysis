@@ -2,7 +2,7 @@
 name = "apify"
 enabled = true
 token_env = "APIFY_TOKEN"
-actor_id = ""
+actor_id = "apify/instagram-profile-scraper"
 dataset_id = ""
 default_platform = "instagram"
 docs_url = "https://docs.apify.com/"
@@ -10,6 +10,6 @@ docs_url = "https://docs.apify.com/"
 setup_steps = [
   "Create or sign in to your Apify account.",
   "Create an API token in the Apify console and export it as APIFY_TOKEN.",
-  "Choose the first Instagram-oriented actor or dataset workflow for competitor research.",
+  "Use the Instagram Profile Scraper actor and provide seed Instagram usernames.",
   "Return to the app and rerun the integration status check."
 ]

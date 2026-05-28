@@ -110,12 +110,15 @@ class ApifyConnector:
         if not config.actor_id:
             raise ApifySetupRequiredError("Missing provider.actor_id in configs/providers/apify.toml.")
 
+        usernames = scout_input.get("usernames")
+        if not isinstance(usernames, list) or not usernames:
+            raise ApifyExecutionError(
+                "Apify instagram-profile-scraper requires a non-empty usernames list."
+            )
+
         actor_input = {
-            "altitut_context": scout_input.get("altitut_context", ""),
-            "focus_keywords": scout_input.get("focus_keywords", []),
-            "notes": scout_input.get("notes", []),
-            "default_platform": config.default_platform,
-            "source": "altitut-social-media-analysis",
+            "usernames": usernames,
+            "includeAboutSection": False,
         }
         run_url = (
             f"https://api.apify.com/v2/acts/{quote(config.actor_id, safe='')}/runs"

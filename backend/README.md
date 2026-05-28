@@ -23,7 +23,7 @@ Docker support still exists at the repository root via `docker-compose.yml` and 
 
 ## Apify scout flow
 
-`POST /competitor-scout` runs the Apify-backed competitor scout when `APIFY_TOKEN` and `configs/providers/apify.toml` are configured. If either piece is missing, the endpoint returns a structured setup-required response instead of guessing.
+`POST /competitor-scout` runs the Apify-backed competitor scout when `APIFY_TOKEN` and `configs/providers/apify.toml` are configured. Request body must include either usernames or profile_urls; both are normalized into Instagram usernames before calling Apify. If either piece is missing, the endpoint returns a structured setup-required response instead of guessing.
 
 ## Database
 

@@ -99,3 +99,16 @@ Handed off to QA: No
 Phase transition: Phase 2 execution advanced
 Outstanding: Need the actual Apify actor ID and compatible input schema from the user to make the scout call fully operational in their environment.
 ---
+[DEVELOPER] [SESSION-2026-05-28] [TURN #12] [2026-05-28 17:49]
+Phase: 2 — Competitor Scout Backend
+Task: Normalized Instagram profile URLs into usernames for the Apify scout flow.
+Plan approved: Yes
+Files created/modified: backend/api/main.py, backend/README.md, README.md, configs/providers/apify.toml
+Config files touched: configs/providers/apify.toml
+Design system conventions applied: scout inputs now accept either usernames or profile_urls and normalize them before calling Apify
+Dependencies verified: backend compileall passed; ruff passed; mypy passed
+Branch: main
+Handed off to QA: No
+Phase transition: Phase 2 still active
+Outstanding: Ready to run against the provided Instagram profiles once the Apify token is exported in the local environment.
+---
