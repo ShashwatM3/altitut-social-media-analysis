@@ -1,5 +1,7 @@
 # ALTITUT-SOCIAL-MEDIA-ANALYSIS
 
+See the detailed product spec in [PRODUCT_SPEC.md](PRODUCT_SPEC.md)
+
 ## Overview
 This project is a social media analysis dashboard for Altitut. It helps the team find relevant competitor companies, review why those companies are doing well on social media, and analyze individual posts so the team can understand what patterns are working.
 
