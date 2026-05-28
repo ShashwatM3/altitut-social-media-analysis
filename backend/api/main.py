@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from typing import Any
+from urllib.parse import urlparse
 
 from fastapi import FastAPI, HTTPException
 
@@ -252,10 +253,10 @@ def _coerce_instagram_usernames(value: Any, field_name: str) -> list[str]:
         cleaned = raw.strip()
         if not cleaned:
             continue
-        if cleaned.startswith("http://") or cleaned.startswith("https://"):
-            cleaned = cleaned.split("?")[0].rstrip("/")
-            if "/instagram.com/" in cleaned:
-                cleaned = cleaned.rsplit("/", 1)[-1]
+        if cleaned.startswith(("http://", "https://")):
+            parsed = urlparse(cleaned)
+            path_parts = [part for part in parsed.path.split("/") if part]
+            cleaned = path_parts[0] if path_parts else parsed.netloc.split(".")[0]
         cleaned = cleaned.strip().lstrip("@").split("/")[0]
         if not cleaned:
             continue
