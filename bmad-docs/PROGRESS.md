@@ -67,6 +67,19 @@ Handed off to QA: No
 Phase transition: Still in Phase 1
 Outstanding: Need to decide whether to harden the migration runner further or move to Phase 2 planning.
 ---
+[DEVELOPER] [SESSION-2026-05-28] [TURN #10] [2026-05-28 12:19]
+Phase: 2 — Competitor Scout Backend
+Task: Added the first Phase 2 backend endpoints and local persistence helpers.
+Plan approved: Yes
+Files created/modified: backend/api/main.py, backend/db/client.py, backend/db/competitors.py, README.md
+Config files touched: none
+Design system conventions applied: structured JSON responses, setup-required responses remain explicit, approved competitor records persist in local PostgreSQL
+Dependencies verified: backend compileall passed; app imports and routes load; competitor list/save/approve helpers import successfully
+Branch: main
+Handed off to QA: No
+Phase transition: Phase 2 started
+Outstanding: The scout route still returns setup-required/ready status instead of executing an external Apify discovery job until the third-party actor flow is wired in.
+---
 [QA] [SESSION-2026-05-28] [TURN #10] [2026-05-28 12:19]
 Action: Handoff to QA after backend foundation review
 Verification: compileall passed; app routes load; Apify status returns setup_required as expected when credentials are missing; independent reviewer found no blocking issues

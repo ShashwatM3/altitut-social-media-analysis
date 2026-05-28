@@ -58,6 +58,8 @@ uvicorn backend.api.main:app --reload
 ## Usage
 - Open `http://localhost:8000/health` to verify the backend is running.
 - Open `http://localhost:8000/integrations/apify/status` to see whether the Apify integration is ready or still needs setup.
+- Use `POST /competitor-scout` to create a scout run record and see setup-required handling when Apify is not configured.
+- Use `GET /competitors`, `POST /competitors`, and `POST /competitors/{competitor_id}/approve` to manage competitor records in local PostgreSQL.
 - Apply `backend/migrations/001_init.sql` to your local PostgreSQL database, or run `python -m backend.db.apply` after installing `psycopg[binary]`.
 - Docker support still exists at the repository root via `docker-compose.yml` and the root Dockerfile; this quickstart uses the local Uvicorn path.
 
