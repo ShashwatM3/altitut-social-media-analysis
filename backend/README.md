@@ -25,6 +25,10 @@ Docker support still exists at the repository root via `docker-compose.yml` and 
 
 `POST /competitor-scout` runs the Apify-backed competitor scout when `APIFY_TOKEN` and `configs/providers/apify.toml` are configured. Request body must include either usernames or profile_urls; both are normalized into Instagram usernames before calling Apify. If either piece is missing, the endpoint returns a structured setup-required response instead of guessing.
 
+## Posts analysis flow
+
+`POST /posts-analyze` runs the posts analysis backend for approved competitors. The endpoint accepts approved `competitor_ids` and uses their saved Instagram profile links to retrieve post data. It also accepts direct `usernames` or `profile_urls` for ad hoc runs. The dashboard filters approved posts by company with `GET /posts?approved=true` and approval updates use `POST /posts/{post_id}/approve`.
+
 ## Database
 
 The initial schema lives in `backend/migrations/001_init.sql`.

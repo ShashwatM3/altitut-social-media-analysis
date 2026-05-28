@@ -20,6 +20,15 @@ class ScoutExecution:
     candidates: list[dict[str, Any]]
 
 
+@dataclass
+class PostAnalysisExecution:
+    run_ids: list[str]
+    dataset_ids: list[str]
+    raw_runs: list[dict[str, Any]]
+    raw_items: list[dict[str, Any]]
+    posts: list[dict[str, Any]]
+
+
 class ApifyExecutionError(RuntimeError):
     pass
 
@@ -156,6 +165,110 @@ class ApifyConnector:
             candidates=candidates,
         )
 
+    def execute_posts_analysis(
+        self,
+        analysis_input: dict[str, Any],
+        wait_for_finish: int = 120,
+    ) -> PostAnalysisExecution:
+        config = load_apify_config()
+        status = self.status()
+        if not status.ready:
+            raise ApifySetupRequiredError(
+                "Apify setup is required before posts analysis can run."
+            )
+        if not config.token:
+            raise ApifySetupRequiredError(f"Missing {config.token_env}.")
+        if not config.actor_id:
+            raise ApifySetupRequiredError("Missing provider.actor_id in configs/providers/apify.toml.")
+
+        targets = analysis_input.get("targets")
+        if not isinstance(targets, list) or not targets:
+            raise ApifyExecutionError(
+                "Posts analysis requires at least one competitor target with usernames."
+            )
+        retrieval_mode = str(analysis_input.get("retrieval_mode") or "recent").strip().lower()
+        post_limit_value = analysis_input.get("post_limit", 6)
+        try:
+            post_limit = max(1, int(post_limit_value))
+        except (TypeError, ValueError) as exc:
+            raise ApifyExecutionError("post_limit must be a positive integer.") from exc
+
+        raw_runs: list[dict[str, Any]] = []
+        raw_items: list[dict[str, Any]] = []
+        posts: list[dict[str, Any]] = []
+        run_ids: list[str] = []
+        dataset_ids: list[str] = []
+
+        for target_index, target in enumerate(targets):
+            if not isinstance(target, dict):
+                raise ApifyExecutionError("Each posts target must be an object.")
+            usernames = target.get("usernames")
+            if not isinstance(usernames, list) or not usernames:
+                raise ApifyExecutionError(
+                    "Each posts target requires a non-empty usernames list."
+                )
+            competitor_id = str(target.get("competitor_id") or f"competitor-{target_index + 1}")
+            competitor_name = str(
+                target.get("competitor_name") or competitor_id.replace("-", " ").title()
+            )
+
+            actor_input = {
+                "usernames": usernames,
+                "includeAboutSection": False,
+            }
+            run_url = (
+                f"https://api.apify.com/v2/acts/{quote(config.actor_id, safe='')}/runs"
+                f"?waitForFinish={wait_for_finish}"
+            )
+            run_response = self._request_json("POST", run_url, config.token, payload=actor_input)
+            run_data = _unwrap_data(run_response)
+            run_id = str(run_data.get("id") or f"{config.actor_id}-{target_index + 1}")
+            status_value = str(run_data.get("status") or "").upper()
+            if status_value and status_value not in {"SUCCEEDED", "READY"}:
+                raise ApifyExecutionError(
+                    f"Apify posts run {run_id or '<unknown>'} finished with status {status_value}."
+                )
+
+            dataset_id = str(run_data.get("defaultDatasetId") or config.dataset_id or "")
+            if not dataset_id:
+                raise ApifyExecutionError(
+                    "Apify posts run completed but no dataset id was returned by the actor or config."
+                )
+
+            items_url = (
+                f"https://api.apify.com/v2/datasets/{quote(dataset_id, safe='')}/items"
+                "?clean=true&format=json"
+            )
+            items_response = self._request_json("GET", items_url, config.token)
+            profile_items = _coerce_item_list(items_response)
+            target_posts = _extract_posts_from_profile_items(profile_items)
+            normalized_posts = [
+                self.normalize_post(
+                    post_item,
+                    index=index,
+                    run_id=run_id,
+                    platform=config.default_platform,
+                    retrieval_mode=retrieval_mode,
+                    competitor_id=competitor_id,
+                    competitor_name=competitor_name,
+                )
+                for index, post_item in enumerate(target_posts)
+            ]
+            normalized_posts = _sort_posts(normalized_posts, retrieval_mode=retrieval_mode)[:post_limit]
+            posts.extend(normalized_posts)
+            raw_runs.append(run_data)
+            raw_items.extend(profile_items)
+            run_ids.append(run_id)
+            dataset_ids.append(dataset_id)
+
+        return PostAnalysisExecution(
+            run_ids=run_ids,
+            dataset_ids=dataset_ids,
+            raw_runs=raw_runs,
+            raw_items=raw_items,
+            posts=posts,
+        )
+
     @staticmethod
     def normalize_candidate(
         item: dict[str, Any],
@@ -194,6 +307,54 @@ class ApifyConnector:
             "social_links": social_links,
             "relevance_summary": relevance_summary,
             "traction_summary": traction_summary,
+            "source_run_id": run_id,
+        }
+
+    @staticmethod
+    def normalize_post(
+        item: dict[str, Any],
+        *,
+        index: int,
+        run_id: str,
+        platform: str,
+        retrieval_mode: str,
+        competitor_id: str,
+        competitor_name: str,
+    ) -> dict[str, Any]:
+        identity = _candidate_identity(item, index=index)
+        post_id = f"post-{competitor_id}-{identity}"
+        title = _pick_text(
+            item,
+            "title",
+            "caption",
+            "text",
+            "shortCode",
+            fallback=f"{competitor_name} post {index + 1}",
+        )
+        caption = _pick_text(item, "caption", "text", "description", fallback=title)
+        transcript = _pick_text(item, "transcript", "ocrText", fallback="")
+        source_url = _pick_text(item, "url", "permalink", "link", "postUrl", fallback="")
+        frames = _extract_frames(item)
+        traction = _extract_traction(item)
+        analysis = _build_post_analysis(
+            item,
+            competitor_name=competitor_name,
+            retrieval_mode=retrieval_mode,
+            traction=traction,
+        )
+        return {
+            "id": post_id,
+            "competitor_id": competitor_id,
+            "competitor_name": competitor_name,
+            "source_platform": platform,
+            "source_url": source_url or None,
+            "retrieval_mode": retrieval_mode,
+            "title": title,
+            "caption": caption,
+            "transcript": transcript,
+            "frames": frames,
+            "traction": traction,
+            "analysis": analysis,
             "source_run_id": run_id,
         }
 
@@ -330,3 +491,131 @@ def _dedupe(items: list[str]) -> list[str]:
         seen.add(item)
         result.append(item)
     return result
+
+
+def _extract_posts_from_profile_items(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    posts: list[dict[str, Any]] = []
+    for item in items:
+        for key in ("latestPosts", "posts", "recentPosts", "topPosts"):
+            value = item.get(key)
+            if isinstance(value, list):
+                posts.extend(entry for entry in value if isinstance(entry, dict))
+        edge_media = item.get("edge_owner_to_timeline_media")
+        if isinstance(edge_media, dict):
+            edges = edge_media.get("edges")
+            if isinstance(edges, list):
+                for edge in edges:
+                    if not isinstance(edge, dict):
+                        continue
+                    node = edge.get("node")
+                    if isinstance(node, dict):
+                        posts.append(node)
+    return posts
+
+
+def _extract_frames(item: dict[str, Any]) -> list[Any]:
+    for key in ("frames", "media", "images", "image_urls", "imageUrls", "thumbnails"):
+        value = item.get(key)
+        if isinstance(value, list):
+            return value
+    if isinstance(item.get("displayUrl"), str):
+        return [item["displayUrl"]]
+    if isinstance(item.get("display_url"), str):
+        return [item["display_url"]]
+    return []
+
+
+def _extract_traction(item: dict[str, Any]) -> dict[str, Any]:
+    traction: dict[str, Any] = {}
+    for key in (
+        "likes",
+        "likesCount",
+        "comments",
+        "commentsCount",
+        "views",
+        "viewsCount",
+        "videoViewCount",
+        "playCount",
+        "engagement",
+        "engagementRate",
+        "postedAt",
+        "timestamp",
+        "takenAtTimestamp",
+    ):
+        value = item.get(key)
+        if isinstance(value, (int, float, str)) and str(value).strip():
+            traction[key] = value
+    return traction
+
+
+def _build_post_analysis(
+    item: dict[str, Any],
+    *,
+    competitor_name: str,
+    retrieval_mode: str,
+    traction: dict[str, Any],
+) -> dict[str, Any]:
+    caption = _pick_text(item, "caption", "text", "description", fallback="")
+    summary_bits = [
+        f"{competitor_name} post analyzed for {retrieval_mode} retrieval.",
+    ]
+    if caption:
+        summary_bits.append(f"Caption starts with: {caption[:120]}")
+    if traction:
+        summary_bits.append("Engagement metrics were returned by the source item.")
+    else:
+        summary_bits.append("No traction metrics were returned by the source item.")
+    return {
+        "summary": " ".join(summary_bits),
+        "why_it_worked": [
+            "The post was included in the actor output for this competitor.",
+            "The content structure is preserved for review and approval.",
+        ],
+        "design_pattern": [
+            "Captured as a structured post object for dashboard rendering.",
+            f"Prepared for {retrieval_mode} feed filtering.",
+        ],
+        "altitut_adaptation": [
+            "Use this as a candidate in the posts analysis approval flow.",
+            "Reuse the strongest hook, visual pattern, or caption structure in Altitut content.",
+        ],
+    }
+
+
+def _sort_posts(posts: list[dict[str, Any]], *, retrieval_mode: str) -> list[dict[str, Any]]:
+    if retrieval_mode == "popular":
+        return sorted(posts, key=_popular_score, reverse=True)
+    return sorted(posts, key=_recent_score, reverse=True)
+
+
+def _popular_score(post: dict[str, Any]) -> float:
+    traction = post.get("traction")
+    if not isinstance(traction, dict):
+        return 0.0
+    score = 0.0
+    for key in ("likes", "likesCount", "comments", "commentsCount", "views", "viewsCount", "videoViewCount", "playCount"):
+        value = traction.get(key)
+        if isinstance(value, (int, float)):
+            score += float(value)
+        elif isinstance(value, str) and value.strip():
+            try:
+                score += float(value)
+            except ValueError:
+                continue
+    return score
+
+
+def _recent_score(post: dict[str, Any]) -> float:
+    traction = post.get("traction")
+    if not isinstance(traction, dict):
+        return 0.0
+    for key in ("takenAtTimestamp", "timestamp", "postedAt"):
+        value = traction.get(key)
+        if isinstance(value, (int, float)):
+            return float(value)
+        if isinstance(value, str) and value.strip():
+            try:
+                return float(value)
+            except ValueError:
+                continue
+    return 0.0

@@ -12,16 +12,19 @@ The workflow is human-in-the-loop by design: the backend discovers and analyzes 
 - Human approval flow for saving competitors.
 - Posts Analysis for retrieving and analyzing competitor posts.
 - Human approval flow for saving posts.
-- Default all-posts dashboard view with company-wise filtering.
+- Default approved-posts dashboard view with company-wise filtering.
 - Local PostgreSQL persistence.
 - Config-driven third-party integration layer with setup-required handling.
 - Apify as the initial default third-party data-access path.
 - Instagram-first initial post-access path, with LinkedIn support deferred or added later.
+- Frontend dashboard for competitor scouting, posts analysis, approval actions, and company filtering.
 
 ## Architecture Overview
 The backend is organized around a small set of clear boundaries. `backend/api/` exposes the HTTP routes, `backend/connectors/` handles third-party social/data providers, and `backend/migrations/` manages the local PostgreSQL schema.
 
 `frontend/` renders the dashboard and approval workflow. The UI reads structured objects from the backend and maps them to expandable cards, filters, and approve/reject controls. `configs/` holds runtime and provider configuration so the project stays adaptable when external tool setup changes.
+
+Phase 2 focuses on competitor discovery and approval. Phase 3 adds posts analysis for approved companies, with recent/popular retrieval modes and company-wise filtering in the approved feed.
 
 The BMAD workflow docs in `bmad-docs/` define the project plan, scope, and action inbox used by the downstream agents.
 

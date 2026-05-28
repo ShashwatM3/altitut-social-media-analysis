@@ -1,7 +1,23 @@
 # Frontend
 
-Default to Vite + React + TypeScript (recommended for this scaffold because API is already separated under `backend/api` and this keeps frontend lightweight):
+This folder contains the Phase 4 dashboard UI.
 
-pnpm create vite . --template react-ts
+## Run locally
 
-Alternative (if SSR/SEO is needed): Next.js app router can be used later.
+From this folder:
+
+```bash
+npm install
+npm run dev
+```
+
+The app expects the backend at `http://localhost:8000` by default. Override it with `VITE_API_BASE_URL` if needed.
+
+## What it covers
+
+- Competitor Scout form and returned candidate cards
+- Competitor approval actions
+- Posts Analysis form for approved companies
+- Recent / popular retrieval mode selection
+- Company-wise filtering for approved posts
+- Post approval actions
