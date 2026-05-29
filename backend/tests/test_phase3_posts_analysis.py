@@ -54,6 +54,44 @@ class _FakeConnector:
         return self._execution
 
 
+class _FakeLlmConnector:
+    def __init__(self, ready: bool = True) -> None:
+        self._ready = ready
+
+    def status(self) -> SimpleNamespace:
+        return SimpleNamespace(
+            provider="openai-compatible",
+            ready=self._ready,
+            status="ready" if self._ready else "setup_required",
+            missing_requirements=[] if self._ready else ["OPENAI_API_KEY", "provider.model"],
+            next_steps=[],
+            docs_url="https://platform.openai.com/docs",
+            details={"config": {"model": "gpt-4.1-mini"}},
+            to_dict=lambda: {
+                "provider": "openai-compatible",
+                "ready": self._ready,
+                "status": "ready" if self._ready else "setup_required",
+                "missing_requirements": [] if self._ready else ["OPENAI_API_KEY", "provider.model"],
+                "next_steps": [],
+                "docs_url": "https://platform.openai.com/docs",
+                "details": {"config": {"model": "gpt-4.1-mini"}},
+            },
+        )
+
+    def analyze_post(self, post: dict[str, Any], *, context: dict[str, Any] | None = None) -> dict[str, Any]:
+        assert context is not None
+        return {
+            "summary": "LLM summary",
+            "why_it_worked": ["Hook was clear"],
+            "design_pattern": ["Strong visual"],
+            "altitut_adaptation": ["Try the same opening"],
+            "reasoning": "This post performed well because it had a strong hook.",
+            "confidence": 0.91,
+            "provider": "openai-compatible",
+            "model": "gpt-4.1-mini",
+        }
+
+
 def test_resolve_posts_analysis_request_accepts_approved_competitors(monkeypatch: Any) -> None:
     monkeypatch.setattr(
         main,
@@ -62,7 +100,7 @@ def test_resolve_posts_analysis_request_accepts_approved_competitors(monkeypatch
             {
                 "id": "competitor-1",
                 "name": "Creator One",
-                "social_links": {"instagram": "https://www.instagram.com/creator.one/"},
+                "website": "https://www.instagram.com/creator.one/",
             }
         ],
     )
@@ -131,7 +169,19 @@ def test_posts_analysis_persists_analyzed_posts(monkeypatch: Any) -> None:
     fake_connector = _FakeConnector(ready=True, execution=execution)
     recorded: dict[str, Any] = {}
 
+    monkeypatch.setattr(
+        main,
+        "list_competitors",
+        lambda approved=None: [
+            {
+                "id": "competitor-1",
+                "name": "Creator One",
+                "website": "https://www.instagram.com/creator.one/",
+            }
+        ],
+    )
     monkeypatch.setattr(main, "ApifyConnector", lambda: fake_connector)
+    monkeypatch.setattr(main, "LlmConnector", lambda: _FakeLlmConnector(ready=True))
     monkeypatch.setattr(
         main,
         "save_post",
@@ -154,5 +204,6 @@ def test_posts_analysis_persists_analyzed_posts(monkeypatch: Any) -> None:
     assert result["status"] == "completed"
     assert result["post_count"] == 1
     assert result["posts"][0]["competitor_name"] == "Creator One"
+    assert result["posts"][0]["analysis"]["summary"] == "LLM summary"
     assert recorded["run"]["status"] == "completed"
     assert recorded["run"]["output_payload"]["post_ids"] == ["post-competitor-1-post-1"]

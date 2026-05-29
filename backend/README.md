@@ -27,7 +27,12 @@ Docker support still exists at the repository root via `docker-compose.yml` and 
 
 ## Posts analysis flow
 
-`POST /posts-analyze` runs the posts analysis backend for approved competitors. The endpoint accepts approved `competitor_ids` and uses their saved Instagram profile links to retrieve post data. It also accepts direct `usernames` or `profile_urls` for ad hoc runs. The dashboard filters approved posts by company with `GET /posts?approved=true` and approval updates use `POST /posts/{post_id}/approve`.
+`POST /posts-analyze` runs the posts analysis backend for approved competitors. The endpoint accepts approved `competitor_ids` and uses their saved Instagram profile links to retrieve post data. It also accepts direct `usernames` or `profile_urls` for ad hoc runs. The dashboard filters approved posts by company with `GET /posts?approved=true` and approval updates use `POST /posts/{post_id}/approve`. Rejections use `POST /posts/{post_id}/reject`.
+
+## Integrations
+
+- `GET /integrations/apify/status` shows whether the Apify scout path is ready.
+- `GET /integrations/llm/status` shows whether the OpenAI-compatible analysis provider is ready. If `OPENAI_API_KEY` or `provider.model` is missing in `configs/providers/llm.toml`, the endpoint returns a setup-required response instead of guessing.
 
 ## Database
 

@@ -4,14 +4,29 @@ from typing import Any
 from urllib.parse import urlparse
 
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 
 from backend.connectors.apify import ApifyConnector, ApifyExecutionError, ApifySetupRequiredError
-from backend.db.competitors import approve_competitor, list_competitors, record_run, save_competitor
-from backend.db.posts import approve_post, list_posts, save_post
+from backend.connectors.llm import LlmConnector, LlmExecutionError, LlmSetupRequiredError
+from backend.db.competitors import (
+    approve_competitor,
+    list_competitors,
+    record_run,
+    reject_competitor,
+    save_competitor,
+)
+from backend.db.posts import approve_post, list_posts, reject_post, save_post
 from backend.settings import load_runtime_config
 
 runtime = load_runtime_config()
 app = FastAPI(title=runtime.app.name, version=runtime.app.version)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origin_regex=r"https?://(localhost|127\.0\.0\.1)(:\d+)?",
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 async def root() -> dict[str, str]:
@@ -28,6 +43,10 @@ async def health() -> dict[str, str]:
 
 async def apify_status() -> dict[str, Any]:
     return ApifyConnector().status().to_dict()
+
+
+async def llm_status() -> dict[str, Any]:
+    return LlmConnector().status().to_dict()
 
 
 async def competitor_scout(request: dict[str, Any]) -> dict[str, Any]:
@@ -83,10 +102,34 @@ async def competitor_scout(request: dict[str, Any]) -> dict[str, Any]:
             "error": str(exc),
         }
 
-    saved_candidates = [
-        save_competitor(candidate, approved=False, source_run_id=execution.run_id)
-        for candidate in execution.candidates
-    ]
+    llm = LlmConnector()
+    llm_integration = llm.status()
+    analysis_errors: list[str] = []
+    analyzed_candidates: list[dict[str, Any]] = []
+    for candidate in execution.candidates:
+        enriched_candidate = dict(candidate)
+        if llm_integration.ready:
+            try:
+                analysis = llm.analyze_competitor(
+                    candidate,
+                    context={
+                        "scout_input": scout_input,
+                        "apify_run_id": execution.run_id,
+                        "dataset_id": execution.dataset_id,
+                    },
+                )
+            except (LlmSetupRequiredError, LlmExecutionError) as exc:
+                analysis_errors.append(str(exc))
+            else:
+                if isinstance(analysis.get("relevance_summary"), str):
+                    enriched_candidate["relevance_summary"] = analysis["relevance_summary"]
+                if isinstance(analysis.get("traction_summary"), str):
+                    enriched_candidate["traction_summary"] = analysis["traction_summary"]
+                enriched_candidate["analysis"] = analysis
+        saved_candidate = save_competitor(enriched_candidate, approved=False, source_run_id=execution.run_id)
+        if "analysis" in enriched_candidate:
+            saved_candidate["analysis"] = enriched_candidate["analysis"]
+        analyzed_candidates.append(saved_candidate)
     run = record_run(
         run_type="competitor_scout",
         provider=integration.provider,
@@ -96,17 +139,24 @@ async def competitor_scout(request: dict[str, Any]) -> dict[str, Any]:
             "apify_run": execution.raw_run,
             "dataset_id": execution.dataset_id,
             "raw_item_count": len(execution.raw_items),
-            "candidate_count": len(saved_candidates),
-            "candidate_ids": [candidate["id"] for candidate in saved_candidates],
+            "candidate_count": len(analyzed_candidates),
+            "candidate_ids": [candidate["id"] for candidate in analyzed_candidates],
+            "llm": llm_integration.to_dict(),
+            "analysis_status": "completed" if llm_integration.ready and not analysis_errors else (
+                "setup_required" if not llm_integration.ready else "partial"
+            ),
+            "analysis_errors": analysis_errors,
         },
         run_id=execution.run_id,
     )
     return {
         "status": "completed",
         "integration": integration.to_dict(),
+        "llm_integration": llm_integration.to_dict(),
         "run": run,
-        "candidate_count": len(saved_candidates),
-        "candidates": saved_candidates,
+        "candidate_count": len(analyzed_candidates),
+        "candidates": analyzed_candidates,
+        "analysis_errors": analysis_errors,
     }
 
 
@@ -118,6 +168,13 @@ async def create_competitor(candidate: dict[str, Any]) -> dict[str, Any]:
 async def approve_competitor_route(competitor_id: str, source_run_id: str | None = None) -> dict[str, Any]:
     try:
         return approve_competitor(competitor_id, source_run_id=source_run_id)
+    except KeyError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+
+
+async def reject_competitor_route(competitor_id: str, source_run_id: str | None = None) -> dict[str, Any]:
+    try:
+        return reject_competitor(competitor_id, source_run_id=source_run_id)
     except KeyError as exc:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
 
@@ -140,10 +197,19 @@ async def approve_post_route(post_id: str, source_run_id: str | None = None) -> 
         raise HTTPException(status_code=404, detail=str(exc)) from exc
 
 
+async def reject_post_route(post_id: str, source_run_id: str | None = None) -> dict[str, Any]:
+    try:
+        return reject_post(post_id, source_run_id=source_run_id)
+    except KeyError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+
+
 async def posts_analysis(request: dict[str, Any]) -> dict[str, Any]:
     analysis_input, missing_requirements, next_steps = _resolve_posts_analysis_request(request)
     connector = ApifyConnector()
     integration = connector.status()
+    llm = LlmConnector()
+    llm_integration = llm.status()
 
     if missing_requirements:
         setup_response = {
@@ -165,6 +231,25 @@ async def posts_analysis(request: dict[str, Any]) -> dict[str, Any]:
             input_payload=analysis_input,
             output_payload=setup_response,
             error_message="Posts analysis requires approved companies with Instagram usernames.",
+        )
+        return {
+            "status": "setup_required",
+            "integration": setup_response,
+            "run": run,
+        }
+
+    if not llm_integration.ready:
+        llm_setup_response = llm_integration.to_dict()
+        llm_details = dict(llm_setup_response.get("details", {}))
+        llm_details["requested_targets"] = analysis_input["targets"]
+        setup_response = {**llm_setup_response, "details": llm_details}
+        run = record_run(
+            run_type="posts_analysis",
+            provider=llm_integration.provider,
+            status="setup_required",
+            input_payload=analysis_input,
+            output_payload=setup_response,
+            error_message="LLM setup required before posts analysis can run.",
         )
         return {
             "status": "setup_required",
@@ -220,17 +305,81 @@ async def posts_analysis(request: dict[str, Any]) -> dict[str, Any]:
             "error": str(exc),
         }
 
-    saved_posts = [
-        {
-            **save_post(post, approved=False, source_run_id=post["source_run_id"]),
-            "competitor_name": post["competitor_name"],
-            "analysis": post["analysis"],
+    existing_competitor_ids = {row["id"] for row in list_competitors()}
+    placeholder_competitors: list[dict[str, Any]] = []
+    prepared_posts: list[dict[str, Any]] = []
+    analysis_errors: list[str] = []
+
+    for post in execution.posts:
+        competitor_id = post["competitor_id"]
+        if competitor_id not in existing_competitor_ids:
+            placeholder_competitors.append(
+                {
+                    "id": competitor_id,
+                    "name": post["competitor_name"],
+                    "website": post.get("source_url"),
+                    "social_links": {"instagram": post.get("source_url", "")} if post.get("source_url") else {},
+                    "relevance_summary": "Generated during posts analysis so the post can be stored locally.",
+                    "traction_summary": "Posts analysis target with no prior competitor record.",
+                }
+            )
+            existing_competitor_ids.add(competitor_id)
+        try:
+            analysis = llm.analyze_post(
+                post,
+                context={
+                    "analysis_input": analysis_input,
+                    "apify_run_ids": execution.run_ids,
+                    "dataset_ids": execution.dataset_ids,
+                },
+            )
+        except (LlmSetupRequiredError, LlmExecutionError) as exc:
+            analysis_errors.append(f"{post['id']}: {exc}")
+            break
+        prepared_posts.append(
+            {
+                **post,
+                "analysis": analysis,
+            }
+        )
+
+    if analysis_errors:
+        run = record_run(
+            run_type="posts_analysis",
+            provider=llm_integration.provider,
+            status="failed",
+            input_payload=analysis_input,
+            output_payload={
+                "apify_run_ids": execution.run_ids,
+                "dataset_ids": execution.dataset_ids,
+                "raw_item_count": len(execution.raw_items),
+                "analysis_errors": analysis_errors,
+                "post_count": len(prepared_posts),
+            },
+            error_message="LLM post analysis failed.",
+        )
+        return {
+            "status": "failed",
+            "integration": integration.to_dict(),
+            "llm_integration": llm_integration.to_dict(),
+            "run": run,
+            "error": "LLM post analysis failed.",
+            "analysis_errors": analysis_errors,
         }
-        for post in execution.posts
-    ]
+
+    for competitor in placeholder_competitors:
+        save_competitor(competitor, approved=False)
+
+    saved_posts: list[dict[str, Any]] = []
+    for post in prepared_posts:
+        saved_post = save_post(post, approved=False, source_run_id=post["source_run_id"])
+        saved_post["competitor_name"] = post["competitor_name"]
+        saved_post["analysis"] = post["analysis"]
+        saved_posts.append(saved_post)
+
     run = record_run(
         run_type="posts_analysis",
-        provider=integration.provider,
+        provider=llm_integration.provider,
         status="completed",
         input_payload=analysis_input,
         output_payload={
@@ -239,11 +388,13 @@ async def posts_analysis(request: dict[str, Any]) -> dict[str, Any]:
             "raw_item_count": len(execution.raw_items),
             "post_count": len(saved_posts),
             "post_ids": [post["id"] for post in saved_posts],
+            "llm": llm_integration.to_dict(),
         },
     )
     return {
         "status": "completed",
         "integration": integration.to_dict(),
+        "llm_integration": llm_integration.to_dict(),
         "run": run,
         "post_count": len(saved_posts),
         "posts": saved_posts,
@@ -253,13 +404,16 @@ async def posts_analysis(request: dict[str, Any]) -> dict[str, Any]:
 app.add_api_route("/", root, methods=["GET"])
 app.add_api_route("/health", health, methods=["GET"])
 app.add_api_route("/integrations/apify/status", apify_status, methods=["GET"])
+app.add_api_route("/integrations/llm/status", llm_status, methods=["GET"])
 app.add_api_route("/competitor-scout", competitor_scout, methods=["POST"])
 app.add_api_route("/competitors", get_competitors, methods=["GET"])
 app.add_api_route("/competitors", create_competitor, methods=["POST"])
 app.add_api_route("/competitors/{competitor_id}/approve", approve_competitor_route, methods=["POST"])
+app.add_api_route("/competitors/{competitor_id}/reject", reject_competitor_route, methods=["POST"])
 app.add_api_route("/posts-analyze", posts_analysis, methods=["POST"])
 app.add_api_route("/posts", get_posts, methods=["GET"])
 app.add_api_route("/posts/{post_id}/approve", approve_post_route, methods=["POST"])
+app.add_api_route("/posts/{post_id}/reject", reject_post_route, methods=["POST"])
 
 
 def _resolve_posts_analysis_request(payload: dict[str, Any]) -> tuple[dict[str, Any], list[str], list[str]]:
@@ -349,6 +503,13 @@ def _extract_instagram_username_from_competitor(candidate: dict[str, Any]) -> st
                 usernames = _coerce_instagram_usernames([value], key)
                 if usernames:
                     return usernames[0]
+
+    for key in ("website", "source_url", "instagram_url", "instagramUrl", "profile_url", "profileUrl"):
+        value = candidate.get(key)
+        if isinstance(value, str) and value.strip():
+            usernames = _coerce_instagram_usernames([value], key)
+            if usernames:
+                return usernames[0]
     return None
 
 

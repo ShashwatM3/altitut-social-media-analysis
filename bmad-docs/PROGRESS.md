@@ -151,3 +151,9 @@ Handed off to QA: No
 Phase transition: Phase 3 completed
 Outstanding: Move to final hardening/docs or start Phase 4 polish if needed.
 ---
+[QA] [SESSION-2026-05-28] [END-TO-END WALK] [2026-05-28]
+Action: Re-ran the project from a fresh local PostgreSQL database and walked Phase 1, Phase 2, Phase 3, and the frontend preview against the live backend.
+Fixes made during the walk: Phase 3 competitor-id resolution now falls back to website/source_url when social_links are absent; backend CORS now correctly allows localhost/127.0.0.1 frontend origins.
+Verification: fresh database created; migrations applied; /health and /integrations/apify/status returned healthy; competitor scout completed; competitor approval persisted; posts analysis completed; post approval persisted; approved posts filtered by company; frontend preview loaded live data.
+Outstanding: None for the current BMAD scope.
+---

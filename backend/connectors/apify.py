@@ -85,7 +85,7 @@ class ApifyConnector:
             ready=ready,
             status=status,
             missing_requirements=missing,
-            next_steps=_dedupe(config.setup_steps + next_steps),
+            next_steps=_dedupe((config.setup_steps + next_steps) if not ready else next_steps),
             docs_url=config.docs_url,
             details=details,
         )

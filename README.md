@@ -16,7 +16,7 @@ The workflow is human-in-the-loop by design: the backend discovers and analyzes 
 - Local PostgreSQL persistence.
 - Config-driven third-party integration layer with setup-required handling.
 - Apify as the initial default third-party data-access path.
-- Instagram-first initial post-access path, with LinkedIn support deferred or added later.
+- OpenAI-compatible LLM analysis support for competitor and post reasoning, with setup-required handling when the API key or model is missing.
 - Frontend dashboard for competitor scouting, posts analysis, approval actions, and company filtering.
 
 ## Architecture Overview

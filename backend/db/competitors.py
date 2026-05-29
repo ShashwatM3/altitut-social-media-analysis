@@ -7,6 +7,7 @@ from uuid import uuid4
 from psycopg.rows import dict_row
 from psycopg.types.json import Json
 
+from backend.db.audit import record_workflow_event
 from backend.db.client import connection
 
 
@@ -28,6 +29,7 @@ def record_run(
     run_id: str | None = None,
 ) -> dict[str, Any]:
     generated_id = run_id or f"run_{uuid4().hex}"
+    now = _utcnow()
     with connection() as conn:
         with conn.cursor(row_factory=dict_row) as cur:
             cur.execute(
@@ -61,20 +63,43 @@ def record_run(
                     _json_payload(input_payload),
                     _json_payload(output_payload),
                     error_message,
-                    _utcnow(),
-                    _utcnow(),
+                    now,
+                    now,
                 ),
             )
             row = cur.fetchone()
         conn.commit()
     if row is None:  # pragma: no cover - defensive guard
         raise RuntimeError("Failed to record run")
+    record_workflow_event(
+        entity_type="run",
+        entity_id=generated_id,
+        action="record",
+        outcome=status,
+        provider=provider,
+        run_id=generated_id,
+        payload={
+            "run_type": run_type,
+            "status": status,
+            "input": input_payload or {},
+            "output": output_payload or {},
+            "error_message": error_message,
+        },
+    )
     return dict(row)
 
 
-def save_competitor(candidate: dict[str, Any], approved: bool = False, source_run_id: str | None = None) -> dict[str, Any]:
+def save_competitor(
+    candidate: dict[str, Any],
+    approved: bool = False,
+    source_run_id: str | None = None,
+) -> dict[str, Any]:
     competitor_id = candidate["id"]
-    approved_at = _utcnow() if approved else None
+    now = _utcnow()
+    approved_at = now if approved else None
+    reviewed_at = now if approved else None
+    rejected = bool(candidate.get("rejected", False))
+    rejected_at = candidate.get("rejected_at") if isinstance(candidate.get("rejected_at"), datetime) else None
     with connection() as conn:
         with conn.cursor(row_factory=dict_row) as cur:
             cur.execute(
@@ -88,10 +113,13 @@ def save_competitor(candidate: dict[str, Any], approved: bool = False, source_ru
                     traction_summary,
                     approved,
                     approved_at,
+                    rejected,
+                    rejected_at,
+                    reviewed_at,
                     source_run_id,
                     created_at,
                     updated_at
-                ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                 ON CONFLICT (id) DO UPDATE SET
                     name = EXCLUDED.name,
                     website = EXCLUDED.website,
@@ -100,6 +128,9 @@ def save_competitor(candidate: dict[str, Any], approved: bool = False, source_ru
                     traction_summary = EXCLUDED.traction_summary,
                     approved = competitors.approved OR EXCLUDED.approved,
                     approved_at = COALESCE(competitors.approved_at, EXCLUDED.approved_at),
+                    rejected = competitors.rejected OR EXCLUDED.rejected,
+                    rejected_at = COALESCE(competitors.rejected_at, EXCLUDED.rejected_at),
+                    reviewed_at = COALESCE(competitors.reviewed_at, EXCLUDED.reviewed_at),
                     source_run_id = COALESCE(EXCLUDED.source_run_id, competitors.source_run_id),
                     updated_at = EXCLUDED.updated_at
                 RETURNING *
@@ -113,9 +144,12 @@ def save_competitor(candidate: dict[str, Any], approved: bool = False, source_ru
                     candidate["traction_summary"],
                     approved,
                     approved_at,
+                    rejected,
+                    rejected_at,
+                    reviewed_at,
                     source_run_id,
-                    _utcnow(),
-                    _utcnow(),
+                    now,
+                    now,
                 ),
             )
             row = cur.fetchone()
@@ -126,25 +160,68 @@ def save_competitor(candidate: dict[str, Any], approved: bool = False, source_ru
 
 
 def approve_competitor(competitor_id: str, source_run_id: str | None = None) -> dict[str, Any]:
-    approved_at = _utcnow()
+    now = _utcnow()
     with connection() as conn:
         with conn.cursor(row_factory=dict_row) as cur:
             cur.execute(
                 """
                 UPDATE competitors
                 SET approved = TRUE,
+                    rejected = FALSE,
                     approved_at = %s,
+                    reviewed_at = %s,
                     source_run_id = COALESCE(%s, source_run_id),
                     updated_at = %s
                 WHERE id = %s
                 RETURNING *
                 """,
-                (approved_at, source_run_id, _utcnow(), competitor_id),
+                (now, now, source_run_id, now, competitor_id),
             )
             row = cur.fetchone()
         conn.commit()
     if row is None:
         raise KeyError(f"Competitor not found: {competitor_id}")
+    record_workflow_event(
+        entity_type="competitor",
+        entity_id=competitor_id,
+        action="approve",
+        outcome="approved",
+        source_run_id=source_run_id,
+        payload={"source_run_id": source_run_id},
+    )
+    return dict(row)
+
+
+def reject_competitor(competitor_id: str, source_run_id: str | None = None) -> dict[str, Any]:
+    now = _utcnow()
+    with connection() as conn:
+        with conn.cursor(row_factory=dict_row) as cur:
+            cur.execute(
+                """
+                UPDATE competitors
+                SET approved = FALSE,
+                    rejected = TRUE,
+                    rejected_at = %s,
+                    reviewed_at = %s,
+                    source_run_id = COALESCE(%s, source_run_id),
+                    updated_at = %s
+                WHERE id = %s
+                RETURNING *
+                """,
+                (now, now, source_run_id, now, competitor_id),
+            )
+            row = cur.fetchone()
+        conn.commit()
+    if row is None:
+        raise KeyError(f"Competitor not found: {competitor_id}")
+    record_workflow_event(
+        entity_type="competitor",
+        entity_id=competitor_id,
+        action="reject",
+        outcome="rejected",
+        source_run_id=source_run_id,
+        payload={"source_run_id": source_run_id},
+    )
     return dict(row)
 
 

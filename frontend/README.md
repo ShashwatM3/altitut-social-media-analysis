@@ -16,8 +16,11 @@ The app expects the backend at `http://localhost:8000` by default. Override it w
 ## What it covers
 
 - Competitor Scout form and returned candidate cards
-- Competitor approval actions
+- Competitor approval and dismiss controls
+- Explicit Apify setup-required banner states
+- Optional LLM setup-required banner states when the backend exposes `/integrations/llm/status`
 - Posts Analysis form for approved companies
 - Recent / popular retrieval mode selection
 - Company-wise filtering for approved posts
-- Post approval actions
+- Post approval and dismiss controls
+- Persisted review state mirrored in the dashboard UI

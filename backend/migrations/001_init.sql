@@ -7,6 +7,8 @@ CREATE TABLE IF NOT EXISTS competitors (
     traction_summary TEXT NOT NULL,
     approved BOOLEAN NOT NULL DEFAULT FALSE,
     approved_at TIMESTAMPTZ,
+    rejected BOOLEAN NOT NULL DEFAULT FALSE,
+    rejected_at TIMESTAMPTZ,
     source_run_id TEXT,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
@@ -29,6 +31,8 @@ CREATE TABLE IF NOT EXISTS posts (
     analysis JSONB NOT NULL DEFAULT '{}'::jsonb,
     approved BOOLEAN NOT NULL DEFAULT FALSE,
     approved_at TIMESTAMPTZ,
+    rejected BOOLEAN NOT NULL DEFAULT FALSE,
+    rejected_at TIMESTAMPTZ,
     source_run_id TEXT,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
@@ -52,3 +56,22 @@ CREATE TABLE IF NOT EXISTS runs (
 
 CREATE INDEX IF NOT EXISTS idx_runs_type ON runs (run_type);
 CREATE INDEX IF NOT EXISTS idx_runs_provider ON runs (provider);
+
+CREATE TABLE IF NOT EXISTS workflow_events (
+    id TEXT PRIMARY KEY,
+    actor TEXT NOT NULL DEFAULT 'system',
+    entity_type TEXT NOT NULL,
+    entity_id TEXT NOT NULL,
+    action TEXT NOT NULL,
+    outcome TEXT NOT NULL DEFAULT 'completed',
+    provider TEXT,
+    run_id TEXT,
+    source_run_id TEXT,
+    payload JSONB NOT NULL DEFAULT '{}'::jsonb,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_workflow_events_entity ON workflow_events (entity_type, entity_id);
+CREATE INDEX IF NOT EXISTS idx_workflow_events_action ON workflow_events (action);
+CREATE INDEX IF NOT EXISTS idx_workflow_events_outcome ON workflow_events (outcome);
+CREATE INDEX IF NOT EXISTS idx_workflow_events_run_id ON workflow_events (run_id);

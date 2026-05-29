@@ -60,6 +60,23 @@ class ApifyProviderConfig:
         return _env(self.token_env)
 
 
+@dataclass
+class LlmProviderConfig:
+    name: str = "openai-compatible"
+    enabled: bool = True
+    api_key_env: str = "OPENAI_API_KEY"
+    base_url: str = "https://api.openai.com/v1"
+    model: str = ""
+    docs_url: str = "https://platform.openai.com/docs"
+    setup_steps: list[str] = field(default_factory=list)
+    timeout_seconds: int = 60
+    offline_fallback: bool = True
+
+    @property
+    def api_key(self) -> str:
+        return _env(self.api_key_env)
+
+
 def load_runtime_config() -> RuntimeConfig:
     raw = _load_toml(CONFIG_DIR / "runtime.toml")
     app = raw.get("app", {})
@@ -88,4 +105,25 @@ def load_apify_config() -> ApifyProviderConfig:
         default_platform=provider.get("default_platform", "instagram"),
         docs_url=provider.get("docs_url", "https://docs.apify.com/"),
         setup_steps=list(provider.get("setup_steps", [])),
+    )
+
+
+def load_llm_config() -> LlmProviderConfig:
+    raw = _load_toml(CONFIG_DIR / "providers" / "llm.toml")
+    provider = raw.get("provider", {})
+    timeout_seconds = provider.get("timeout_seconds", 60)
+    try:
+        timeout_value = max(1, int(timeout_seconds))
+    except (TypeError, ValueError):
+        timeout_value = 60
+    return LlmProviderConfig(
+        name=provider.get("name", "openai-compatible"),
+        enabled=bool(provider.get("enabled", True)),
+        api_key_env=provider.get("api_key_env", "OPENAI_API_KEY"),
+        base_url=provider.get("base_url", "https://api.openai.com/v1"),
+        model=provider.get("model", ""),
+        docs_url=provider.get("docs_url", "https://platform.openai.com/docs"),
+        setup_steps=list(provider.get("setup_steps", [])),
+        timeout_seconds=timeout_value,
+        offline_fallback=bool(provider.get("offline_fallback", True)),
     )
