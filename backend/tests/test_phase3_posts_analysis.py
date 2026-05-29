@@ -5,6 +5,7 @@ from types import SimpleNamespace
 from typing import Any
 
 from backend.api import main
+from backend.connectors import llm as llm_connector
 
 
 class _FakeConnector:
@@ -207,3 +208,116 @@ def test_posts_analysis_persists_analyzed_posts(monkeypatch: Any) -> None:
     assert result["posts"][0]["analysis"]["summary"] == "LLM summary"
     assert recorded["run"]["status"] == "completed"
     assert recorded["run"]["output_payload"]["post_ids"] == ["post-competitor-1-post-1"]
+
+
+def test_posts_analysis_returns_setup_required_when_llm_needs_setup(monkeypatch: Any) -> None:
+    monkeypatch.setattr(
+        main,
+        "list_competitors",
+        lambda approved=True: [
+            {
+                "id": "competitor-1",
+                "name": "Creator One",
+                "website": "https://www.instagram.com/creator.one/",
+            }
+        ],
+    )
+    monkeypatch.setattr(main, "ApifyConnector", lambda: _FakeConnector(ready=True, execution=None))
+    monkeypatch.setattr(main, "LlmConnector", lambda: _FakeLlmConnector(ready=False))
+    recorded: dict[str, Any] = {}
+    monkeypatch.setattr(
+        main,
+        "record_run",
+        lambda **kwargs: recorded.setdefault("run", kwargs) or {"id": "run-3", **kwargs},
+    )
+
+    result = asyncio.run(main.posts_analysis({"competitor_ids": ["competitor-1"]}))
+
+    assert result["status"] == "setup_required"
+    assert result["integration"]["provider"] == "openai-compatible"
+    assert result["integration"]["status"] == "setup_required"
+    assert recorded["run"]["provider"] == "openai-compatible"
+    assert recorded["run"]["status"] == "setup_required"
+
+
+def test_posts_analysis_uses_offline_llm_fallback_and_persists_posts(monkeypatch: Any) -> None:
+    execution = SimpleNamespace(
+        run_ids=["run-456"],
+        dataset_ids=["dataset-456"],
+        raw_runs=[{"id": "run-456", "status": "SUCCEEDED"}],
+        raw_items=[{"latestPosts": [{"id": "post-1", "caption": "Caption", "likesCount": 99}]}],
+        posts=[
+            {
+                "id": "post-competitor-1-post-1",
+                "competitor_id": "competitor-1",
+                "competitor_name": "Creator One",
+                "source_platform": "instagram",
+                "source_url": "https://instagram.com/p/post-1",
+                "retrieval_mode": "popular",
+                "title": "Caption",
+                "caption": "Caption",
+                "transcript": "",
+                "frames": [],
+                "traction": {"likesCount": 99},
+                "analysis": {"summary": "offline"},
+                "source_run_id": "run-456",
+            }
+        ],
+    )
+    monkeypatch.setattr(
+        llm_connector,
+        "load_llm_config",
+        lambda: SimpleNamespace(
+            name="openai-compatible",
+            enabled=True,
+            api_key_env="OPENAI_API_KEY",
+            api_key="",
+            base_url="https://api.openai.com/v1",
+            model="",
+            docs_url="https://platform.openai.com/docs",
+            setup_steps=["Set OPENAI_API_KEY in your environment."],
+            timeout_seconds=60,
+            offline_fallback=True,
+        ),
+    )
+
+    fake_connector = _FakeConnector(ready=True, execution=execution)
+    recorded: dict[str, Any] = {}
+
+    monkeypatch.setattr(
+        main,
+        "list_competitors",
+        lambda approved=None: [
+            {
+                "id": "competitor-1",
+                "name": "Creator One",
+                "website": "https://www.instagram.com/creator.one/",
+            }
+        ],
+    )
+    monkeypatch.setattr(main, "ApifyConnector", lambda: fake_connector)
+    monkeypatch.setattr(
+        main,
+        "save_post",
+        lambda post, approved=False, source_run_id=None: {
+            **post,
+            "approved": approved,
+            "source_run_id": source_run_id,
+        },
+    )
+    monkeypatch.setattr(
+        main,
+        "record_run",
+        lambda **kwargs: recorded.setdefault("run", kwargs) or {"id": "run-4", **kwargs},
+    )
+
+    result = asyncio.run(
+        main.posts_analysis({"competitor_ids": ["competitor-1"], "retrieval_mode": "popular", "post_limit": 4})
+    )
+
+    assert result["status"] == "completed"
+    assert result["llm_integration"]["provider"] == "offline-heuristic"
+    assert result["posts"][0]["analysis"]["provider"] == "offline-heuristic"
+    assert result["posts"][0]["analysis"]["model"] == "offline-heuristic-v1"
+    assert recorded["run"]["provider"] == "offline-heuristic"
+    assert recorded["run"]["output_payload"]["llm"]["provider"] == "offline-heuristic"

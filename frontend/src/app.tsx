@@ -135,14 +135,17 @@ function getReviewDecision(
   item: { approved?: boolean; rejected?: boolean },
   localDecision?: ReviewDecision,
 ): ReviewStatus {
+  if (localDecision === "approved") {
+    return "approved";
+  }
+  if (localDecision === "rejected") {
+    return "rejected";
+  }
   if (item.approved) {
     return "approved";
   }
-  if (item.rejected || localDecision === "rejected") {
+  if (item.rejected) {
     return "rejected";
-  }
-  if (localDecision === "approved") {
-    return "approved";
   }
   return "pending";
 }
@@ -403,9 +406,11 @@ function App() {
     }
   }, [reviewState]);
 
-  async function loadDashboard() {
+  async function loadDashboard(options?: { preserveNotice?: boolean }) {
     setError("");
-    setNotice("");
+    if (!options?.preserveNotice) {
+      setNotice("");
+    }
     try {
       const [healthRes, apifyRes, llmRes, competitorsRes, postsRes] = await Promise.all([
         fetchJson<Record<string, unknown>>("/health"),
@@ -502,7 +507,7 @@ function App() {
         body: JSON.stringify(payload),
       });
       setScoutResult(response);
-      await loadDashboard();
+      await loadDashboard({ preserveNotice: true });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Competitor scout failed.");
     } finally {
@@ -525,7 +530,7 @@ function App() {
         }),
       });
       setAnalysisResult(response);
-      await loadDashboard();
+      await loadDashboard({ preserveNotice: true });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Posts analysis failed.");
     } finally {
@@ -571,7 +576,7 @@ function App() {
       await fetchJson(`/competitors/${id}/approve`, { method: "POST" });
       await mutateReviewState("competitors", id, "approved");
       setNotice("Competitor approved.");
-      await loadDashboard();
+      await loadDashboard({ preserveNotice: true });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unable to approve competitor.");
     } finally {
@@ -591,7 +596,7 @@ function App() {
           ? "Competitor dismissed."
           : "Reject route not available yet; competitor dismissed locally in this browser.",
       );
-      await loadDashboard();
+      await loadDashboard({ preserveNotice: true });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unable to dismiss competitor.");
     } finally {
@@ -607,7 +612,7 @@ function App() {
       await fetchJson(`/posts/${id}/approve`, { method: "POST" });
       await mutateReviewState("posts", id, "approved");
       setNotice("Post approved.");
-      await loadDashboard();
+      await loadDashboard({ preserveNotice: true });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unable to approve post.");
     } finally {
@@ -623,7 +628,7 @@ function App() {
       const persisted = await attemptBackendReview([`/posts/${id}/reject`, `/posts/${id}/dismiss`]);
       await mutateReviewState("posts", id, "rejected");
       setNotice(persisted ? "Post dismissed." : "Reject route not available yet; post dismissed locally in this browser.");
-      await loadDashboard();
+      await loadDashboard({ preserveNotice: true });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unable to dismiss post.");
     } finally {
