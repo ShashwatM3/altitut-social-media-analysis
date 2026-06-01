@@ -1,12 +1,12 @@
 from __future__ import annotations
 
+from collections.abc import Callable
+from dataclasses import dataclass
 import http.client
 import json
 import re
-import urllib.request
-from collections.abc import Callable
-from dataclasses import dataclass
 from typing import Any
+import urllib.request
 from urllib.parse import urlparse
 
 from backend.connectors.base import IntegrationStatus, SetupRequiredResponse

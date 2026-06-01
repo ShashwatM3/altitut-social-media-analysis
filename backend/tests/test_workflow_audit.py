@@ -108,7 +108,7 @@ def test_review_approvals_clear_rejection_metadata(monkeypatch: Any) -> None:
             "source_run_id": "run-9",
         }
         fake_connection = _FakeConnection(row)
-        monkeypatch.setattr(module, "connection", lambda: fake_connection)
+        monkeypatch.setattr(module, "connection", lambda fake_connection=fake_connection: fake_connection)
         monkeypatch.setattr(module, "record_workflow_event", lambda **kwargs: {"id": "event-1", **kwargs})
 
         getattr(module, func_name)("item-1", source_run_id="run-9")

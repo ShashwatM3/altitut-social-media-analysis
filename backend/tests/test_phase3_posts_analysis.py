@@ -7,7 +7,6 @@ from typing import Any
 import pytest
 
 from backend.api import main
-from backend.connectors import llm as llm_connector
 
 
 class _FakeConnector:

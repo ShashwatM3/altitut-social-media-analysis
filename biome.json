@@ -1,0 +1,15 @@
+{
+	"files": {
+		"includes": [
+			"backend/**/*",
+			"frontend/src/**/*",
+			"frontend/*.json",
+			"frontend/*.ts",
+			"frontend/*.tsx",
+			"frontend/*.js",
+			"frontend/*.mjs",
+			"frontend/*.cjs",
+			"biome.json"
+		]
+	}
+}

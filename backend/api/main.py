@@ -11,22 +11,11 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
 from backend.connectors.apify import ApifyConnector, ApifyExecutionError, ApifySetupRequiredError
-from backend.connectors.exa import (
-    ExaConnector,
-    ExaExecutionError,
-    ExaSetupRequiredError,
-    _extract_social_links_from_website as extract_social_links_from_website,
-)
+from backend.connectors.exa import ExaConnector, _extract_social_links_from_website as extract_social_links_from_website
 from backend.connectors.llm import LlmConnector, LlmExecutionError, LlmSetupRequiredError
-from backend.db.competitors import (
-    approve_competitor,
-    list_competitors,
-    record_run,
-    reject_competitor,
-    save_competitor,
-)
-from backend.db.posts import approve_post, list_posts, reject_post, save_post
+from backend.db.competitors import approve_competitor, list_competitors, record_run, reject_competitor, save_competitor
 from backend.db.maintenance import refactor_database_records
+from backend.db.posts import approve_post, list_posts, reject_post, save_post
 from backend.settings import load_runtime_config
 
 SOCIAL_LINK_KEYS = {"instagram", "linkedin", "x", "youtube", "tiktok", "facebook", "threads"}
@@ -600,16 +589,8 @@ def _merge_scout_candidates(candidate_sets: list[list[dict[str, Any]]]) -> list[
                 merged[key] = dict(candidate)
                 order.append(key)
                 continue
-            existing_social_links = (
-                {key: value for key, value in existing["social_links"].items()}
-                if isinstance(existing.get("social_links"), dict)
-                else {}
-            )
-            candidate_social_links = (
-                {key: value for key, value in candidate["social_links"].items()}
-                if isinstance(candidate.get("social_links"), dict)
-                else {}
-            )
+            existing_social_links = dict(existing["social_links"]) if isinstance(existing.get("social_links"), dict) else {}
+            candidate_social_links = dict(candidate["social_links"]) if isinstance(candidate.get("social_links"), dict) else {}
             existing["social_links"] = {**existing_social_links, **candidate_social_links}
             for field in ("website", "relevance_summary", "traction_summary"):
                 if not existing.get(field) and candidate.get(field):

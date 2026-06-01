@@ -48,7 +48,7 @@ class _FakeConnection:
         self.committed = False
         self.rolled_back = False
 
-    def __enter__(self) -> '_FakeConnection':
+    def __enter__(self) -> _FakeConnection:
         return self
 
     def __exit__(self, exc_type, exc, tb) -> bool:
