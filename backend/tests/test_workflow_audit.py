@@ -30,6 +30,12 @@ class _FakeConnection:
         self.cursor_obj = _FakeCursor(row)
         self.commit_count = 0
 
+    def __enter__(self) -> _FakeConnection:
+        return self
+
+    def __exit__(self, exc_type: object, exc: object, tb: object) -> Literal[False]:
+        return False
+
     def cursor(self, row_factory: object | None = None) -> _FakeCursor:
         return self.cursor_obj
 
@@ -83,6 +89,32 @@ def test_record_run_emits_workflow_event(monkeypatch: Any) -> None:
     assert recorded["event"]["run_id"] == "run-1"
     assert recorded["event"]["payload"]["input"] == {"targets": ["competitor-1"]}
     assert recorded["event"]["payload"]["output"] == {"post_ids": ["post-1"]}
+
+
+def test_review_approvals_clear_rejection_metadata(monkeypatch: Any) -> None:
+    cases = [
+        (competitors, "approve_competitor", "rejected_at = NULL"),
+        (posts, "approve_post", "rejected_at = NULL"),
+        (posts, "reject_post", "approved_at = NULL"),
+    ]
+
+    for module, func_name, expected_sql in cases:
+        row: dict[str, Any] = {
+            "id": "item-1",
+            "approved": False,
+            "rejected": True,
+            "rejected_at": "2026-01-01T00:00:00Z",
+            "approved_at": "2025-01-01T00:00:00Z",
+            "source_run_id": "run-9",
+        }
+        fake_connection = _FakeConnection(row)
+        monkeypatch.setattr(module, "connection", lambda: fake_connection)
+        monkeypatch.setattr(module, "record_workflow_event", lambda **kwargs: {"id": "event-1", **kwargs})
+
+        getattr(module, func_name)("item-1", source_run_id="run-9")
+
+        executed_sql = "\n".join(sql for sql, _ in fake_connection.cursor_obj.executed)
+        assert expected_sql in executed_sql
 
 
 def test_record_workflow_event_inserts_audit_row(monkeypatch: Any) -> None:

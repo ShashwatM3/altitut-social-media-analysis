@@ -138,6 +138,35 @@ def test_competitor_scout_merges_exa_and_llm_candidates_and_keeps_social_links(m
     assert recorded["run"]["output_payload"]["source_statuses"]["llm"]["provider"] == "openai-compatible"
 
 
+def test_competitor_scout_keeps_distinct_social_profiles_on_same_domain() -> None:
+    merged = main._merge_scout_candidates(
+        [
+            [
+                {
+                    "id": "profile-a",
+                    "name": "Profile A",
+                    "website": "https://instagram.com/profilea",
+                    "social_links": {"instagram": "https://instagram.com/profilea"},
+                    "relevance_summary": "A",
+                    "traction_summary": "A",
+                }
+            ],
+            [
+                {
+                    "id": "profile-b",
+                    "name": "Profile B",
+                    "website": "https://instagram.com/profileb",
+                    "social_links": {"instagram": "https://instagram.com/profileb"},
+                    "relevance_summary": "B",
+                    "traction_summary": "B",
+                }
+            ],
+        ]
+    )
+
+    assert [candidate["id"] for candidate in merged] == ["profile-a", "profile-b"]
+
+
 def test_exa_scout_request_uses_deep_company_search_and_queries(monkeypatch: Any) -> None:
     monkeypatch.setattr(
         exa_connector,

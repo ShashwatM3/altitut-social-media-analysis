@@ -30,6 +30,23 @@ from backend.db.maintenance import refactor_database_records
 from backend.settings import load_runtime_config
 
 SOCIAL_LINK_KEYS = {"instagram", "linkedin", "x", "youtube", "tiktok", "facebook", "threads"}
+SOCIAL_HOSTNAMES = {
+    "instagram.com",
+    "linkedin.com",
+    "www.linkedin.com",
+    "x.com",
+    "www.x.com",
+    "twitter.com",
+    "www.twitter.com",
+    "youtube.com",
+    "www.youtube.com",
+    "tiktok.com",
+    "www.tiktok.com",
+    "facebook.com",
+    "www.facebook.com",
+    "threads.net",
+    "www.threads.net",
+}
 DEFAULT_ALTITUT_CONTEXT = (
     "Altitut is an AI-powered entrepreneurship platform for students and early-stage founders. "
     "It combines learning modules, customer discovery tooling, pitch practice, and progress tracking "
@@ -607,7 +624,11 @@ def _candidate_merge_key(candidate: dict[str, Any]) -> str:
     website = _optional_text(candidate.get("website"))
     if website:
         parsed = urlparse(website)
-        domain = parsed.netloc.lower().removeprefix("www.") or parsed.path.lower().removeprefix("www.")
+        hostname = (parsed.netloc or parsed.path).lower().removeprefix("www.")
+        if hostname in SOCIAL_HOSTNAMES:
+            normalized_path = parsed.path.rstrip("/")
+            return f"social:{hostname}{normalized_path}"
+        domain = hostname
         if domain:
             return f"domain:{domain}"
     candidate_id = _optional_text(candidate.get("id"))

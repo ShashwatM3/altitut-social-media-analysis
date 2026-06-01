@@ -113,6 +113,7 @@ def approve_post(post_id: str, source_run_id: str | None = None) -> dict[str, An
                 UPDATE posts
                 SET approved = TRUE,
                     rejected = FALSE,
+                    rejected_at = NULL,
                     approved_at = %s,
                     reviewed_at = %s,
                     source_run_id = COALESCE(%s, source_run_id),
@@ -145,6 +146,7 @@ def reject_post(post_id: str, source_run_id: str | None = None) -> dict[str, Any
                 """
                 UPDATE posts
                 SET approved = FALSE,
+                    approved_at = NULL,
                     rejected = TRUE,
                     rejected_at = %s,
                     reviewed_at = %s,

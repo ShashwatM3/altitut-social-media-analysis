@@ -168,6 +168,7 @@ def approve_competitor(competitor_id: str, source_run_id: str | None = None) -> 
                 UPDATE competitors
                 SET approved = TRUE,
                     rejected = FALSE,
+                    rejected_at = NULL,
                     approved_at = %s,
                     reviewed_at = %s,
                     source_run_id = COALESCE(%s, source_run_id),
@@ -210,7 +211,12 @@ def reject_competitor(competitor_id: str, source_run_id: str | None = None) -> d
             )
             cur.execute("DELETE FROM competitors WHERE id = %s", (competitor_id,))
         conn.commit()
-    return dict(row)
+    return {
+        "id": row["id"],
+        "deleted": True,
+        "approved": False,
+        "rejected": True,
+    }
 
 
 def list_competitors(approved: bool | None = None) -> list[dict[str, Any]]:
