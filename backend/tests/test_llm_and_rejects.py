@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import json
 from types import SimpleNamespace
 from typing import Any
 
@@ -12,7 +13,7 @@ class _RejectResult(dict[str, Any]):
     pass
 
 
-def _llm_config(*, enabled: bool, api_key: str = "", model: str = "", offline_fallback: bool = True) -> Any:
+def _llm_config(*, enabled: bool, api_key: str = "", model: str = "") -> Any:
     return SimpleNamespace(
         name="openai-compatible",
         enabled=enabled,
@@ -26,22 +27,11 @@ def _llm_config(*, enabled: bool, api_key: str = "", model: str = "", offline_fa
             "Choose a compatible chat model and set provider.model.",
         ],
         timeout_seconds=60,
-        offline_fallback=offline_fallback,
     )
 
 
-def test_llm_status_returns_offline_ready_without_credentials() -> None:
-    result = asyncio.run(main.llm_status())
-
-    assert result["status"] == "ready"
-    assert result["ready"] is True
-    assert result["provider"] == "offline-heuristic"
-    assert result["details"]["mode"] == "offline"
-    assert result["missing_requirements"] == []
-
-
-def test_llm_status_reports_setup_required_without_offline_fallback(monkeypatch: Any) -> None:
-    monkeypatch.setattr(llm_connector, "load_llm_config", lambda: _llm_config(enabled=True, offline_fallback=False))
+def test_llm_status_returns_setup_required_without_credentials(monkeypatch: Any) -> None:
+    monkeypatch.setattr(llm_connector, "load_llm_config", lambda: _llm_config(enabled=True))
 
     result = asyncio.run(main.llm_status())
 
@@ -52,10 +42,117 @@ def test_llm_status_reports_setup_required_without_offline_fallback(monkeypatch:
     assert result["missing_requirements"] == ["OPENAI_API_KEY", "provider.model"]
 
 
-def test_llm_offline_fallback_analysis_uses_local_heuristics(monkeypatch: Any) -> None:
-    monkeypatch.setattr(llm_connector, "load_llm_config", lambda: _llm_config(enabled=True, model="", api_key="", offline_fallback=True))
+def test_llm_status_flags_malformed_api_key(monkeypatch: Any) -> None:
+    monkeypatch.setattr(
+        llm_connector,
+        "load_llm_config",
+        lambda: _llm_config(enabled=True, api_key="OPENAI_API_KEY=sk-test", model="gpt-4.1-mini"),
+    )
 
-    analysis = llm_connector.LlmConnector().analyze_post(
+    result = asyncio.run(main.llm_status())
+
+    assert result["status"] == "setup_required"
+    assert result["ready"] is False
+    assert result["missing_requirements"] == ["OPENAI_API_KEY"]
+    assert result["details"]["api_key_issue"] == "api_key_value_includes_env_var_name"
+    assert any("secret value only" in step for step in result["next_steps"])
+
+
+def test_llm_scout_prompt_hardens_similarity_filter(monkeypatch: Any) -> None:
+    monkeypatch.setattr(llm_connector, "load_llm_config", lambda: _llm_config(enabled=True, api_key="sk-test", model="gpt-4.1-mini"))
+
+    captured: dict[str, Any] = {}
+
+    def transport(method: str, url: str, headers: dict[str, str], body: bytes | None, timeout: int) -> tuple[int, str]:
+        captured["method"] = method
+        captured["url"] = url
+        captured["body"] = json.loads((body or b"{}").decode("utf-8"))
+        instructions = captured["body"].get("instructions", "")
+        scout_input = json.loads(captured["body"].get("input", "{}"))
+        assert "Return at least 10 candidates" in instructions
+        assert "exact or extremely similar" in instructions
+        assert "not a single one" in instructions or "approved companies" in instructions
+        assert "approved_companies" in scout_input
+        assert scout_input["approved_companies"][0]["name"] == "Memory Target"
+        assert any(tool.get("type") == "web_search" for tool in captured["body"].get("tools", []))
+        assert captured["body"].get("tool_choice") == "required"
+        return (
+            200,
+            json.dumps(
+                {
+                    "output_text": json.dumps(
+                        {
+                            "candidates": [
+                                {
+                                    "id": "altitut-like",
+                                    "name": "LearnLaunch",
+                                    "website": "https://learnlaunch.example.com",
+                                    "social_links": {"linkedin": "https://linkedin.com/company/learnlaunch"},
+                                    "relevance_summary": "Very similar product shape.",
+                                    "traction_summary": "Early traction.",
+                                }
+                            ]
+                        }
+                    )
+                }
+            ),
+        )
+
+    execution = llm_connector.LlmConnector(transport=transport).scout_competitors(
+        {
+            "altitut_context": main.DEFAULT_ALTITUT_CONTEXT,
+            "focus_keywords": ["customer discovery"],
+            "notes": ["Keep only extremely similar competitors."],
+            "approved_companies": [
+                {
+                    "id": "memory-target",
+                    "name": "Memory Target",
+                    "website": "https://memory.example.com",
+                    "social_links": {"linkedin": "https://linkedin.com/company/memory-target"},
+                }
+            ],
+        }
+    )
+
+    assert captured["body"]["model"] == "gpt-4.1-mini"
+    assert captured["url"].endswith("/responses")
+    assert execution.candidates[0]["name"] == "LearnLaunch"
+
+
+def test_llm_remote_analysis_uses_transport_and_parses_json(monkeypatch: Any) -> None:
+    monkeypatch.setattr(llm_connector, "load_llm_config", lambda: _llm_config(enabled=True, api_key="sk-test", model="gpt-4.1-mini"))
+
+    captured: dict[str, Any] = {}
+
+    def transport(method: str, url: str, headers: dict[str, str], body: bytes | None, timeout: int) -> tuple[int, str]:
+        captured["method"] = method
+        captured["url"] = url
+        captured["headers"] = headers
+        captured["timeout"] = timeout
+        captured["body"] = json.loads((body or b"{}").decode("utf-8"))
+        return (
+            200,
+            json.dumps(
+                {
+                    "choices": [
+                        {
+                            "message": {
+                                "content": {
+                                    "summary": "Remote summary",
+                                    "why_it_worked": ["Strong hook"],
+                                    "design_pattern": ["Clear framing"],
+                                    "altitut_adaptation": ["Adapt the opener"],
+                                    "reasoning": "Remote model produced the analysis.",
+                                    "confidence": 0.97,
+                                }
+                            }
+                        }
+                    ]
+                }
+            ),
+        )
+
+    analysis = llm_connector.LlmConnector(transport=transport).analyze_post(
         {
             "id": "post-1",
             "competitor_name": "Creator One",
@@ -65,10 +162,13 @@ def test_llm_offline_fallback_analysis_uses_local_heuristics(monkeypatch: Any) -
         context={"retrieval_mode": "popular"},
     )
 
-    assert analysis["provider"] == "offline-heuristic"
-    assert analysis["model"] == "offline-heuristic-v1"
+    assert captured["method"] == "POST"
+    assert captured["url"].endswith("/chat/completions")
+    assert captured["body"]["model"] == "gpt-4.1-mini"
+    assert analysis["provider"] == "openai-compatible"
+    assert analysis["model"] == "gpt-4.1-mini"
     assert analysis["status"] == "completed"
-    assert "Creator One post analyzed for popular retrieval" in analysis["summary"]
+    assert analysis["summary"] == "Remote summary"
 
 
 def test_reject_routes_delegate_to_db_helpers(monkeypatch: Any) -> None:

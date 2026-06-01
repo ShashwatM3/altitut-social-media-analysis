@@ -47,7 +47,7 @@ def test_record_run_emits_workflow_event(monkeypatch: Any) -> None:
     row: dict[str, Any] = {
         "id": "run-1",
         "run_type": "posts_analysis",
-        "provider": "offline-heuristic",
+        "provider": "openai-compatible",
         "status": "completed",
         "input": {},
         "output": {},
@@ -66,7 +66,7 @@ def test_record_run_emits_workflow_event(monkeypatch: Any) -> None:
 
     result = competitors.record_run(
         run_type="posts_analysis",
-        provider="offline-heuristic",
+        provider="openai-compatible",
         status="completed",
         input_payload={"targets": ["competitor-1"]},
         output_payload={"post_ids": ["post-1"]},
@@ -79,7 +79,7 @@ def test_record_run_emits_workflow_event(monkeypatch: Any) -> None:
     assert recorded["event"]["entity_id"] == "run-1"
     assert recorded["event"]["action"] == "record"
     assert recorded["event"]["outcome"] == "completed"
-    assert recorded["event"]["provider"] == "offline-heuristic"
+    assert recorded["event"]["provider"] == "openai-compatible"
     assert recorded["event"]["run_id"] == "run-1"
     assert recorded["event"]["payload"]["input"] == {"targets": ["competitor-1"]}
     assert recorded["event"]["payload"]["output"] == {"post_ids": ["post-1"]}
@@ -93,7 +93,7 @@ def test_record_workflow_event_inserts_audit_row(monkeypatch: Any) -> None:
         "entity_id": "post-1",
         "action": "reject",
         "outcome": "rejected",
-        "provider": "offline-heuristic",
+        "provider": "openai-compatible",
         "run_id": "run-1",
         "source_run_id": "run-1",
         "payload": {"source_run_id": "run-1"},
@@ -107,7 +107,7 @@ def test_record_workflow_event_inserts_audit_row(monkeypatch: Any) -> None:
         entity_id="post-1",
         action="reject",
         outcome="rejected",
-        provider="offline-heuristic",
+        provider="openai-compatible",
         run_id="run-1",
         source_run_id="run-1",
         payload={"source_run_id": "run-1"},
@@ -120,13 +120,13 @@ def test_record_workflow_event_inserts_audit_row(monkeypatch: Any) -> None:
 
 def test_review_actions_record_workflow_events(monkeypatch: Any) -> None:
     cases = [
-        (competitors, "approve_competitor", "competitor", "approved"),
-        (competitors, "reject_competitor", "competitor", "rejected"),
-        (posts, "approve_post", "post", "approved"),
-        (posts, "reject_post", "post", "rejected"),
+        (competitors, "approve_competitor", "competitor", "approved", True),
+        (competitors, "reject_competitor", "competitor", "rejected", False),
+        (posts, "approve_post", "post", "approved", True),
+        (posts, "reject_post", "post", "rejected", True),
     ]
 
-    for module, func_name, entity_type, outcome in cases:
+    for module, func_name, entity_type, outcome, should_record_event in cases:
         row: dict[str, Any] = {
             "id": "item-1",
             "approved": outcome == "approved",
@@ -136,18 +136,26 @@ def test_review_actions_record_workflow_events(monkeypatch: Any) -> None:
         captured: dict[str, Any] = {}
 
         monkeypatch.setattr(module, "connection", lambda row=row: _fake_connection(row))
-        monkeypatch.setattr(
-            module,
-            "record_workflow_event",
-            lambda captured=captured, **kwargs: captured.setdefault("event", kwargs) or {"id": "event-1", **kwargs},
-        )
+        if should_record_event:
+            monkeypatch.setattr(
+                module,
+                "record_workflow_event",
+                lambda captured=captured, **kwargs: captured.setdefault("event", kwargs) or {"id": "event-1", **kwargs},
+            )
+        else:
+            monkeypatch.setattr(
+                module,
+                "record_workflow_event",
+                lambda **kwargs: (_ for _ in ()).throw(AssertionError("reject_competitor should not record workflow events")),
+            )
 
         result = getattr(module, func_name)("item-1", source_run_id="run-9")
 
         assert result["id"] == "item-1"
-        assert captured["event"]["entity_type"] == entity_type
-        assert captured["event"]["entity_id"] == "item-1"
-        assert captured["event"]["action"] == func_name.split("_")[0]
-        assert captured["event"]["outcome"] == outcome
-        assert captured["event"]["source_run_id"] == "run-9"
-        assert captured["event"]["payload"] == {"source_run_id": "run-9"}
+        if should_record_event:
+            assert captured["event"]["entity_type"] == entity_type
+            assert captured["event"]["entity_id"] == "item-1"
+            assert captured["event"]["action"] == func_name.split("_")[0]
+            assert captured["event"]["outcome"] == outcome
+            assert captured["event"]["source_run_id"] == "run-9"
+            assert captured["event"]["payload"] == {"source_run_id": "run-9"}

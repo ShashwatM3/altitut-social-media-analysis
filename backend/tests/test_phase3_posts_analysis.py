@@ -4,6 +4,8 @@ import asyncio
 from types import SimpleNamespace
 from typing import Any
 
+import pytest
+
 from backend.api import main
 from backend.connectors import llm as llm_connector
 
@@ -93,7 +95,7 @@ class _FakeLlmConnector:
         }
 
 
-def test_resolve_posts_analysis_request_accepts_approved_competitors(monkeypatch: Any) -> None:
+def test_resolve_posts_analysis_request_uses_approved_competitors_only(monkeypatch: Any) -> None:
     monkeypatch.setattr(
         main,
         "list_competitors",
@@ -101,46 +103,32 @@ def test_resolve_posts_analysis_request_accepts_approved_competitors(monkeypatch
             {
                 "id": "competitor-1",
                 "name": "Creator One",
-                "website": "https://www.instagram.com/creator.one/",
+                "social_links": {"instagram": "https://instagram.com/creator.one"},
             }
         ],
     )
 
     analysis_input, missing, next_steps = main._resolve_posts_analysis_request(
-        {"competitor_ids": ["competitor-1"], "retrieval_mode": "popular", "post_limit": 4}
+        {"competitor_ids": ["competitor-1"], "retrieval_mode": "popular"}
     )
 
     assert missing == []
     assert next_steps == []
     assert analysis_input["retrieval_mode"] == "popular"
-    assert analysis_input["post_limit"] == 4
+    assert analysis_input["post_limit"] == 6
     assert analysis_input["targets"][0]["competitor_id"] == "competitor-1"
+    assert analysis_input["targets"][0]["competitor_name"] == "Creator One"
     assert analysis_input["targets"][0]["usernames"] == ["creator.one"]
 
 
-def test_posts_analysis_returns_setup_required_when_company_has_no_instagram_username(monkeypatch: Any) -> None:
-    monkeypatch.setattr(
-        main,
-        "list_competitors",
-        lambda approved=True: [
-            {"id": "competitor-1", "name": "Creator One", "social_links": {"website": "https://example.com"}},
-        ],
-    )
-    fake_connector = _FakeConnector(ready=True)
-    recorded: dict[str, Any] = {}
+def test_resolve_posts_analysis_request_rejects_direct_usernames(monkeypatch: Any) -> None:
+    monkeypatch.setattr(main, "list_competitors", lambda approved=True: [])
 
-    monkeypatch.setattr(main, "ApifyConnector", lambda: fake_connector)
-    monkeypatch.setattr(
-        main,
-        "record_run",
-        lambda **kwargs: recorded.setdefault("run", kwargs) or {"id": "run-1", **kwargs},
-    )
+    with pytest.raises(main.HTTPException) as exc_info:
+        main._resolve_posts_analysis_request({"usernames": ["creator.one"], "retrieval_mode": "recent"})
 
-    result = asyncio.run(main.posts_analysis({"competitor_ids": ["competitor-1"]}))
-
-    assert result["status"] == "setup_required"
-    assert recorded["run"]["status"] == "setup_required"
-    assert "competitor-1:instagram_username" in recorded["run"]["output_payload"]["missing_requirements"]
+    assert exc_info.value.status_code == 422
+    assert "approved competitor_ids" in exc_info.value.detail.lower()
 
 
 def test_posts_analysis_persists_analyzed_posts(monkeypatch: Any) -> None:
@@ -199,7 +187,7 @@ def test_posts_analysis_persists_analyzed_posts(monkeypatch: Any) -> None:
     )
 
     result = asyncio.run(
-        main.posts_analysis({"usernames": ["creator.one"], "retrieval_mode": "recent", "post_limit": 4})
+        main.posts_analysis({"competitor_ids": ["competitor-1"], "retrieval_mode": "recent", "post_limit": 4})
     )
 
     assert result["status"] == "completed"
@@ -240,7 +228,7 @@ def test_posts_analysis_returns_setup_required_when_llm_needs_setup(monkeypatch:
     assert recorded["run"]["status"] == "setup_required"
 
 
-def test_posts_analysis_uses_offline_llm_fallback_and_persists_posts(monkeypatch: Any) -> None:
+def test_posts_analysis_uses_remote_llm_and_persists_posts(monkeypatch: Any) -> None:
     execution = SimpleNamespace(
         run_ids=["run-456"],
         dataset_ids=["dataset-456"],
@@ -259,28 +247,11 @@ def test_posts_analysis_uses_offline_llm_fallback_and_persists_posts(monkeypatch
                 "transcript": "",
                 "frames": [],
                 "traction": {"likesCount": 99},
-                "analysis": {"summary": "offline"},
+                "analysis": {"summary": "remote"},
                 "source_run_id": "run-456",
             }
         ],
     )
-    monkeypatch.setattr(
-        llm_connector,
-        "load_llm_config",
-        lambda: SimpleNamespace(
-            name="openai-compatible",
-            enabled=True,
-            api_key_env="OPENAI_API_KEY",
-            api_key="",
-            base_url="https://api.openai.com/v1",
-            model="",
-            docs_url="https://platform.openai.com/docs",
-            setup_steps=["Set OPENAI_API_KEY in your environment."],
-            timeout_seconds=60,
-            offline_fallback=True,
-        ),
-    )
-
     fake_connector = _FakeConnector(ready=True, execution=execution)
     recorded: dict[str, Any] = {}
 
@@ -296,6 +267,7 @@ def test_posts_analysis_uses_offline_llm_fallback_and_persists_posts(monkeypatch
         ],
     )
     monkeypatch.setattr(main, "ApifyConnector", lambda: fake_connector)
+    monkeypatch.setattr(main, "LlmConnector", lambda: _FakeLlmConnector(ready=True))
     monkeypatch.setattr(
         main,
         "save_post",
@@ -316,8 +288,8 @@ def test_posts_analysis_uses_offline_llm_fallback_and_persists_posts(monkeypatch
     )
 
     assert result["status"] == "completed"
-    assert result["llm_integration"]["provider"] == "offline-heuristic"
-    assert result["posts"][0]["analysis"]["provider"] == "offline-heuristic"
-    assert result["posts"][0]["analysis"]["model"] == "offline-heuristic-v1"
-    assert recorded["run"]["provider"] == "offline-heuristic"
-    assert recorded["run"]["output_payload"]["llm"]["provider"] == "offline-heuristic"
+    assert result["llm_integration"]["provider"] == "openai-compatible"
+    assert result["posts"][0]["analysis"]["provider"] == "openai-compatible"
+    assert result["posts"][0]["analysis"]["model"] == "gpt-4.1-mini"
+    assert recorded["run"]["provider"] == "openai-compatible"
+    assert recorded["run"]["output_payload"]["llm"]["provider"] == "openai-compatible"

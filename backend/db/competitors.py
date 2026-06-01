@@ -193,35 +193,23 @@ def approve_competitor(competitor_id: str, source_run_id: str | None = None) -> 
 
 
 def reject_competitor(competitor_id: str, source_run_id: str | None = None) -> dict[str, Any]:
-    now = _utcnow()
     with connection() as conn:
         with conn.cursor(row_factory=dict_row) as cur:
             cur.execute(
-                """
-                UPDATE competitors
-                SET approved = FALSE,
-                    rejected = TRUE,
-                    rejected_at = %s,
-                    reviewed_at = %s,
-                    source_run_id = COALESCE(%s, source_run_id),
-                    updated_at = %s
-                WHERE id = %s
-                RETURNING *
-                """,
-                (now, now, source_run_id, now, competitor_id),
+                "SELECT * FROM competitors WHERE id = %s",
+                (competitor_id,),
             )
             row = cur.fetchone()
+            if row is None:
+                conn.rollback()
+                raise KeyError(f"Competitor not found: {competitor_id}")
+            cur.execute("DELETE FROM posts WHERE competitor_id = %s", (competitor_id,))
+            cur.execute(
+                "DELETE FROM workflow_events WHERE entity_type = %s AND entity_id = %s",
+                ("competitor", competitor_id),
+            )
+            cur.execute("DELETE FROM competitors WHERE id = %s", (competitor_id,))
         conn.commit()
-    if row is None:
-        raise KeyError(f"Competitor not found: {competitor_id}")
-    record_workflow_event(
-        entity_type="competitor",
-        entity_id=competitor_id,
-        action="reject",
-        outcome="rejected",
-        source_run_id=source_run_id,
-        payload={"source_run_id": source_run_id},
-    )
     return dict(row)
 
 

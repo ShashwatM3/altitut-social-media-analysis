@@ -11,4 +11,3 @@ setup_steps = [
   "If you use a self-hosted OpenAI-compatible endpoint, update provider.base_url.",
 ]
 timeout_seconds = 60
-offline_fallback = true
