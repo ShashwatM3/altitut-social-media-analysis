@@ -1,8 +1,0 @@
-[app]
-name = "ALTITUT Social Media Analysis API"
-version = "0.1.0"
-
-[database]
-# Override with DATABASE_URL when running locally against a real Postgres instance.
-dsn = "postgresql://localhost:5432/altitut_social_media_analysis"
-schema = "public"
