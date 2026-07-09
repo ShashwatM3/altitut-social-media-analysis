@@ -23,3 +23,12 @@ ALTITUT-SOCIAL-MEDIA-ANALYSIS is scaffolded as a simple monorepo with clear sepa
 ## Quick orientation
 
 A new contributor should be able to understand the skeleton in under 5 minutes by reading this file, the root README, and `backend/README.md`.
+
+## Local dev layout
+
+Use two terminals:
+
+1. **Repo root** — backend venv, migrations, and Uvicorn
+2. **`frontend/`** — `npm run dev`
+
+Do not run backend Python commands from inside `backend/`; imports like `backend.api` only resolve from the repo root.

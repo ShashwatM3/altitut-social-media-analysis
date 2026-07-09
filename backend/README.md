@@ -7,11 +7,20 @@ This folder contains backend services:
 
 ## Run API locally
 
-From the repository root:
+All commands below run from the **repository root**, not from this `backend/` folder.
 
 ```bash
+cd /path/to/ALTITUT-SOCIAL-MEDIA-ANALYSIS
+python3 -m venv .venv
+source .venv/bin/activate
 pip install -r backend/api/requirements.txt
+python -m backend.db.apply
 uvicorn backend.api.main:app --reload
+```
+
+If your shell prompt shows `backend %`, go up one directory first:
+```bash
+cd ..
 ```
 
 Open:
@@ -36,5 +45,9 @@ Docker support still exists at the repository root via `docker-compose.yml` and 
 
 ## Database
 
-The initial schema lives in `backend/migrations/001_init.sql`.
-Use that migration against your local PostgreSQL instance before running the full backend flows.
+SQL migrations live in `backend/migrations/`.
+
+Apply them from the repository root:
+```bash
+python -m backend.db.apply
+```

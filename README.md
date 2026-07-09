@@ -43,35 +43,68 @@ The BMAD workflow docs in `bmad-docs/` define the project plan, scope, and actio
 
 ## First-time setup
 
+Do this once before running the app locally. Day-to-day development uses **two terminals in two different folders**:
+
+| Terminal | Working directory | What runs there |
+|---|---|---|
+| Terminal 1 — Backend | Repo root (`ALTITUT-SOCIAL-MEDIA-ANALYSIS/`) | Python venv, migrations, Uvicorn API |
+| Terminal 2 — Frontend | `frontend/` | Vite dev server |
+
+**Important:** Backend Python commands must run from the **repo root**, not from inside `backend/`. The code imports modules as `backend.api`, `backend.db`, and so on, which only works when your shell is one level above the `backend/` folder.
+
 ### Prerequisites
-- Python 3.11+
+- Python 3.11+ (avoid creating the venv with a different Python than the one you run day to day)
 - Node.js 18+
 - A local PostgreSQL instance
 - Optional: an Apify account/token and an OpenAI-compatible API key if you want the full third-party integrations enabled
 
-### 1) Clone the repo and open the project root
+### 1) Clone the repo
 ```bash
-cd /Users/gobus/Desktop/main/projects/internship/altitut/ALTITUT-SOCIAL-MEDIA-ANALYSIS
+git clone <repo-url>
+cd ALTITUT-SOCIAL-MEDIA-ANALYSIS
 ```
 
-### 2) Set up the backend environment
-Create a virtual environment and install the API dependencies:
+Confirm you are at the repo root. This command should list `backend/`, `frontend/`, and `README.md`:
+```bash
+ls
+```
+
+### 2) Backend dependencies (Terminal 1 prep)
+Open **Terminal 1** and stay at the repo root for all backend work.
+
+If your shell is inside `backend/`, go back up first:
+```bash
+cd ..
+```
+
+Create the virtual environment at the repo root (not inside `backend/`):
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r backend/api/requirements.txt
 ```
 
-### 3) Set up the frontend dependencies
-Install the frontend packages from the `frontend/` directory:
+After activation, `which python` should point to `.venv/bin/python` under the repo root.
+
+### 3) Frontend dependencies (Terminal 2 prep)
+Open **Terminal 2** for frontend work.
+
+From the repo root:
 ```bash
 cd frontend
 npm install
-cd ..
 ```
 
+Leave this terminal in `frontend/` for day-to-day frontend work.
+
 ### 4) Create a `.env` file at the repo root
-The backend automatically loads `/Users/gobus/Desktop/main/projects/internship/altitut/ALTITUT-SOCIAL-MEDIA-ANALYSIS/.env`, so put the required values there before starting the app.
+In **Terminal 1**, make sure you are back at the repo root before editing env vars:
+```bash
+cd ..   # only if you are still in frontend/
+cp .env.example .env
+```
+
+The backend loads `.env` from the repo root automatically. Fill in the values before starting the API.
 
 Required environment variables for the live product:
 - `DATABASE_URL` — PostgreSQL connection string for your local database
@@ -93,29 +126,45 @@ The default provider config still lives in `configs/providers/`:
 - `configs/providers/llm.toml` supplies the OpenAI-compatible provider metadata and docs link
 - `configs/providers/exa.toml` supplies the Exa discovery provider metadata and docs link
 
-### 5) Apply the database migrations
-Apply the SQL migrations to the database before starting the app:
-```bash
-python -m backend.db.apply
-```
-If you prefer to run the schema manually, the migrations live in `backend/migrations/`.
+## Run locally
 
-### 6) Start the backend API
-From the repo root, run:
+Use two terminals and keep them open while developing.
+
+### Terminal 1 — Backend
+Working directory: repo root (`ALTITUT-SOCIAL-MEDIA-ANALYSIS/`)
+
 ```bash
+cd /path/to/ALTITUT-SOCIAL-MEDIA-ANALYSIS
+source .venv/bin/activate
+python -m backend.db.apply
 uvicorn backend.api.main:app --reload
 ```
-The health check should be available at `http://localhost:8000/health`.
 
-### 7) Start the frontend dashboard
-In a second terminal, run:
+Quick directory check before running backend commands:
 ```bash
-cd frontend
+pwd
+ls backend frontend README.md
+```
+
+Expected results:
+- `pwd` ends with `ALTITUT-SOCIAL-MEDIA-ANALYSIS`
+- `ls` shows the `backend/` and `frontend/` folders
+
+Notes:
+- Run migrations before the first API start, and again whenever new SQL files are added under `backend/migrations/`.
+- The health check should be available at `http://localhost:8000/health`.
+
+### Terminal 2 — Frontend
+Working directory: `frontend/`
+
+```bash
+cd /path/to/ALTITUT-SOCIAL-MEDIA-ANALYSIS/frontend
 npm run dev
 ```
-Then open the local Vite URL printed in the terminal.
 
-### 8) Verify the main flows
+Open the local Vite URL printed in this terminal. The dashboard expects the backend from Terminal 1 to already be running.
+
+### Verify the main flows
 - `GET /health` confirms the API is up
 - `GET /integrations/apify/status` shows whether Apify is ready or still needs setup
 - `GET /integrations/llm/status` confirms whether the analysis provider has credentials and a model configured
@@ -125,10 +174,58 @@ Then open the local Vite URL printed in the terminal.
 - `POST /competitors/{competitor_id}/approve`, `POST /competitors/{competitor_id}/reject`, `POST /posts/{post_id}/approve`, and `POST /posts/{post_id}/reject` persist review actions to PostgreSQL
 
 ## Usage
+- Run the backend in Terminal 1 (repo root) and the frontend in Terminal 2 (`frontend/`); both need to stay up while you use the dashboard.
 - The dashboard is split between competitor scouting, post analysis, and approval actions.
 - The system returns setup-required states when required third-party credentials or provider config are missing, so first-time users know exactly what still needs to be configured.
 - Approved posts can be filtered by company using the backend query parameter, not just client-side filtering.
 - Docker support still exists at the repository root via `docker-compose.yml` and the root Dockerfile if you want to run the API containerized instead of directly with Uvicorn.
+
+## Troubleshooting
+
+### `No module named 'backend'`
+You are probably inside `backend/` instead of the repo root.
+
+Fix:
+```bash
+cd ..
+source .venv/bin/activate
+python -m backend.db.apply
+```
+
+### `Could not open requirements file: backend/api/requirements.txt`
+Same cause: the shell is inside `backend/`, so that relative path does not exist.
+
+Fix:
+```bash
+cd ..
+pip install -r backend/api/requirements.txt
+```
+
+If you are already at the repo root, the requirements file is at `backend/api/requirements.txt`.
+
+### `psycopg is required to apply migrations`
+The virtual environment is missing backend dependencies, or the venv was created with a different Python version than the one currently active.
+
+Fix from the repo root:
+```bash
+rm -rf .venv
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r backend/api/requirements.txt
+python -m backend.db.apply
+```
+
+### I created `.venv` inside `backend/` by mistake
+The project expects the venv at the repo root.
+
+Fix:
+```bash
+cd /path/to/ALTITUT-SOCIAL-MEDIA-ANALYSIS
+rm -rf backend/.venv
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r backend/api/requirements.txt
+```
 
 ## Evaluation
 Success means the system can discover competitors, analyze posts, persist approved items locally, and clearly guide the user whenever a third-party tool requires external setup.
