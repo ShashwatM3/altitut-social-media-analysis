@@ -1,0 +1,221 @@
+{
+  "meta": {
+    "name": "Strategyzer",
+    "slug": "strategyzer",
+    "tier": "strong-adjacent",
+    "snapshot_date": "2026-07-09",
+    "overall_confidence": "medium",
+    "refresh_cadence": "monthly — steady, low-volume LinkedIn-only cadence; unlikely to shift materially week to week"
+  },
+
+  "1_identity": {
+    "snapshot": {
+      "one_liner": "A business-model-canvas methodology platform (Business Model Canvas, Value Proposition Canvas) plus 'Playbooks' guided workflows, consulting, workshops, and training academy, built around Alexander Osterwalder's Business Model Generation methodology.",
+      "tier": "strong-adjacent",
+      "why_they_compete": "Real tools platform and the canvas/validation methodology underneath Altitut's own canvas and validation tools, per COMPETITORS.md (#9 of 10) — but audience is corporate/enterprise, not students or first-time founders, and it is not gamified."
+    },
+    "positioning": {
+      "value_prop": "\"Stop going in Circles. Create Clarity. Make Decisions. Get Results.\" — has repositioned from a canvas SaaS tool toward a broader innovation/strategy-execution platform: Playbooks, Consulting, Workshops, Training. (source: strategyzer.com)",
+      "differentiation": "Methodology-as-brand: every tool traces back to Osterwalder's bestselling Business Model Generation book and the Business Model Canvas, described on-site as 'the world's most-used strategy tool' — proven, book-anchored frameworks delivered as structured playbooks/consulting/training rather than a blank-canvas app."
+    },
+    "audience_icp": "Corporate innovation and strategy teams at large enterprises (named customer logos include Nestlé, Bayer, Mastercard, MSD); also individual coaches/facilitators via the Strategyzer Bootcamp and training programs. Not a student or first-time-founder audience.",
+    "similarity_to_us": {
+      "c1_presence": 4,
+      "c2_audience": 2,
+      "c3_motive": 6,
+      "rationale": "The underlying canvas/validation methodology is directly relevant to Altitut's own tools, but Strategyzer's actual audience (enterprise innovation teams, B2B contact-sales pricing) and format (consulting/workshops/training, not a gamified LMS) diverge sharply from Altitut's student/first-founder audience. Scores are directional judgment, not a scoring model output."
+    }
+  },
+
+  "2_product_website": {
+    "highlight_features": [
+      { "feature": "Playbooks (step-by-step guided workflows)", "why_pushed": "Now the lead homepage pillar alongside Consulting/Workshops/Training — a shift from selling 'canvas software' to selling guided process." },
+      { "feature": "Workshops", "why_pushed": "Promises team alignment 'in days rather than quarters' — a time-compression hook for enterprise buyers." },
+      { "feature": "Training / Masterclasses & Bootcamps", "why_pushed": "Includes AI-flavored additions ('Master Business Ideas Testing with AI') that modernize the core methodology for current buyers." },
+      { "feature": "Business Model Canvas (free download)", "why_pushed": "Retained as a free lead-magnet/template rather than the flagship paid product — funnels into paid courses." }
+    ],
+    "most_attractive_features": [
+      { "feature": "Playbook library", "why_it_lands": "Turnkey, pre-built workflows reduce facilitation overhead for internal corporate innovation teams." },
+      { "feature": "Workshops promising fast alignment", "why_it_lands": "Speaks directly to enterprise pain of slow, inconclusive strategy meetings." },
+      { "feature": "Enterprise credibility signals (named logos, '200,000+ companies guided')", "why_it_lands": "De-risks procurement for B2B buyers." }
+    ],
+    "messaging_conversion": {
+      "headline_copy": "\"Stop going in Circles. Create Clarity. Make Decisions. Get Results.\"",
+      "pricing": "Individual Access pricing is internally inconsistent as fetched ($25/month, $50, and €299/year all appear on the pricing page), with a 14-day money-back guarantee; Team Access and Enterprise are both 'Contact sales' / 'Upon request'. A third-party aggregator cites a 'Small Team' package at $299.99/year — not independently confirmed first-party.",
+      "primary_ctas": ["Discover our playbook library", "Talk to us", "Get full access now", "Contact sales", "Buy this course", "Enroll now"],
+      "funnel_path": "Free Business Model Canvas download / free playbook preview → paid individual access or course enrollment → 'Contact sales' for Team/Enterprise.",
+      "social_proof": "'200,000+ companies guided'; '#1 most popular innovation & entrepreneurship tool'; 'Top 10 most-cited business book (Financial Times)'; presence in '178+ countries'; named enterprise logos (Nestlé, Bayer, Mastercard, MSD); named, titled testimonials (VP Research at BioZyme; Innovation Director at Cyric)."
+    },
+    "insights_to_imbibe": [
+      "Lead with outcomes ('clarity, decisions, results'), not the tool itself — applicable to Altitut's own copy for founder outcomes over feature lists.",
+      "Offer a free, brand-anchored artifact (their Business Model Canvas download) as a funnel entry point into paid modules.",
+      "Pair even a small number of testimonials with concrete names and titles/roles rather than generic praise — works even without a large logo wall.",
+      "Time-compression positioning ('alignment in days, not quarters') is a strong hook Altitut could adapt for bootcamp-style RPG sprints.",
+      "Tie every tool/framework back to a named creator or proprietary 'system' — Strategyzer's Osterwalder-anchored authority is a transferable credibility pattern."
+    ]
+  },
+
+  "3_social_presence": {
+    "platforms": [
+      {
+        "platform": "linkedin",
+        "profile_stats": { "handle": "linkedin.com/company/strategyzer", "followers": 65713, "verified": false, "bio_links": ["http://www.strategyzer.com"] },
+        "cadence": { "posts_per_week": 0.75, "consistency": "steady but low-volume", "notes": "36 posts pulled span 2025-08-05 to 2026-07-08 (~11 months) — under 1 post/week, far lower volume than either Fe/male Switch or IdeaBuddy despite the much larger follower base. Observed, tier 1." },
+        "format_mix": { "reel_pct": 0, "carousel_pct": 0, "static_pct": 100, "story_pct": 0 },
+        "engagement_rate": { "value_pct": 0.06, "basis": "normalized to followers", "notes": "Likes per post range 5–116 (median ~40) on a 65,713-follower base — engagement rate is low in percentage terms purely because the follower base is large; raw like counts are the platform's highest of the three scraped competitors by a wide margin. Observed, tier 1, approximate." },
+        "growth_velocity": { "trend": "not available", "from_snapshots": ["Single snapshot only; a search-snippet figure (~56,947 followers) predates this direct pull (65,713), consistent with real growth over an unknown window but not a controlled comparison."] }
+      },
+      {
+        "platform": "instagram",
+        "profile_stats": { "handle": "not scraped this pass", "followers": null, "verified": false, "bio_links": [] },
+        "cadence": { "posts_per_week": 0, "consistency": "not available", "notes": "COMPETITORS.md flags Strategyzer as LinkedIn-only for scraping purposes; not attempted this pass by design." },
+        "format_mix": { "reel_pct": 0, "carousel_pct": 0, "static_pct": 0, "story_pct": 0 },
+        "engagement_rate": { "value_pct": 0, "basis": "normalized to followers", "notes": "not available" },
+        "growth_velocity": { "trend": "not available", "from_snapshots": [] }
+      }
+    ]
+  },
+
+  "4_content_strategy": {
+    "pillars": [
+      { "pillar": "Webinar/masterclass promotion (Osterwalder, Viki, Hill co-hosted live sessions)", "share": "~45%", "example_refs": ["li:activity-7458594424202211328-DuVq", "li:activity-7459852505103921152-mrOD"], "reliability": "observed, tier 1/2" },
+      { "pillar": "Framework/methodology thought-leadership essays (differentiation, value propositions, business-model competition)", "share": "~30%", "example_refs": ["li:activity-7381598778627092480-GEnf", "li:activity-7368168306769412096-zUOo"], "reliability": "observed, tier 2" },
+      { "pillar": "Bootcamp / in-person event promotion (Swiss Alps Bootcamp)", "share": "~15%", "example_refs": ["li:activity-7419699464556351488-qtlQ", "li:activity-7399410649593950208-cezu"], "reliability": "observed, tier 1/2" },
+      { "pillar": "Team/press recognition posts", "share": "~10%", "example_refs": ["li:activity-7457762876469133312--WZm"], "reliability": "observed, tier 1" }
+    ],
+    "recurring_series": [
+      { "name": "Free live webinar series with Osterwalder + Viki + Hill", "format": "long-form text post + registration link", "cadence": "roughly monthly to biweekly" },
+      { "name": "Strategyzer Bootcamp (Swiss Alps) promotion", "format": "long-form narrative post, sometimes with live in-event updates", "cadence": "seasonal, tied to the January cohort" }
+    ],
+    "hook_patterns": [
+      { "pattern": "Contrarian-claim openers ('Most teams differentiate by looking at competitors. That is the wrong starting point.')", "source": "on-cover / caption", "reliability": "observed, tier 1 — present in the majority of top-performing posts" },
+      { "pattern": "Named-brand case-study contrasts (failures: Juicero, Segway, Quibi vs. winners: Nintendo Wii, Stanley Quencher, Too Good To Go)", "source": "caption", "reliability": "observed, tier 2" }
+    ],
+    "cta_funnel_intent": { "dominant_intent": "conversion", "notes": "The large majority of posts drive directly to a webinar registration, course enrollment, or bootcamp application link — awareness-only posts are rare in the sample." },
+    "brand_voice": "Authoritative, consultative, thought-leadership register — long-form posts built around a contrarian claim, evidence/case studies, then a direct offer. Consistently name-drops Alexander Osterwalder and named co-hosts as the credibility anchor.",
+    "production_style": {
+      "style": "Long-form text posts (300-600+ words) are the dominant format — no video/reel content observed in the pulled sample; occasional embedded short clips of Osterwalder speaking at events.",
+      "trend_audio_usage": "not applicable — no video content pulled this pass."
+    },
+    "per_platform_divergence": "Not assessable — only LinkedIn was scraped this pass per COMPETITORS.md's guidance that Strategyzer is LinkedIn-only for social scraping purposes; the website research agent's report did not confirm active Instagram/other-platform handles worth pursuing."
+  },
+
+  "5_top_performers": [
+    {
+      "rank": 1, "platform": "linkedin", "url": "https://www.linkedin.com/posts/strategyzer_you-know-that-moment-when-your-team-gets-activity-7368168306769412096-zUOo", "type": "static",
+      "content": { "transcript_or_caption": "\"You know that moment when your team gets stuck debating the same concept for weeks while competitors are already shipping solutions?... Design like you are right. Test like you are wrong.\"", "on_cover_text": "not available" },
+      "numbers": { "likes": 116, "comments": 2, "shares": 15, "saves": null, "views": null },
+      "why_it_won": "Highest-liked and highest-shared post in the sample; frames a universal, relatable team pain point (analysis paralysis vs. commitment bias) and resolves it with a punchy, quotable dual-mindset framework ('design like you're right, test like you're wrong').",
+      "repeatable_formula": "Open with a relatable, specific team pain point; resolve with a short, quotable two-sided framework."
+    },
+    {
+      "rank": 2, "platform": "linkedin", "url": "https://www.linkedin.com/posts/strategyzer_strategyzer-innovation-strategyzerbootcamp-activity-7419699464556351488-qtlQ", "type": "static",
+      "content": { "transcript_or_caption": "\"Elevating Strategy Above the Clouds. We are currently 2,132 meters above sea level at Pilatus Kulm... Tag yourself below and share your #1 'Aha!' moment from the summit!\"", "on_cover_text": "not available" },
+      "numbers": { "likes": 108, "comments": 9, "shares": 5, "saves": null, "views": null },
+      "why_it_won": "Highest comment count in the sample — a live, in-the-moment event post with a direct participation prompt (tag yourself, share your takeaway) and attendee name-tags drove genuine two-way engagement rather than passive likes.",
+      "repeatable_formula": "Live in-event post with a specific location detail and a direct participation prompt (tag/comment your takeaway)."
+    },
+    {
+      "rank": 3, "platform": "linkedin", "url": "https://www.linkedin.com/posts/strategyzer_most-teams-differentiate-by-looking-at-competitors-activity-7458594424202211328-DuVq", "type": "static",
+      "content": { "transcript_or_caption": "\"Most teams differentiate by looking at competitors. That is the wrong starting point... Three failed launches make the point clearly: Juicero, Segway, Quibi. Now compare them to three that worked: Nintendo Wii, Stanley Quencher, Too Good To Go.\"", "on_cover_text": "not available" },
+      "numbers": { "likes": 83, "comments": 6, "shares": 7, "saves": null, "views": null },
+      "why_it_won": "Contrarian opening claim backed by six specific, recognizable named-brand case studies (three failures, three winners) — concrete, verifiable examples outperform abstract framework explanations.",
+      "repeatable_formula": "Contrarian claim + a matched set of named-brand failure/success case studies as proof."
+    },
+    {
+      "rank": 4, "platform": "linkedin", "url": "https://www.linkedin.com/posts/strategyzer_how-long-was-your-last-experiment-be-honest-activity-7475833579743186944-AnWq", "type": "static",
+      "content": { "transcript_or_caption": "\"How long was your last experiment? Be honest. Six months? Two years?... This September, Strategyzer is launching a new masterclass to fix that.\"", "on_cover_text": "not available" },
+      "numbers": { "likes": 79, "comments": 21, "shares": 13, "saves": null, "views": null },
+      "why_it_won": "Highest comment count relative to likes ratio in the top set — a direct, personal, slightly confrontational question ('be honest') to the reader prompts self-reflective replies more than a general statement would.",
+      "repeatable_formula": "Open with a direct, personal, slightly uncomfortable question aimed at the reader before pitching the offer."
+    },
+    {
+      "rank": 5, "platform": "linkedin", "url": "https://www.linkedin.com/posts/strategyzer_most-teams-fight-feature-wars-the-winners-activity-7381598778627092480-GEnf", "type": "static",
+      "content": { "transcript_or_caption": "\"Most teams fight feature wars. The winners compete on business models... Nespresso sold machines at cost and captured value in pods. Dollar Shave Club beat incumbents with direct subscription, not a better blade.\"", "on_cover_text": "not available" },
+      "numbers": { "likes": 68, "comments": 8, "shares": 0, "saves": null, "views": null },
+      "why_it_won": "Reuses the winning 'contrarian claim + named-brand case studies' pattern (Nespresso, Dollar Shave Club) tied to a free downloadable playbook offer.",
+      "repeatable_formula": "Contrarian claim + 2 named-brand case studies + free downloadable resource CTA."
+    },
+    {
+      "rank": 6, "platform": "linkedin", "url": "https://www.linkedin.com/posts/strategyzer_your-executive-strategy-sessions-burn-hours-activity-7399004206063325184-Tw7e", "type": "static",
+      "content": { "transcript_or_caption": "\"Your executive strategy sessions burn hours without creating a strategy... Alexander Osterwalder and Tendayi Viki have run strategy sessions with Fortune 500 companies and sovereign wealth funds.\"", "on_cover_text": "not available" },
+      "numbers": { "likes": 66, "comments": 1, "shares": 3, "saves": null, "views": null },
+      "why_it_won": "Names a specific, high-status client tier (Fortune 500, sovereign wealth funds) as social proof directly inside the pain-point-led hook.",
+      "repeatable_formula": "Pain-point hook + specific high-status client-tier credibility claim in the same opening block."
+    },
+    {
+      "rank": 7, "platform": "linkedin", "url": "https://www.linkedin.com/posts/strategyzer_the-hardest-part-of-modern-leadership-isnt-activity-7358387562366803969-GjVq", "type": "static",
+      "content": { "transcript_or_caption": "\"The hardest part of modern leadership isn't choosing between running today's business or building tomorrow's. It's learning to excel at both simultaneously... Alexander Osterwalder captured this perfectly in 60 seconds at Presidents Summit 25.\"", "on_cover_text": "not available" },
+      "numbers": { "likes": 64, "comments": 6, "shares": 3, "saves": null, "views": null },
+      "why_it_won": "Reframes a common binary ('run vs. build') as a false choice, then references a specific named event (Presidents Summit 25) for authority.",
+      "repeatable_formula": "Reframe a common false binary, then anchor authority with a named real-world event/talk reference."
+    },
+    {
+      "rank": 8, "platform": "linkedin", "url": "https://www.linkedin.com/posts/strategyzer_5-way-to-become-a-better-coach-strategyzer-activity-7391850450871877632-qX1o", "type": "static",
+      "content": { "transcript_or_caption": "\"What separates good business coaches from exceptional ones?... 1. Master the art of facilitation 2. Use proven playbooks, not just tools 3. Build a network of peers... 4. Stay ahead of the field 5. Build credibility that opens doors\"", "on_cover_text": "not available" },
+      "numbers": { "likes": 61, "comments": 3, "shares": 6, "saves": null, "views": null },
+      "why_it_won": "Numbered-list format (5 concrete, scannable points) applied to a career-development angle (becoming a better coach) rather than a product pitch performs strongly.",
+      "repeatable_formula": "Numbered-list career/skill-development post (5 concrete points) tied to a bootcamp/training CTA."
+    },
+    {
+      "rank": 9, "platform": "linkedin", "url": "https://www.linkedin.com/posts/strategyzer_most-teams-prepare-for-growth-investment-activity-7442512304895807489-AYjc", "type": "static",
+      "content": { "transcript_or_caption": "\"Most teams prepare for growth investment reviews by polishing slides. Honeywell banned them... The result after four growth symposiums: sharper conversations, faster preparation, and fewer projects funded on gut feel.\"", "on_cover_text": "not available" },
+      "numbers": { "likes": 55, "comments": 1, "shares": 3, "saves": null, "views": null },
+      "why_it_won": "A single, specific named-client case study (Honeywell) with a concrete before/after result outperforms generic advice.",
+      "repeatable_formula": "Single named-client case study with a specific, quantifiable before/after outcome."
+    },
+    {
+      "rank": 10, "platform": "linkedin", "url": "https://www.linkedin.com/posts/strategyzer_two-people-we-get-to-work-with-every-day-activity-7457762876469133312--WZm", "type": "static",
+      "content": { "transcript_or_caption": "\"Two people we get to work with every day just made a list of 25. Alexander Osterwalder and Tendayi Viki have both been featured in the Industry Leaders '25 Management Consultant Leaders Shaping the Profession in 2026' — Alex at #3, Tendayi at #14.\"", "on_cover_text": "not available" },
+      "numbers": { "likes": 48, "comments": 16, "shares": 6, "saves": null, "views": null },
+      "why_it_won": "Highest comment count of any non-event post — third-party press recognition of named team members, plus a direct question ('who else on it has shaped how you work?'), invites reader participation.",
+      "repeatable_formula": "Third-party press/award recognition of a named team member + a direct discussion-prompt question."
+    }
+  ],
+
+  "6_paid_partnerships": {
+    "active_ads": [],
+    "partnerships": []
+  },
+
+  "7_audience_community": {
+    "sentiment": { "praise": [], "complaints": [], "overall": "not available — comments were not scraped (scrapeComments=false this pass to control cost); comment counts alone (0-21 per post) don't support a sentiment read without content." },
+    "whitespace": [
+      "Zero video/reel content observed in the LinkedIn sample despite LinkedIn's native video format being available — an untapped format for a brand with strong, articulate spoken content available from live webinars/events."
+    ],
+    "responsiveness": { "replies": false, "speed": "not available", "notes": "Comment content was not scraped this pass, so responsiveness cannot be assessed." },
+    "owned_community": [
+      { "type": "other", "detail": "Strategyzer Bootcamp — an in-person, paid cohort community (Swiss Alps, ~30 seats) run periodically." }
+    ]
+  },
+
+  "8_synthesis": {
+    "winning_formula": "Low-volume (under 1 post/week), high-craft, long-form LinkedIn thought-leadership content that consistently pairs a contrarian claim with named, verifiable brand case studies or named-client results, anchored by Alexander Osterwalder's personal authority — driving toward webinar/masterclass/bootcamp conversion rather than passive brand awareness.",
+    "recent_strategic_shifts": "A broader platform repositioning from 'canvas software' to 'Playbooks' (guided workflows) plus consulting/workshops/training, visible both on-site and in the content mix's heavy skew toward webinar and masterclass promotion over generic educational content.",
+    "steal_avoid_test": {
+      "steal": [
+        "Contrarian claim + named, verifiable brand case studies (both failures and successes) as the dominant hook-and-proof structure.",
+        "Anchoring content credibility to a single, consistently-named authority figure (Osterwalder) across nearly every post.",
+        "Live in-event posts with a direct participation prompt (tag yourself, share your takeaway) — the highest comment-count post in the sample."
+      ],
+      "avoid": [
+        "Zero video content on a platform (LinkedIn) that increasingly favors native video — a clear gap even in Strategyzer's otherwise strong content.",
+        "Inconsistent, page-level pricing information (three different figures on one pricing page) — an execution error worth avoiding, not a strategy to copy."
+      ],
+      "test": [
+        "Whether adapting Strategyzer's 'contrarian claim + named case study' structure for startup/student-relevant brands (rather than enterprise case studies) performs as well for Altitut's audience.",
+        "Whether a direct, personal, slightly uncomfortable question ('how long was your last experiment, be honest') as a post-opener reliably drives comment volume at Altitut's scale."
+      ]
+    },
+    "content_pack_hooks": [
+      { "pillar_or_format": "Contrarian claim + named case-study proof structure", "why_feed_forward": "A reusable long-form-post template Altitut could adapt with startup/student-relevant examples instead of enterprise brands." },
+      { "pillar_or_format": "Live in-event participation posts", "why_feed_forward": "Directly applicable to Altitut's own cohort events, demo days, or in-game milestones — proven to drive the highest comment engagement in this competitor's sample." }
+    ]
+  },
+
+  "sources": [
+    { "claim_ref": "1_identity, 2_product_website", "actor_id": "n/a (WebSearch/WebFetch desk research)", "run_or_dataset_id": "n/a", "url": "https://www.strategyzer.com; https://www.strategyzer.com/pricing; https://www.strategyzer.com/training-programs; https://www.strategyzer.com/library/the-business-model-canvas", "pull_date": "2026-07-09", "reliability": "high for on-site copy; the pricing page itself contains internally inconsistent figures, flagged as-is rather than resolved" },
+    { "claim_ref": "3_social_presence.linkedin, 4_content_strategy, 5_top_performers, 6_paid_partnerships", "actor_id": "harvestapi/linkedin-company (UwSdACBp7ymaGUJjS); harvestapi/linkedin-company-posts (WI0tj4Ieb5Kq458gB)", "run_or_dataset_id": "dataset 4rSj8VDr4gvj45Xpg (company); dataset vGE01KPxPeX2dBlLH (36 posts)", "url": "https://www.linkedin.com/company/strategyzer/", "pull_date": "2026-07-09", "reliability": "high — Tier 1 structured data" },
+    { "claim_ref": "3_social_presence.instagram (not scraped, scope note)", "actor_id": "n/a", "run_or_dataset_id": "n/a", "url": "n/a", "pull_date": "2026-07-09", "reliability": "n/a — deliberately out of scope per COMPETITORS.md's 'Strategyzer is LinkedIn-only' guidance" }
+  ]
+}

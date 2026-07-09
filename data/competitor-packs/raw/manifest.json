@@ -1,0 +1,37 @@
+{
+  "note": "Provenance manifest for raw Apify datasets pulled 2026-07-09 while building the competitor packs in ../*.json. Datasets live on Apify's platform (retained per Apify's own retention policy) and can be re-fetched via the apify MCP `get-dataset-items` tool without re-scraping, using the dataset IDs below. This file exists so §4 clustering / re-derivation can happen later without burning new Apify budget.",
+  "pull_date": "2026-07-09",
+  "budget_note": "All pulls used a $2.00 maxTotalChargeUsd cap per Apify call (Standard depth: ~50 posts/platform + top 10 performers), per PROMPT_2.md parameters. Actual spend per call was well under the cap (compute-unit costs shown in each run's stats were all under $0.05).",
+  "competitors": {
+    "female-switch": {
+      "linkedin_company": { "actor": "harvestapi/linkedin-company", "actorId": "UwSdACBp7ymaGUJjS", "runId": "5c5hK16zL2caRSEWe", "datasetId": "0V0D54pC1zc7lzSpn" },
+      "linkedin_posts": { "actor": "harvestapi/linkedin-company-posts", "actorId": "WI0tj4Ieb5Kq458gB", "runId": "wf7GbrjHBIaChlbtu", "datasetId": "7TK43SIk5ATTvaYYm", "items": 50 },
+      "instagram_profile": { "actor": "apify/instagram-profile-scraper", "actorId": "dSCLg0C3YEZ83HzYX", "runId": "7Aa8218rUQfWipa10", "datasetId": "FHpQjJgCb15CGtEGh" },
+      "instagram_posts": { "actor": "apify/instagram-post-scraper", "actorId": "nH2AHrwxeTRJoN5hX", "runId": "mX7e3EaNXockOBTAn", "datasetId": "CAIhKLrI99msGxV4g", "items": 50 },
+      "instagram_reel_transcripts": { "actor": "apple_yang/instagram-transcripts-scraper", "actorId": "S9A11NvceWaGorwwh", "runId": "ZDpVFMncagyypi0Kp", "datasetId": "Eceae6NKfdHCAHazR", "items": 3, "note": "tier-4 sampled pass on top 3 IG performers only" },
+      "x_posts": { "actor": "xquik/x-tweet-scraper", "actorId": "wAusCMrm284Voaw86", "runId": "R8kHLNflkkPMfZKMj", "datasetId": "QkF8YUmnyw61cSnZc", "items": 40 }
+    },
+    "ideabuddy": {
+      "instagram_profile": { "actor": "apify/instagram-profile-scraper", "actorId": "dSCLg0C3YEZ83HzYX", "runId": "ozdaWqtmCLmiHqWsG", "datasetId": "1EgIkr4HbD2gsHrld" },
+      "instagram_posts": { "actor": "apify/instagram-post-scraper", "actorId": "nH2AHrwxeTRJoN5hX", "runId": "jhdSV0XrfPbyg4BXO", "datasetId": "VU3kvo5e7j91igknm", "items": 50 },
+      "linkedin_company": { "actor": "harvestapi/linkedin-company", "actorId": "UwSdACBp7ymaGUJjS", "runId": "Yt7BbGuQiiUA2rgZe", "datasetId": "Rql1afcGoHaXYNgkU" },
+      "linkedin_posts": { "actor": "harvestapi/linkedin-company-posts", "actorId": "WI0tj4Ieb5Kq458gB", "runId": "3w63PcceNUVOdg1P3", "datasetId": "EZFElEWTXAtgSx8z6", "items": 12, "note": "account posts infrequently; 12 was the full available set, not a truncation" },
+      "instagram_reel_transcripts": { "actor": "apple_yang/instagram-transcripts-scraper", "actorId": "S9A11NvceWaGorwwh", "runId": "RnDg1Jlw2u4TmXXlx", "datasetId": "CndwZVlRW6SUdfQ3S", "items": 2, "note": "tier-4 sampled pass on the 2 reels within IdeaBuddy's top-10 performer set" }
+    },
+    "strategyzer": {
+      "linkedin_company": { "actor": "harvestapi/linkedin-company", "actorId": "UwSdACBp7ymaGUJjS", "runId": "KtLzXw2pCsew0TDP4", "datasetId": "4rSj8VDr4gvj45Xpg" },
+      "linkedin_posts": { "actor": "harvestapi/linkedin-company-posts", "actorId": "WI0tj4Ieb5Kq458gB", "runId": "lLx9zECSevhEtc9l8", "datasetId": "vGE01KPxPeX2dBlLH", "items": 36, "note": "LinkedIn-only per COMPETITORS.md guidance" }
+    }
+  },
+  "pilot_runs_note": "Per PROMPT_2.md's 'pilot first' requirement, each Actor/platform combination was first tested with a 10-item pilot before the full ~50-item pull (e.g. Fe/male Switch Instagram profile+10 posts pilot at runId 06gHbWufgxSebpc3r, LinkedIn posts pilot at runId c4EvpphRXz0HSVDhv, X pilot attempts at runId 3dVAtdv6iuk3Xaajj [failed, no diagnosable error message] and Iar25yiyKAKBnrIGY [succeeded, then widened]) before scaling to the full pull.",
+  "actors_not_used": {
+    "note": "The following Actors named in PROMPT_2.md's tooling table were not used this pass, either because a live equivalent with a better fit was found via search-actors, or because the platform was out of scope for the competitors run (COMPETITORS.md flags most of the other 7 competitors and Strategyzer's non-LinkedIn platforms as having negligible scrapeable social).",
+    "apify/instagram-followers-count-scraper": "not needed — single-snapshot follower counts were captured by apify/instagram-profile-scraper directly",
+    "apify/instagram-reel-scraper": "substituted with apple_yang/instagram-transcripts-scraper for the tier-4 transcript sample (cheaper, confirmed live via search-actors)",
+    "clockworks/tiktok-scraper / clockworks/tiktok-transcript-extractor": "none of the 3 scraped competitors maintain an active TikTok presence per desk research",
+    "apidojo/tweet-scraper": "not found via search-actors under that exact name; substituted with scrape.badger/twitter-tweets-scraper (pilot failed with no diagnosable error) then xquik/x-tweet-scraper (succeeded)",
+    "apimaestro/linkedin-posts-search-scraper-no-cookies": "substituted with harvestapi/linkedin-company-posts (also cookieless, confirmed live via search-actors)",
+    "streamers/youtube-scraper": "not run — no owned YouTube channel confirmed for IdeaBuddy; Fe/male Switch's YouTube channel ID was found but not scraped this pass (budget/time triage)",
+    "Meta Ad Library Actor / branded-content partnerships Actor": "not run — no paid/ad-library layer was identified as active for any of the 3 scraped competitors during desk research; §6 (paid_partnerships) reflects observed partnerships found in scraped post content instead"
+  }
+}

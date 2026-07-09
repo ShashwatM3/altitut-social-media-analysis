@@ -1,0 +1,130 @@
+{
+  "meta": {
+    "name": "Disciplined Entrepreneurship (MIT Orbit / DE Toolbox)",
+    "slug": "disciplined-entrepreneurship",
+    "tier": "direct",
+    "snapshot_date": "2026-07-09",
+    "overall_confidence": "low",
+    "refresh_cadence": "quarterly — product-only benchmark, low expected rate of change; not worth a tighter cadence given thin public footprint"
+  },
+  "1_identity": {
+    "snapshot": {
+      "one_liner": "Ecosystem built around Bill Aulet's (MIT Martin Trust Center) 'Disciplined Entrepreneurship: 24 Steps to a Successful Startup' methodology: books, the DE Toolbox (dashboards/tools, course-integration), MIT's Orbit platform (resource hub/community), and JetPack (a generative-AI assistant trained on the 24-step framework, launched 2024).",
+      "tier": "direct",
+      "why_they_compete": "High similarity on structured curriculum plus tools plus course-embedding; arguably the closest match to Altitut's web app minus gamification, per COMPETITORS.md (#7 of 10)."
+    },
+    "positioning": {
+      "value_prop": "JetPack is pitched as 'like having five or ten MIT undergraduates' instantly researching market segments, beachhead markets, business model, and pricing per the 24-step framework — an AI-accelerated version of a proven academic methodology.",
+      "differentiation": "Direct MIT/Bill Aulet academic pedigree and a named, structured 24-step methodology as the organizing spine of every tool."
+    },
+    "audience_icp": "Startup founders; entrepreneurship educators/courses (DE Toolbox is course-embeddable with student progress tracking/mentor feedback); MIT students primarily via Orbit; also accelerators, incubators, investors.",
+    "similarity_to_us": {
+      "c1_presence": 7,
+      "c2_audience": 6,
+      "c3_motive": 8,
+      "rationale": "Arguably the closest structured-curriculum-plus-tools-plus-course-embedding match to Altitut's web app, minus a game layer; MIT-specific reach limits direct audience overlap. Directional judgment, not a scoring model."
+    }
+  },
+  "2_product_website": {
+    "highlight_features": [
+      {
+        "feature": "JetPack (AI assistant trained on the 24-step framework)",
+        "why_pushed": "The newest, most differentiated feature — an AI research assistant mapped directly to the methodology's steps."
+      },
+      {
+        "feature": "DE Toolbox dashboards (team/mentor tracking, course integration)",
+        "why_pushed": "Targets the instructor/course-embedding buyer directly."
+      },
+      {
+        "feature": "Orbit (community/resource hub)",
+        "why_pushed": "Broader-reach entry point beyond the paid toolbox."
+      }
+    ],
+    "most_attractive_features": [
+      {
+        "feature": "JetPack",
+        "why_it_lands": "'Like having 5-10 MIT undergrads' is a vivid, concrete value proposition that directly translates methodology into automated research output."
+      }
+    ],
+    "messaging_conversion": {
+      "headline_copy": "not available — not captured in this desk-research pass",
+      "pricing": "DE Toolbox: free 30-day trial then month-to-month, pay-as-you-go billed upfront (per search snippet, not independently confirmed); exact dollar tiers not available (site access issues blocked direct verification). Orbit appears free for the MIT community; no public pricing found.",
+      "primary_ctas": [
+        "not available"
+      ],
+      "funnel_path": "not available",
+      "social_proof": "not available beyond MIT institutional affiliation itself."
+    },
+    "insights_to_imbibe": [
+      "JetPack's 'AI research assistant that fills in your business-model steps for you' is directly relevant — Altitut could build an equivalent AI co-pilot that auto-drafts framework steps (beachhead market, pricing, etc.) as a premium/AI tier."
+    ]
+  },
+  "3_social_presence": {
+    "platforms": [],
+    "_note": "Not scraped this pass — COMPETITORS.md flags this competitor as having little/no scrapeable consumer social presence; treated as a product benchmark, not a social one. Sections 3-7 are marked not available rather than guessed. Facebook (@DEToolbox) exists but follower count not available. Orbit/Martin Trust Center accounts: Instagram @eshipmit, X @EshipMIT, Facebook 'EshipMIT' — follower counts not available; not scraped this pass."
+  },
+  "4_content_strategy": {
+    "pillars": [],
+    "recurring_series": [],
+    "hook_patterns": [],
+    "cta_funnel_intent": {
+      "dominant_intent": "not available",
+      "notes": "not available"
+    },
+    "brand_voice": "not available",
+    "production_style": {
+      "style": "not available",
+      "trend_audio_usage": "not available"
+    },
+    "per_platform_divergence": "not available",
+    "_note": "Not scraped this pass — COMPETITORS.md flags this competitor as having little/no scrapeable consumer social presence; treated as a product benchmark, not a social one. Sections 3-7 are marked not available rather than guessed."
+  },
+  "5_top_performers": [],
+  "6_paid_partnerships": {
+    "active_ads": [],
+    "partnerships": []
+  },
+  "7_audience_community": {
+    "sentiment": {
+      "praise": [],
+      "complaints": [],
+      "overall": "not available"
+    },
+    "whitespace": [],
+    "responsiveness": {
+      "replies": false,
+      "speed": "not available",
+      "notes": "not available"
+    },
+    "owned_community": []
+  },
+  "8_synthesis": {
+    "winning_formula": "MIT-branded methodology authority, delivered as course-embeddable tools plus a 2024-launched AI assistant (JetPack) that automates methodology-step research.",
+    "recent_strategic_shifts": "Launch of JetPack (AI assistant) on Orbit in 2024 — the most significant recent product addition found.",
+    "steal_avoid_test": {
+      "steal": [
+        "An AI assistant explicitly mapped to named methodology steps ('fill in your beachhead market, pricing, etc.') rather than a generic chatbot."
+      ],
+      "avoid": [],
+      "test": [
+        "Whether framing an AI assistant's output count ('like having 5-10 X undergrads') as a concrete labor-equivalence claim is a transferable positioning device for Altitut's own AI features."
+      ]
+    },
+    "content_pack_hooks": [
+      {
+        "pillar_or_format": "AI research assistant mapped to named methodology steps",
+        "why_feed_forward": "Directly applicable to Altitut's Ikigai/persona/MVP-builder tools — an AI co-pilot that auto-drafts specific framework outputs rather than free-form chat."
+      }
+    ]
+  },
+  "sources": [
+    {
+      "claim_ref": "1_identity, 2_product_website",
+      "actor_id": "n/a (WebSearch/WebFetch desk research)",
+      "run_or_dataset_id": "n/a",
+      "url": "https://www.detoolbox.com/; https://www.d-eship.com/; https://orbit.mit.edu/; https://news.mit.edu/2024/new-ai-jetpack-accelerates-entrepreneurial-process-0919; https://mitsloan.mit.edu/ideas-made-to-matter/new-mit-ai-jetpack-accelerates-entrepreneurial-process",
+      "pull_date": "2026-07-09",
+      "reliability": "medium — detoolbox.com returned a certificate error on direct fetch; profile relies partly on search-result snippets and MIT press coverage rather than the primary site"
+    }
+  ]
+}

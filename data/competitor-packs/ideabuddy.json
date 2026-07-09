@@ -1,0 +1,252 @@
+{
+  "meta": {
+    "name": "IdeaBuddy",
+    "slug": "ideabuddy",
+    "tier": "direct",
+    "snapshot_date": "2026-07-09",
+    "overall_confidence": "medium",
+    "refresh_cadence": "monthly — low-volume, steady cadence on both scraped platforms; unlikely to shift materially week to week"
+  },
+
+  "1_identity": {
+    "snapshot": {
+      "one_liner": "AI-guided, step-by-step business-planning software (Guide, Canvas, Financial Plan, Validation, Business Plan) for entrepreneurs, accelerators, and business schools.",
+      "tier": "direct",
+      "why_they_compete": "Closest analog to Altitut's web-app/LMS side (structured modules + tools, minus the game), per COMPETITORS.md ranking (#6 of 10); genuinely multi-platform and consistently active on social, unlike most of the set."
+    },
+    "positioning": {
+      "value_prop": "\"All-in-one business planning software, powered by AI\" / \"Bring your business idea to life.\" Recognition as Forbes' '#1 business plan software for ideation' used as a trust anchor. (source: ideabuddy.com; ideabuddy.com/solutions/business-schools)",
+      "differentiation": "Wraps plan-writing in a structured, step-by-step guided journey (Guide → Canvas → Financial Plan → Validation → Business Plan) rather than a blank template — differentiates on process, not just tooling."
+    },
+    "audience_icp": "Three explicit segments via dedicated 'Solutions' pages: individual startups/entrepreneurs, incubators/accelerators, and business schools (educators wanting a hands-on classroom tool). (source: ideabuddy.com nav)",
+    "similarity_to_us": {
+      "c1_presence": 7,
+      "c2_audience": 6,
+      "c3_motive": 8,
+      "rationale": "Strong match to Altitut's guided-modules-plus-tools web-app side and its business-school angle, but has no gamification layer and a small (~1K) social footprint. Scores are directional judgment, not a scoring model output."
+    }
+  },
+
+  "2_product_website": {
+    "highlight_features": [
+      { "feature": "Guide (step-by-step ideation-to-plan)", "why_pushed": "First and most-referenced module; removes blank-page anxiety with prompts/examples." },
+      { "feature": "Canvas (single-page business model)", "why_pushed": "Positioned as the fast, visual first artifact." },
+      { "feature": "Financial Plan (P&L, cash flow, projections)", "why_pushed": "Marketed as auto-built from Guide inputs — addresses the hardest part for first-timers." },
+      { "feature": "Validation (feasibility scoring)", "why_pushed": "Gives a concrete score/output rather than open-ended advice." },
+      { "feature": "Business Plan (auto-generated, exportable)", "why_pushed": "The tangible end deliverable — positioned as the conversion payoff of the whole guided flow." },
+      { "feature": "AI Assistance (multilingual, tailored suggestions)", "why_pushed": "Has its own nav entry — cross-cuts all modules and is treated as the primary differentiator, not a single feature." }
+    ],
+    "most_attractive_features": [
+      { "feature": "Guide", "why_it_lands": "Most compelling for non-business-major students — removes blank-page anxiety with concrete prompts." },
+      { "feature": "Financial Plan auto-build", "why_it_lands": "Forecasting is the hardest part for first-time founders; auto-generation from guide answers lowers the skill bar." },
+      { "feature": "Business Plan export (PDF/Word)", "why_it_lands": "Gives students/founders a tangible deliverable usable for pitch competitions or class submission." }
+    ],
+    "messaging_conversion": {
+      "headline_copy": "\"Bring your business idea to life\" (home); \"Supercharge your business classes\" (business-schools page)",
+      "pricing": "Plans: Free Trial (15 days, no card required), Dreamer, Founder, White Label, with Monthly/Annual toggle ('Save up to 60%' annually) and a 15-day money-back guarantee. Exact dollar figures are JS-rendered and not directly confirmed on-site; third-party aggregators (G2/Capterra/upmetrics) cite roughly $15/mo (Dreamer) and $20/mo (Founder) — flagged as external-source-only, not first-party confirmed.",
+      "primary_ctas": ["Start your free trial", "Try for free", "Get started", "Try for 15 days. No credit card required.", "Choose Plan", "Contact us"],
+      "funnel_path": "Free 15-day trial (no card) → paid plan selection → 15-day money-back guarantee as a paid-conversion safety net.",
+      "social_proof": "Forbes '#1 business plan software for ideation' mention; Capterra/G2 review badges; two named individual testimonials (an accelerator co-director, an SSE Business Lab marketing manager) rather than a university logo wall. No public user-count figure found on-site."
+    },
+    "insights_to_imbibe": [
+      "Mirror the Guide→Canvas→Financial→Validation→Plan sequence as visible 'quest stages' in Altitut's RPG progression, ending in a tangible exportable artifact.",
+      "Offer a no-credit-card 15-day trial plus a money-back guarantee to lower signup friction, especially useful for reducing parental/institutional hesitation with student users.",
+      "Build a dedicated schools/educators landing page distinct from the individual-student page — messaging and testimonials differ meaningfully by segment.",
+      "Use named, titled individual testimonials over logo walls while an institutional-logo base is still thin.",
+      "Exploit the gap reviewers flag in IdeaBuddy's financial modeling (too rigid for complex/multi-revenue-stream logic) — market Altitut's gamified approach as better for iterative, scenario-based thinking."
+    ]
+  },
+
+  "3_social_presence": {
+    "platforms": [
+      {
+        "platform": "instagram",
+        "profile_stats": { "handle": "ideabuddy", "followers": 1065, "verified": false, "bio_links": ["https://ideabuddy.com/"] },
+        "cadence": { "posts_per_week": 1, "consistency": "steady", "notes": "50-post pull spans roughly a year (2024-10 to 2026-07 based on shortcode/date range observed), suggesting a consistent ~1/week cadence rather than bursts. Observed, tier 1." },
+        "format_mix": { "reel_pct": 40, "carousel_pct": 44, "static_pct": 16, "story_pct": "not available" },
+        "engagement_rate": { "value_pct": 0.4, "basis": "normalized to followers", "notes": "Likes per post mostly range 1–9 (median ~4) on a 1,065-follower base — modest but real engagement, an order of magnitude better than Fe/male Switch's IG. Observed, tier 1, approximate." },
+        "growth_velocity": { "trend": "not available", "from_snapshots": ["Single snapshot only."] }
+      },
+      {
+        "platform": "linkedin",
+        "profile_stats": { "handle": "linkedin.com/company/ideabuddy", "followers": 951, "verified": false, "bio_links": ["https://ideabuddy.com"] },
+        "cadence": { "posts_per_week": "not available", "consistency": "low volume", "notes": "Only 12 posts total were returned by the company-posts pull (maxPosts=50, but the account appears to genuinely post infrequently) spanning 2025-07 to 2026-06 — roughly 1 post/month. Observed, tier 1." },
+        "format_mix": { "reel_pct": 0, "carousel_pct": 8, "static_pct": 92, "story_pct": 0 },
+        "engagement_rate": { "value_pct": 0.4, "basis": "normalized to followers", "notes": "Likes range 1–20 across 12 posts (median ~3) on a 951-follower base. Observed, tier 1." },
+        "growth_velocity": { "trend": "not available", "from_snapshots": ["Single snapshot only."] }
+      },
+      {
+        "platform": "facebook",
+        "profile_stats": { "handle": "YourIdeaBuddy", "followers": null, "verified": false, "bio_links": [] },
+        "cadence": { "posts_per_week": 0, "consistency": "not available", "notes": "Handle confirmed via ideabuddy.com and Product Hunt listing but not scraped this pass." },
+        "format_mix": { "reel_pct": 0, "carousel_pct": 0, "static_pct": 0, "story_pct": 0 },
+        "engagement_rate": { "value_pct": 0, "basis": "normalized to followers", "notes": "not available" },
+        "growth_velocity": { "trend": "not available", "from_snapshots": [] }
+      },
+      {
+        "platform": "x",
+        "profile_stats": { "handle": "ideabuddyhq", "followers": null, "verified": false, "bio_links": [] },
+        "cadence": { "posts_per_week": 0, "consistency": "not available", "notes": "Handle found via Product Hunt listing but not part of the original brief's platform list (COMPETITORS.md names IG/LinkedIn/YouTube/Facebook only); not scraped this pass." },
+        "format_mix": { "reel_pct": 0, "carousel_pct": 0, "static_pct": 0, "story_pct": 0 },
+        "engagement_rate": { "value_pct": 0, "basis": "normalized to followers", "notes": "not available" },
+        "growth_velocity": { "trend": "not available", "from_snapshots": [] }
+      },
+      {
+        "platform": "youtube",
+        "profile_stats": { "handle": "not confirmed this pass", "followers": null, "verified": false, "bio_links": [] },
+        "cadence": { "posts_per_week": 0, "consistency": "not available", "notes": "COMPETITORS.md lists YouTube as one of IdeaBuddy's active platforms, but no owned-channel URL was confirmed during desk research (only third-party review videos surfaced) — flagged rather than guessed." },
+        "format_mix": { "reel_pct": 0, "carousel_pct": 0, "static_pct": 0, "story_pct": 0 },
+        "engagement_rate": { "value_pct": 0, "basis": "normalized to followers", "notes": "not available" },
+        "growth_velocity": { "trend": "not available", "from_snapshots": [] }
+      }
+    ]
+  },
+
+  "4_content_strategy": {
+    "pillars": [
+      { "pillar": "Product/feature promotion (AI tools, Whiteboard, persona generator, business plan writing service)", "share": "~30%", "example_refs": ["ig:DNiE0k8NUV5", "ig:C7mAwy6obmS", "ig:DGA5LQUINiS"], "reliability": "observed, tier 1/2" },
+      { "pillar": "Founder motivation/mindset posts (quotes, mentor spotlights, famous-founder stories — Bezos, Dorsey, Blakely, Huang)", "share": "~25%", "example_refs": ["ig:C737rmZIG_H", "ig:C-c7baroDjp", "ig:C-C7la_NEqn"], "reliability": "observed, tier 2" },
+      { "pillar": "Listicle/roundup posts (top 5/10 tools, business ideas, freelancer sites)", "share": "~20%", "example_refs": ["ig:DPlcBPVDbtp", "ig:DLFhJF8tQMf", "ig:DECdZp7NdKJ"], "reliability": "observed, tier 2" },
+      { "pillar": "Institutional partnership announcements (universities, colleges, EU programs)", "share": "~15%", "example_refs": ["li:activity-7419010342426624000-EB9W", "ig:C7PCY4xoQY5", "li:activity-7473708713271357441-zLmf"], "reliability": "observed, tier 1/2" },
+      { "pillar": "Promotions/seasonal offers (Black Friday, summer discount codes)", "share": "~10%", "example_refs": ["ig:DLm6t6QNrvs", "li:activity-7399838449614106624-PMTt"], "reliability": "observed, tier 1" }
+    ],
+    "recurring_series": [
+      { "name": "Top 5/Top 10 tool or idea roundups", "format": "carousel (Sidecar)", "cadence": "roughly every 2-3 weeks on Instagram" },
+      { "name": "University/accelerator partnership announcements", "format": "static image or short video", "cadence": "irregular, tied to actual partnership signings" }
+    ],
+    "hook_patterns": [
+      { "pattern": "Direct-address question openers ('Why bother with writing a business plan?', 'Wondering if IdeaBuddy is worth the hype?')", "source": "on-cover / caption", "reliability": "observed, tier 2" },
+      { "pattern": "Named-founder story hooks (Jeff Bezos, Jack Dorsey, Sara Blakely, Jensen Huang) used as a motivational entry point before pivoting to product CTA", "source": "on-cover", "reliability": "observed, tier 2" }
+    ],
+    "cta_funnel_intent": { "dominant_intent": "mixed", "notes": "Roughly even split between awareness (motivational/roundup content) and conversion (free-trial and discount-code CTAs)." },
+    "brand_voice": "Warm, encouraging, straightforward — 'we believe everyone is an entrepreneur in the making' — less meme-heavy and lower-volume than Fe/male Switch, reads as a small, real team rather than an automated feed.",
+    "production_style": {
+      "style": "Clean, on-brand graphic templates for carousels; simple talking-point or text-overlay videos for reels — moderate production polish, consistent visual branding.",
+      "trend_audio_usage": "Tier-4 transcript sample run on the 2 reels in the top-10 set: DGfdS3hIEiq returned near-silent audio ('You'); DTsbKZriINQ returned no audio track at all ('no audio url found'). Both reels appear to carry their substance via on-screen text/caption rather than spoken narration or trending audio."
+    },
+    "per_platform_divergence": "LinkedIn skews toward institutional/partnership announcements and thought-leadership-adjacent posts (lower volume, higher per-post likes on standout posts); Instagram carries the bulk of listicle/motivational/product content at higher frequency."
+  },
+
+  "5_top_performers": [
+    {
+      "rank": 1, "platform": "linkedin", "url": "https://www.linkedin.com/posts/ideabuddy_ideabuddy-businessplanningsoftware-activity-7419010342426624000-EB9W", "type": "static",
+      "content": { "transcript_or_caption": "\"When 800 years of academic excellence meets modern entrepreneurship. We are privileged to partner with the Università degli Studi di Padova (UNIPD)... and the Università degli Studi di Trieste to support the next generation of Italian founders.\"", "on_cover_text": "not available" },
+      "numbers": { "likes": 20, "comments": 0, "shares": 1, "saves": null, "views": null },
+      "why_it_won": "By far IdeaBuddy's best-performing post in the sample (20 likes vs. a median of ~3) — a credible, specific institutional partnership (an 800-year-old university) is a far stronger trust signal than generic tips content.",
+      "repeatable_formula": "Lead with a specific, prestigious institutional partner name and a striking specific fact (founding year) before the product tie-in."
+    },
+    {
+      "rank": 2, "platform": "instagram", "url": "https://www.instagram.com/p/DH8aphetTwa/", "type": "static",
+      "content": { "transcript_or_caption": "\"What started as a scribble on paper is now, five years later, helping thousands bring their ideas to life. Thank you for being part of this incredible journey.\"", "on_cover_text": "5-year anniversary graphic" },
+      "numbers": { "likes": 16, "comments": 2, "shares": null, "saves": null, "views": null },
+      "why_it_won": "Top-performing IG post and the only one with meaningful comments — a milestone/gratitude post outperforms routine tips or promo content.",
+      "repeatable_formula": "Milestone/anniversary post with a specific number ('5 years', 'thousands helped') and a direct thank-you to the audience."
+    },
+    {
+      "rank": 3, "platform": "instagram", "url": "https://www.instagram.com/p/DGfdS3hIEiq/", "type": "reel",
+      "content": { "transcript_or_caption": "Caption: \"Exciting news — IdeaBuddy has partnered with Dallas College to support the next generation of entrepreneurs. Students in the Entrepreneurship program will now use IdeaBuddy to bring their business ideas to life step by step.\" Transcript (Whisper, tier-4 pass): \"You\" — near-silent; substance is carried by on-screen text/caption, not narration.", "on_cover_text": "Dallas College partnership announcement" },
+      "numbers": { "likes": 9, "comments": 1, "shares": null, "saves": null, "views": 221 },
+      "why_it_won": "A second named-institution partnership post also lands in the top tier — reinforces that institutional credibility content is IdeaBuddy's strongest recurring pattern across both platforms.",
+      "repeatable_formula": "Named institutional-partnership announcement, video format."
+    },
+    {
+      "rank": 4, "platform": "instagram", "url": "https://www.instagram.com/p/C8uBQWHtduq/", "type": "carousel",
+      "content": { "transcript_or_caption": "\"Boost your startup journey with these top 10 tips, you will.\"", "on_cover_text": "Top 10 startup tips carousel" },
+      "numbers": { "likes": 9, "comments": 0, "shares": null, "saves": null, "views": null },
+      "why_it_won": "Best-performing entry in the recurring listicle/carousel series — the format itself (swipeable, save-worthy tips) reliably outperforms single-image or single-tip posts.",
+      "repeatable_formula": "Numbered-tips carousel ('Top 10 X')."
+    },
+    {
+      "rank": 5, "platform": "instagram", "url": "https://www.instagram.com/p/DBtTY8JtO1J/", "type": "carousel",
+      "content": { "transcript_or_caption": "\"Overconfidence in starting something new can be helpful to a point, but it can also blind us! Learn about the Dunning-Kruger effect and why it matters for every startup founder.\"", "on_cover_text": "Dunning-Kruger effect explainer" },
+      "numbers": { "likes": 8, "comments": 0, "shares": null, "saves": null, "views": null },
+      "why_it_won": "A named psychological concept applied specifically to founders is more distinctive than generic motivational content — educational framing with a memorable hook.",
+      "repeatable_formula": "Take a named psychology/business concept and reframe it specifically for founders."
+    },
+    {
+      "rank": 6, "platform": "linkedin", "url": "https://www.linkedin.com/posts/ideabuddy_we-are-proud-to-support-the-roots2routes-activity-7473708713271357441-zLmf", "type": "static",
+      "content": { "transcript_or_caption": "\"We are proud to support the roots2routes Inclusive Entrepreneurship Programme... migrants and refugees with entrepreneurial dreams will use our platform to shape, validate, and develop their business ideas.\"", "on_cover_text": "not available" },
+      "numbers": { "likes": 6, "comments": 1, "shares": 2, "saves": null, "views": null },
+      "why_it_won": "Highest share count of any IdeaBuddy LinkedIn post — a social-impact program tie-in (EU-co-founded refugee/migrant entrepreneurship) drove above-average reshares even with modest likes.",
+      "repeatable_formula": "Social-impact program partnership with a clear beneficiary story."
+    },
+    {
+      "rank": 7, "platform": "linkedin", "url": "https://www.linkedin.com/posts/ideabuddy_free-user-persona-generator-activity-7363510721684422656-Ur0y", "type": "static",
+      "content": { "transcript_or_caption": "\"With the free User Persona Generator, you can turn simple inputs into full user personas and start building marketing campaigns that actually work.\"", "on_cover_text": "not available" },
+      "numbers": { "likes": 4, "comments": 0, "shares": 0, "saves": null, "views": null },
+      "why_it_won": "A free, named, single-purpose AI micro-tool announcement — the same pattern that worked well for Fe/male Switch's top IG posts.",
+      "repeatable_formula": "Announce a free, named, single-purpose AI tool with a concrete output."
+    },
+    {
+      "rank": 8, "platform": "linkedin", "url": "https://www.linkedin.com/posts/ideabuddy_businessmotivation-activity-7379124633108918272-Aluc", "type": "static",
+      "content": { "transcript_or_caption": "\"We often hear people saying 'Do what makes you happy'. But what's the truth? Happiness comes and goes, and hard work and passion are what actually build lasting impact. Jensen Huang is the CEO of Nvidia, and his journey is proof of that.\"", "on_cover_text": "not available" },
+      "numbers": { "likes": 4, "comments": 0, "shares": 0, "saves": null, "views": null },
+      "why_it_won": "Named, currently-prominent founder (Nvidia's Jensen Huang) used as a motivational anchor performs on par with product-announcement posts.",
+      "repeatable_formula": "Contrarian one-line hook ('happiness isn't the answer') anchored to a specific, currently-relevant named founder."
+    },
+    {
+      "rank": 9, "platform": "linkedin", "url": "https://www.linkedin.com/posts/ideabuddy_ideabuddy-activity-7410323590111285248-iJDM", "type": "static",
+      "content": { "transcript_or_caption": "\"Take the break. Keep the dream. We'll handle the plan. Happy Holidays! Wishing you a successful and inspired 2026.\"", "on_cover_text": "not available" },
+      "numbers": { "likes": 4, "comments": 0, "shares": 0, "saves": null, "views": null },
+      "why_it_won": "Seasonal goodwill post with a clean, on-brand tagline ('We'll handle the plan') performs as well as substantive content — low-effort, on-brand seasonal posts are a safe, reliable filler format.",
+      "repeatable_formula": "Seasonal greeting post with a one-line brand-relevant tagline."
+    },
+    {
+      "rank": 10, "platform": "instagram", "url": "https://www.instagram.com/p/DTsbKZriINQ/", "type": "reel",
+      "content": { "transcript_or_caption": "Caption: \"When 800 years of academic excellence meets modern entrepreneurship. We are privileged to partner with the University of Padova... and the University of Trieste to support the next generation of Italian founders.\" Transcript: not available — Actor returned 'no audio url found' (tier-4 pass logged, not silently skipped).", "on_cover_text": "Padova/Trieste partnership video" },
+      "numbers": { "likes": 7, "comments": 0, "shares": null, "saves": null, "views": 212 },
+      "why_it_won": "The video companion to the #1-ranked LinkedIn post — the same institutional-partnership story repurposed as an Instagram reel also lands in the top tier, confirming the pattern holds cross-platform.",
+      "repeatable_formula": "Repurpose the same institutional-partnership story as both a LinkedIn static post and an Instagram reel."
+    }
+  ],
+
+  "6_paid_partnerships": {
+    "active_ads": [],
+    "partnerships": [
+      { "partner": "roots2routes Inclusive Entrepreneurship Programme (EU-co-founded, with TRIPLE Coworking y Eventos in Spain and Refugee Restart in Italy)", "type": "branded-content", "notes": "Platform access for migrant/refugee entrepreneurs; announced on LinkedIn 2026-06-19." },
+      { "partner": "Università degli Studi di Padova (UNIPD) and Università degli Studi di Trieste", "type": "branded-content", "notes": "Curriculum-integration partnership for Italian entrepreneurship students; announced 2026-01-19." },
+      { "partner": "Dallas College", "type": "branded-content", "notes": "Entrepreneurship-program curriculum integration in the U.S." },
+      { "partner": "LA City College (LACC)", "type": "branded-content", "notes": "Entrepreneurship-classes supporting tool partnership." }
+    ]
+  },
+
+  "7_audience_community": {
+    "sentiment": { "praise": [], "complaints": [], "overall": "Comment volume is low (0-2 per post) across both scraped platforms, too sparse to characterize sentiment beyond noting no visible negative comments surfaced in the pulled samples." },
+    "whitespace": [
+      "Institutional-partnership content consistently outperforms generic tips/motivational content on both platforms — a pattern not yet fully leaned into (partnerships are ~15% of pillar mix but ~40% of the top-10 performers)."
+    ],
+    "responsiveness": { "replies": false, "speed": "not available", "notes": "No visible brand replies to comments in the pulled datasets." },
+    "owned_community": []
+  },
+
+  "8_synthesis": {
+    "winning_formula": "A small, real (not automated) team publishing steady, moderate-volume content across Instagram and LinkedIn, where named institutional partnerships and milestone/gratitude posts consistently outperform generic tips or motivational filler.",
+    "recent_strategic_shifts": "Increasing frequency of university/college partnership announcements (Padova, Trieste, Dallas College, LACC, roots2routes) over the past year — reads as a deliberate push into the business-school/institutional segment that ideabuddy.com's dedicated 'Solutions' page for schools also supports.",
+    "steal_avoid_test": {
+      "steal": [
+        "Lead partnership announcements with a specific, striking institutional fact (e.g. founding year) before the product tie-in.",
+        "Milestone/anniversary posts with concrete numbers and direct audience gratitude.",
+        "Repurpose the same strong story (e.g. a partnership) natively across platforms rather than posting platform-generic content everywhere."
+      ],
+      "avoid": [
+        "Relying on comments as a sentiment or community signal — near-zero comment volume here means this channel alone won't surface product feedback; pair with another listening channel.",
+        "Posting seasonal/generic filler as a majority of volume — it performs adequately but doesn't drive the top results."
+      ],
+      "test": [
+        "Whether leaning further into the institutional-partnership pillar (currently ~15% of mix but disproportionately top-performing) raises average engagement if scaled up.",
+        "Whether IdeaBuddy's demonstrated named-founder-story hook pattern (Bezos, Dorsey, Blakely, Huang) could be adapted with startup-education-relevant figures for Altitut's own audience."
+      ]
+    },
+    "content_pack_hooks": [
+      { "pillar_or_format": "Institutional/university partnership announcements", "why_feed_forward": "Directly applicable once Altitut has school/instructor partnerships to announce — proven top-performing format for a very similar competitor." },
+      { "pillar_or_format": "Milestone/gratitude posts with concrete numbers", "why_feed_forward": "Low-effort, high-performing format Altitut can reuse at any user/cohort/graduation milestone." }
+    ]
+  },
+
+  "sources": [
+    { "claim_ref": "1_identity, 2_product_website", "actor_id": "n/a (WebSearch/WebFetch desk research)", "run_or_dataset_id": "n/a", "url": "https://ideabuddy.com; https://ideabuddy.com/pricing/; https://ideabuddy.com/solutions/business-schools; https://ideabuddy.com/about-us/", "pull_date": "2026-07-09", "reliability": "high for on-site copy; medium for third-party pricing figures (G2/Capterra/upmetrics, not first-party confirmed)" },
+    { "claim_ref": "3_social_presence.instagram, 4_content_strategy, 5_top_performers (IG items)", "actor_id": "apify/instagram-profile-scraper (dSCLg0C3YEZ83HzYX); apify/instagram-post-scraper (nH2AHrwxeTRJoN5hX)", "run_or_dataset_id": "dataset 1EgIkr4HbD2gsHrld (profile); dataset VU3kvo5e7j91igknm (50 posts)", "url": "https://www.instagram.com/ideabuddy/", "pull_date": "2026-07-09", "reliability": "high — Tier 1 structured data" },
+    { "claim_ref": "3_social_presence.linkedin, 5_top_performers (LinkedIn items), 6_paid_partnerships", "actor_id": "harvestapi/linkedin-company (UwSdACBp7ymaGUJjS); harvestapi/linkedin-company-posts (WI0tj4Ieb5Kq458gB)", "run_or_dataset_id": "dataset Rql1afcGoHaXYNgkU (company); dataset EZFElEWTXAtgSx8z6 (12 posts)", "url": "https://www.linkedin.com/company/ideabuddy/", "pull_date": "2026-07-09", "reliability": "high — Tier 1 structured data" },
+    { "claim_ref": "3_social_presence.facebook, 3_social_presence.x (handles only)", "actor_id": "n/a (Exa web search)", "run_or_dataset_id": "n/a", "url": "https://www.producthunt.com/products/ideabuddy", "pull_date": "2026-07-09", "reliability": "medium — handles confirmed via third-party listing, no stats pulled" }
+  ]
+}

@@ -1,0 +1,128 @@
+{
+  "meta": {
+    "name": "SimVenture",
+    "slug": "simventure",
+    "tier": "direct",
+    "snapshot_date": "2026-07-09",
+    "overall_confidence": "low",
+    "refresh_cadence": "quarterly — product-only benchmark, low expected rate of change; not worth a tighter cadence given thin public footprint"
+  },
+  "1_identity": {
+    "snapshot": {
+      "one_liner": "UK-based business-simulation EdTech suite: Evolution (run/scale a full virtual venture) and Validate (ideate/validate a business concept), plus a legacy 'Classic' product; course-embedded in higher ed.",
+      "tier": "direct",
+      "why_they_compete": "Gamified plus tools plus course-embedded; Validate maps closely to Altitut's idea/validation flow, per COMPETITORS.md (#4 of 10)."
+    },
+    "positioning": {
+      "value_prop": "'Award-winning' simulations used by educators/training providers in 40+ countries; Evolution positioned as 'the most powerful and sophisticated business simulation on the market,' with a 2025 'Pathways' step-by-step guidance addition.",
+      "differentiation": "The Validate → Evolution product split (concept-testing tool feeding into a full-scale-the-venture simulation) formalizes a natural student journey as two distinct products/modules."
+    },
+    "audience_icp": "Higher-ed and school business/entrepreneurship educators, plus corporate training providers — instructor-led, course-embedded model.",
+    "similarity_to_us": {
+      "c1_presence": 7,
+      "c2_audience": 6,
+      "c3_motive": 8,
+      "rationale": "Strong match on the gamified-plus-tools-plus-course-embedded axis; Validate specifically overlaps with Altitut's idea/validation tools. Directional judgment, not a scoring model."
+    }
+  },
+  "2_product_website": {
+    "highlight_features": [
+      {
+        "feature": "Evolution (full-scale venture simulation)",
+        "why_pushed": "Flagship product, positioned as the most sophisticated simulation on the market."
+      },
+      {
+        "feature": "Validate (concept testing)",
+        "why_pushed": "Entry-point product for idea-stage users, feeding into Evolution."
+      },
+      {
+        "feature": "Pathways (2025 step-by-step guidance addition)",
+        "why_pushed": "Recent product update addressing a guided-journey gap."
+      }
+    ],
+    "most_attractive_features": [
+      {
+        "feature": "Validate → Evolution progression",
+        "why_it_lands": "Gives students a clear, staged journey from idea-testing to full venture management rather than one flat simulation."
+      }
+    ],
+    "messaging_conversion": {
+      "headline_copy": "not available — not captured in this desk-research pass",
+      "pricing": "not available — separate pricing pages exist per product but amounts weren't surfaced; demo-request/sales-led model implied.",
+      "primary_ctas": [
+        "not available"
+      ],
+      "funnel_path": "not available — appears to be a demo-request/sales-led B2B funnel to educators/institutions.",
+      "social_proof": "'Award-winning'; used in 40+ countries (on-site claim, not independently verified)."
+    },
+    "insights_to_imbibe": [
+      "The Validate → Evolution product split is a concrete, staged-difficulty model Altitut could formalize explicitly as distinct modules/tiers rather than one undifferentiated simulation."
+    ]
+  },
+  "3_social_presence": {
+    "platforms": [],
+    "_note": "Not scraped this pass — COMPETITORS.md flags this competitor as having little/no scrapeable consumer social presence; treated as a product benchmark, not a social one. Sections 3-7 are marked not available rather than guessed. Facebook (facebook.com/SimVentureTribe), X/Twitter (twitter.com/SimVenture), Instagram (instagram.com/simventuretribe/), YouTube, Vimeo, and a LinkedIn company page ('SimVenture Business Simulations') with ~1,305 followers per search snippet — not scraped for stats/posts this pass given thin engagement expected."
+  },
+  "4_content_strategy": {
+    "pillars": [],
+    "recurring_series": [],
+    "hook_patterns": [],
+    "cta_funnel_intent": {
+      "dominant_intent": "not available",
+      "notes": "not available"
+    },
+    "brand_voice": "not available",
+    "production_style": {
+      "style": "not available",
+      "trend_audio_usage": "not available"
+    },
+    "per_platform_divergence": "not available",
+    "_note": "Not scraped this pass — COMPETITORS.md flags this competitor as having little/no scrapeable consumer social presence; treated as a product benchmark, not a social one. Sections 3-7 are marked not available rather than guessed."
+  },
+  "5_top_performers": [],
+  "6_paid_partnerships": {
+    "active_ads": [],
+    "partnerships": []
+  },
+  "7_audience_community": {
+    "sentiment": {
+      "praise": [],
+      "complaints": [],
+      "overall": "not available"
+    },
+    "whitespace": [],
+    "responsiveness": {
+      "replies": false,
+      "speed": "not available",
+      "notes": "not available"
+    },
+    "owned_community": []
+  },
+  "8_synthesis": {
+    "winning_formula": "A two-product staged journey (Validate then Evolution) sold via a demo/sales-led B2B motion into higher-ed and corporate training.",
+    "recent_strategic_shifts": "A 2025 'Pathways' feature addition to Evolution, adding step-by-step guidance to what was previously a more open-ended simulation.",
+    "steal_avoid_test": {
+      "steal": [
+        "Formalize a staged idea-validation-to-full-simulation product journey as distinct modules."
+      ],
+      "avoid": [],
+      "test": []
+    },
+    "content_pack_hooks": [
+      {
+        "pillar_or_format": "Staged validate-then-build product journey",
+        "why_feed_forward": "Directly applicable to sequencing Altitut's own Ikigai/validation tools ahead of its MVP-builder and game modules."
+      }
+    ]
+  },
+  "sources": [
+    {
+      "claim_ref": "1_identity, 2_product_website",
+      "actor_id": "n/a (WebSearch/WebFetch desk research)",
+      "run_or_dataset_id": "n/a",
+      "url": "https://simventure.com/; https://simventure.com/simventure-product-updates-2025/; https://www.linkedin.com/company/simventure-business-simulations",
+      "pull_date": "2026-07-09",
+      "reliability": "medium — on-site claims not independently cross-verified"
+    }
+  ]
+}

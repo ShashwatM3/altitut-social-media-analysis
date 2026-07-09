@@ -1,0 +1,126 @@
+{
+  "meta": {
+    "name": "Virtonomics",
+    "slug": "virtonomics",
+    "tier": "partial",
+    "snapshot_date": "2026-07-09",
+    "overall_confidence": "low",
+    "refresh_cadence": "quarterly — product-only benchmark, low expected rate of change; not worth a tighter cadence given thin public footprint"
+  },
+  "1_identity": {
+    "snapshot": {
+      "one_liner": "Massively multiplayer online business-simulation game (Cyprus studio Gamerflot; originally 'Money Mania' 2004, renamed Virtonomics 2006) where players run virtual companies across 200+ industries, competing against other players in real time.",
+      "tier": "partial",
+      "why_they_compete": "Medium-high similarity: gamified business building for students and entrepreneurs, per COMPETITORS.md (#8 of 10); large in-game community claimed (~1M players)."
+    },
+    "positioning": {
+      "value_prop": "Markets itself as 'the most realistic business simulation game about company management and economics' / 'The #1 Economics Simulation Game in the World.' Three modes: Entrepreneur, Business War, Tycoon.",
+      "differentiation": "A persistent, always-on multiplayer economy (vs. a bounded course-length simulation), spanning casual gaming to serious economic-strategy/PvP play."
+    },
+    "audience_icp": "Broad: business students/educators, aspiring entrepreneurs, business professionals, strategy-game hobbyists; also corporate/school 'Business Challenge' competitions.",
+    "similarity_to_us": {
+      "c1_presence": 6,
+      "c2_audience": 5,
+      "c3_motive": 6,
+      "rationale": "Strong gamification match, but the persistent-multiplayer/PvP-economy format and broad hobbyist audience diverge from Altitut's structured, cohort-based education model. Directional judgment, not a scoring model."
+    }
+  },
+  "2_product_website": {
+    "highlight_features": [
+      {
+        "feature": "Persistent multiplayer economy across 200+ industries",
+        "why_pushed": "The core differentiator — an always-on shared world rather than a bounded simulation."
+      },
+      {
+        "feature": "Three play modes (Entrepreneur, Business War, Tycoon)",
+        "why_pushed": "Segments casual learners from competitive/serious players."
+      }
+    ],
+    "most_attractive_features": [
+      {
+        "feature": "Persistent shared economy",
+        "why_it_lands": "Creates long-term retention/community that outlives a single course or cohort, unlike bounded classroom simulations."
+      }
+    ],
+    "messaging_conversion": {
+      "headline_copy": "not available — not captured in this desk-research pass",
+      "pricing": "Free-to-play / freemium (explicitly marketed as a 'Free business game'); premium features implied but not detailed on-site.",
+      "primary_ctas": [
+        "not available"
+      ],
+      "funnel_path": "not available",
+      "social_proof": "User-base claims found only in press, not verified current: ~1 million registered users claimed in a 2015 PR release, 'exceeding 2 million' by 2018 sources, and current site language vaguely references 'millions of our users' — treat as unverified marketing claims, not confirmed active-player counts."
+    },
+    "insights_to_imbibe": [
+      "The persistent, always-on multiplayer economy creates long-term retention/community — Altitut's RPG framing could borrow a persistent shared 'world' or leaderboard layer that outlives a single course or cohort."
+    ]
+  },
+  "3_social_presence": {
+    "platforms": [],
+    "_note": "Not scraped this pass — COMPETITORS.md flags this competitor as having little/no scrapeable consumer social presence; treated as a product benchmark, not a social one. Sections 3-7 are marked not available rather than guessed. Facebook (facebook.com/Virtonomics) and X/Twitter (twitter.com/Virtonomics) exist; follower counts not available. Also has a YouTube channel and a Google Play app."
+  },
+  "4_content_strategy": {
+    "pillars": [],
+    "recurring_series": [],
+    "hook_patterns": [],
+    "cta_funnel_intent": {
+      "dominant_intent": "not available",
+      "notes": "not available"
+    },
+    "brand_voice": "not available",
+    "production_style": {
+      "style": "not available",
+      "trend_audio_usage": "not available"
+    },
+    "per_platform_divergence": "not available",
+    "_note": "Not scraped this pass — COMPETITORS.md flags this competitor as having little/no scrapeable consumer social presence; treated as a product benchmark, not a social one. Sections 3-7 are marked not available rather than guessed."
+  },
+  "5_top_performers": [],
+  "6_paid_partnerships": {
+    "active_ads": [],
+    "partnerships": []
+  },
+  "7_audience_community": {
+    "sentiment": {
+      "praise": [],
+      "complaints": [],
+      "overall": "not available"
+    },
+    "whitespace": [],
+    "responsiveness": {
+      "replies": false,
+      "speed": "not available",
+      "notes": "not available"
+    },
+    "owned_community": []
+  },
+  "8_synthesis": {
+    "winning_formula": "A free-to-play, persistent multiplayer business simulation sustained by long-term player retention rather than course-length engagement.",
+    "recent_strategic_shifts": "not available — insufficient recent data this pass.",
+    "steal_avoid_test": {
+      "steal": [
+        "A persistent, shared multiplayer world/leaderboard layer that outlives individual courses or cohorts."
+      ],
+      "avoid": [
+        "Relying on stale, unverified user-count press claims (2015-2018 figures) as current social proof — a credibility risk worth avoiding in Altitut's own marketing."
+      ],
+      "test": []
+    },
+    "content_pack_hooks": [
+      {
+        "pillar_or_format": "Persistent shared-world / cross-cohort leaderboard",
+        "why_feed_forward": "Applicable to Altitut Game's existing leaderboard mechanic — Virtonomics shows a persistent economy can sustain a large, long-lived player base."
+      }
+    ]
+  },
+  "sources": [
+    {
+      "claim_ref": "1_identity, 2_product_website",
+      "actor_id": "n/a (WebSearch/WebFetch desk research)",
+      "run_or_dataset_id": "n/a",
+      "url": "https://virtonomics.com/; https://en.wikipedia.org/wiki/Virtonomics; https://www.prweb.com/releases/virtonomics_an_online_business_simulation_game_for_start_ups/prweb12584561.htm",
+      "pull_date": "2026-07-09",
+      "reliability": "low-medium — user-count claims are stale press releases (2015-2018), not independently verified as current"
+    }
+  ]
+}

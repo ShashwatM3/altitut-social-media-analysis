@@ -1,0 +1,252 @@
+{
+  "meta": {
+    "name": "Fe/male Switch (F/MS)",
+    "slug": "female-switch",
+    "tier": "direct",
+    "snapshot_date": "2026-07-09",
+    "overall_confidence": "medium",
+    "refresh_cadence": "monthly — small account, but currently posting near-daily on LinkedIn/Instagram so a monthly check catches drift; X looks dormant and should be spot-checked less often"
+  },
+
+  "1_identity": {
+    "snapshot": {
+      "one_liner": "A women-first startup RPG/simulator (browser game + web platform) where 'gamepreneurs' validate and build a startup through an AI co-founder, structured micro-modules, and a token economy.",
+      "tier": "direct",
+      "why_they_compete": "Closest feature-for-feature analog to Altitut found in the competitor set: game + structured modules + tools + micro-credentials, aimed at first-time founders, per COMPETITORS.md ranking (#1 of 10)."
+    },
+    "positioning": {
+      "value_prop": "\"Startup game for women entrepreneurs: Fe/male Switch\" — \"Validate your startup ideas in one of the best business simulation games with an AI FRIEND as your co-founder.\" (source: femaleswitch.com)",
+      "differentiation": "Proprietary 'gamepreneurship' methodology (game mechanics + data analytics + blockchain + LLMs), a 'Play to Learn'/'Play to Earn' hybrid economy, and a 'Bias Score' tool for gender bias in text — positioned as the only RPG/startup simulator built specifically for women. (source: femaleswitch.com/our-company)"
+    },
+    "audience_icp": "First-time female founders / 'gamepreneurs' — explicitly women-first in framing, though copy also targets 'solo entrepreneurs and indie hackers seeking community' more broadly. (source: femaleswitch.com)",
+    "similarity_to_us": {
+      "c1_presence": 9,
+      "c2_audience": 7,
+      "c3_motive": 9,
+      "rationale": "Near-identical product shape to Altitut (game + AI co-founder + modules + credentials + tools), but audience is women-specific rather than general students/early founders, and social reach is small (~1.5–1.6K across platforms) — a strong product benchmark, weaker as a social-reach benchmark. Scores are directional judgment calls, not derived from a scoring model."
+    }
+  },
+
+  "2_product_website": {
+    "highlight_features": [
+      { "feature": "Sandbox (AI co-founder idea validation)", "why_pushed": "Leads the homepage narrative; framed as the 'validate before you commit' entry point and the primary funnel hook." },
+      { "feature": "Skill Lab (micro-modules)", "why_pushed": "Positioned as the de-risked, self-paced learning surface tied to progress tracking." },
+      { "feature": "Live Certificates / micro-credentials", "why_pushed": "Marketed as a portable, resume-usable output of gameplay — a credibility device for a 'game'." },
+      { "feature": "Marketplace + token economy", "why_pushed": "Ties learning to tangible prizes/microfunding, giving the game real-world stakes." },
+      { "feature": "Community Forum / 'The Lounge'", "why_pushed": "Free-tier hook; positioned as peer support and networking." }
+    ],
+    "most_attractive_features": [
+      { "feature": "AI co-founder (PlayPal / Elona)", "why_it_lands": "Lowers the intimidation of founding alone; is the actual hero message on the homepage, not the curriculum." },
+      { "feature": "Live Certificates", "why_it_lands": "Gives users a tangible, portable credential from what otherwise reads as 'just a game.'" },
+      { "feature": "Near-zero-cost entry tier (~€2.50/mo 'Intern')", "why_it_lands": "Trivial-risk trial price point, well below typical SaaS/edtech entry cost." }
+    ],
+    "messaging_conversion": {
+      "headline_copy": "\"Startup game for women entrepreneurs: Fe/male Switch\" / \"Validate your startup ideas in one of the best business simulation games with an AI FRIEND as your co-founder\" (femaleswitch.com); \"From IDEA to first CUSTOMER\" (femaleswitch.app)",
+      "pricing": "Start = free (forum access). Intern ≈ €2.50/mo (Skill Lab + Elona feedback). Play ≈ €10/mo early-bird (full game access, Game Master support, prizes; €27/€108 annual variants also cited on-site) with a 15-day free trial. Build = 'coming soon' with microfinancing. (source: femaleswitch.com/faq — treat exact figures as observed-but-promo-dependent, not a stable price list)",
+      "primary_ctas": ["Start my own company", "Start for FREE", "Get started for free", "Start your trial", "Let's play!"],
+      "funnel_path": "Register → create avatar → explore Skill Lab / Marketplace / Startup Village (source: femaleswitch.com/faq)",
+      "social_proof": "\"Join 6,000+ entrepreneurs\"; \"1,000+ people tested\" an entrepreneurial-potential quiz (source: femaleswitch.com). A ~5,000-entrepreneurs figure and one user testimonial surfaced only in search snippets, not confirmed on a fetched page — treat as unverified."
+    },
+    "insights_to_imbibe": [
+      "Lead marketing copy with the AI companion/mentor persona, not the curriculum — F/MS's hero line sells 'AI FRIEND as co-founder,' not a syllabus.",
+      "Turn quest/module completion into a portable, named credential ('Live Certificate') rather than an internal badge only.",
+      "Offer a near-zero-friction paid tier (a few euros/month) to soften the free-to-paid cliff.",
+      "Package idea validation as its own named, demoable product surface (their 'Sandbox') rather than burying it inside lessons.",
+      "Tie in-game currency to real prizes/microfunding, not purely cosmetic points, to give progression real-world stakes."
+    ]
+  },
+
+  "3_social_presence": {
+    "platforms": [
+      {
+        "platform": "linkedin",
+        "profile_stats": { "handle": "linkedin.com/company/femaleswitch", "followers": 1478, "verified": false, "bio_links": ["http://www.femaleswitch.com"] },
+        "cadence": { "posts_per_week": 30, "consistency": "very high, automated", "notes": "All 50 posts pulled fall within an ~8-day window (2026-06-27 to 2026-07-04), i.e. roughly 5–6 posts/day — reads as an automated content-curation feed (startup-news digests) rather than hand-authored community management. Reliability: observed from a 50-post Apify pull, tier 1." },
+        "format_mix": { "reel_pct": 0, "carousel_pct": 0, "static_pct": 0, "story_pct": 0 },
+        "engagement_rate": { "value_pct": 0.06, "basis": "normalized to followers", "notes": "Across 50 posts, likes ranged 0–20 (median ~1), on a 1,478-follower base — engagement is near-zero outside two outlier posts. Observed, tier 1, approximate (hand-aggregated from pulled dataset)." },
+        "growth_velocity": { "trend": "not available", "from_snapshots": ["Single snapshot only — no prior-period comparison available this pass."] }
+      },
+      {
+        "platform": "instagram",
+        "profile_stats": { "handle": "gamepreneurship", "followers": 1550, "verified": false, "bio_links": ["https://linktr.ee/gamepreneurship"] },
+        "cadence": { "posts_per_week": 4, "consistency": "bursty", "notes": "50-post pull spans 2023-06-27 to 2026-07-08; a dense recent cluster (~20 posts across 2026-06-27–2026-07-08, so several/week) sits alongside long historical gaps. Observed, tier 1." },
+        "format_mix": { "reel_pct": 70, "carousel_pct": 0, "static_pct": 30, "story_pct": "not available" },
+        "engagement_rate": { "value_pct": 0.1, "basis": "normalized to followers", "notes": "Median 1 like/post on a 1,550-follower base; three 2023-dated pinned posts (11–13 likes) are the clear outliers. Observed, tier 1, approximate." },
+        "growth_velocity": { "trend": "not available", "from_snapshots": ["Single snapshot only."] }
+      },
+      {
+        "platform": "x",
+        "profile_stats": { "handle": "fms_rpg", "followers": 162, "verified": false, "bio_links": [] },
+        "cadence": { "posts_per_week": 0, "consistency": "currently dormant", "notes": "Most recent tweet in the 50-post pull is dated 2026-02-10; before that, a burst of retweets on 2025-12-23, and a near-daily posting run through May–Oct 2025. Reads as abandoned/deprioritized as of this snapshot. Observed, tier 1." },
+        "format_mix": { "reel_pct": 0, "carousel_pct": 0, "static_pct": 100, "story_pct": 0 },
+        "engagement_rate": { "value_pct": 0.02, "basis": "normalized to followers", "notes": "Almost all 50 pulled tweets show 0 likes/0 retweets on a 162-follower base; a handful of retweets (3x) are the only engagement signal. Observed, tier 1." },
+        "growth_velocity": { "trend": "not available", "from_snapshots": ["Single snapshot only."] }
+      },
+      {
+        "platform": "facebook",
+        "profile_stats": { "handle": "gamepreneurship", "followers": null, "verified": false, "bio_links": [] },
+        "cadence": { "posts_per_week": 0, "consistency": "not available", "notes": "Handle confirmed via femaleswitch.com's 'Follow us on Socials' block but not scraped this pass — no Apify Facebook actor run. Reliability: handle observed, stats not available." },
+        "format_mix": { "reel_pct": 0, "carousel_pct": 0, "static_pct": 0, "story_pct": 0 },
+        "engagement_rate": { "value_pct": 0, "basis": "normalized to followers", "notes": "not available" },
+        "growth_velocity": { "trend": "not available", "from_snapshots": [] }
+      },
+      {
+        "platform": "youtube",
+        "profile_stats": { "handle": "UCI5-EIt9AyO2IfWMGcYa17g", "followers": null, "verified": false, "bio_links": [] },
+        "cadence": { "posts_per_week": 0, "consistency": "not available", "notes": "Channel ID confirmed via site footer link but not scraped this pass. Reliability: handle observed, stats not available." },
+        "format_mix": { "reel_pct": 0, "carousel_pct": 0, "static_pct": 0, "story_pct": 0 },
+        "engagement_rate": { "value_pct": 0, "basis": "normalized to followers", "notes": "not available" },
+        "growth_velocity": { "trend": "not available", "from_snapshots": [] }
+      }
+    ]
+  },
+
+  "4_content_strategy": {
+    "pillars": [
+      { "pillar": "Curated startup-news/trend digests (funding, AI, SEO, market news) with a 'Build your startup now' CTA appended", "share": "~60% of LinkedIn and a large share of recent Instagram posts", "example_refs": ["li:activity-7479299191261782016-rvhU", "ig:Dah2U7mD2wX"], "reliability": "observed, tier 1/2" },
+      { "pillar": "Founder-voice motivational/how-to posts (idea brainstorming, pitch tips, 'boss babe' self-belief framing)", "share": "~20%", "example_refs": ["ig:Dac9xvijd9E", "ig:DaK8LqVjGt6"], "reliability": "observed, tier 2" },
+      { "pillar": "Product/feature promotion (AI tools — Annie, Aiden, Elona; Sandbox; Business Model Canvas generator)", "share": "~15%", "example_refs": ["ig:Ct_RKPIuJXq", "ig:CzEUQ1WtNJ9", "x:1928106647546744860"], "reliability": "observed, tier 2" },
+      { "pillar": "Startup-story/case-study spotlights (e.g. VetCove, Diane Hendricks)", "share": "~5%", "example_refs": ["ig:DaXUB_8k_66"], "reliability": "observed, tier 2" }
+    ],
+    "recurring_series": [
+      { "name": "Startup News / Startup Trends Section digests", "format": "text-overlay video or image + article link + fixed CTA block", "cadence": "near-daily on LinkedIn during the pulled window" },
+      { "name": "'Ready to unleash your inner boss babe?' entrepreneurial-potential quiz prompts", "format": "short video with fixed CTA link", "cadence": "roughly weekly on X during its active period (May 2025)" }
+    ],
+    "hook_patterns": [
+      { "pattern": "Rhetorical-question openers ('Want to dive into...', 'Tired of searching for the perfect co-founder?')", "source": "on-cover / caption", "reliability": "observed, tier 2" },
+      { "pattern": "Fixed sign-off CTA block ('Build your startup now: femaleswitch.app' + 'For startup advice, hit FOLLOW') appended to nearly every LinkedIn post", "source": "on-cover", "reliability": "observed, tier 1 — present verbatim across dozens of pulled posts" }
+    ],
+    "cta_funnel_intent": { "dominant_intent": "mixed", "notes": "News-digest posts skew awareness/traffic (drive to blog articles); product-feature and 'boss babe' posts skew conversion (drive to femaleswitch.app signup)." },
+    "brand_voice": "Casual, meme-inflected, emoji-heavy 'girl-boss' tone ('boss babe', 'gamepreneurs', 'let's make it happen'), mixed with founder-personal storytelling from Violetta Bonenkamp ('Mean CEO').",
+    "production_style": {
+      "style": "Low-production text-overlay videos and static graphics; captions carry most of the substance rather than visual production quality.",
+      "trend_audio_usage": "not observed in pulled data — videos appear to rely on captions/voiceover rather than trending audio; two of three transcribed reels had near-silent/minimal spoken audio (tier 4 sample)."
+    },
+    "per_platform_divergence": "LinkedIn is almost entirely automated news-digest content (high volume, near-zero engagement); Instagram mixes the same digest content with more personal/motivational posts and has the platform's only meaningfully engaged posts (the 2023 pinned posts); X is dormant since Feb 2026 and was, when active, a lower-effort cross-post/quote-tweet feed."
+  },
+
+  "5_top_performers": [
+    {
+      "rank": 1, "platform": "instagram", "url": "https://www.instagram.com/p/C0B54nUI8Gi/", "type": "reel",
+      "content": { "transcript_or_caption": "\"Welcome to the Fe/male Switch game... At the moment we have opened up two tiers: START and PLAY...\" (full tier breakdown of Start vs Play benefits). Transcript (Whisper, tier-4 pass): mostly non-verbal ('Oh') — content is carried by on-screen text/captions, not narration.", "on_cover_text": "Tier comparison graphic (Start vs Play)" },
+      "numbers": { "likes": 13, "comments": 2, "shares": null, "saves": null, "views": 257 },
+      "why_it_won": "Pinned since 2023; only IG post with comments; a clear, benefit-driven pricing/tier explainer rather than a generic tip post — direct product education outperforms the news-digest filler.",
+      "repeatable_formula": "Pinned tier/pricing explainer with concrete bullet-point benefits per tier."
+    },
+    {
+      "rank": 2, "platform": "instagram", "url": "https://www.instagram.com/p/CzEUQ1WtNJ9/", "type": "static",
+      "content": { "transcript_or_caption": "\"Introducing our AI-powered 'Business Model Canvas' tool... it's run by the robo-whiz GPT 4, and... it's free.\"", "on_cover_text": "AI Business Model Canvas tool announcement" },
+      "numbers": { "likes": 13, "comments": 0, "shares": null, "saves": null, "views": null },
+      "why_it_won": "Free, named AI tool with a concrete, specific benefit (auto-generated canvas) — highest-performing static post.",
+      "repeatable_formula": "Announce a free, named AI micro-tool with a specific, tangible output."
+    },
+    {
+      "rank": 3, "platform": "instagram", "url": "https://www.instagram.com/p/Ct_RKPIuJXq/", "type": "static",
+      "content": { "transcript_or_caption": "\"Say hello to your pocket-sized AI co-founders: Annie, Aiden, Little Sister, Boris, and Elona!\" — each named tool's function listed individually.", "on_cover_text": "5 named AI co-founder tools graphic" },
+      "numbers": { "likes": 11, "comments": 0, "shares": null, "saves": null, "views": null },
+      "why_it_won": "Personifying each AI tool with a name and single clear job (write descriptions, name products, generate ideas, design logos, give advice) makes an abstract 'AI features' post concrete and memorable.",
+      "repeatable_formula": "Give each AI feature a name and one specific job in a single graphic."
+    },
+    {
+      "rank": 4, "platform": "instagram", "url": "https://www.instagram.com/p/DaXUB_8k_66/", "type": "reel",
+      "content": { "transcript_or_caption": "Transcript (Whisper, tier-4 pass): \"And the short story of Vetcove is that the founders are brothers and their dad is a veterinarian... I love the story of Vetcove because it's such a great example of what a great startup opportunity looks like...\"", "on_cover_text": "\"5 reasons VetCov is a brilliant startup opportunity\"" },
+      "numbers": { "likes": 4, "comments": 0, "shares": null, "saves": null, "views": 145 },
+      "why_it_won": "One of only two reels in the sample with genuine spoken narration (vs. silent text-overlay) — real storytelling about a third-party startup case study outperforms the generic digest format.",
+      "repeatable_formula": "Narrated third-party startup case study framed as 'why this is a great opportunity.'"
+    },
+    {
+      "rank": 5, "platform": "linkedin", "url": "https://www.linkedin.com/posts/femaleswitch_ai-trends-is-where-its-at-for-your-startup-activity-7477030862157594624-wUQ9", "type": "static",
+      "content": { "transcript_or_caption": "\"AI Trends is where it's at for your startup! June 2026 shows us hot new ways to automate workflows and speed up your output...\"", "on_cover_text": "not available" },
+      "numbers": { "likes": 4, "comments": 0, "shares": 0, "saves": null, "views": null },
+      "why_it_won": "Highest-liked post in the LinkedIn digest set — AI-workflow framing slightly outperforms other news-digest topics, though the margin over baseline (0-2 likes) is small and not strongly conclusive.",
+      "repeatable_formula": "AI-productivity angle on the standard news-digest template."
+    },
+    {
+      "rank": 6, "platform": "linkedin", "url": "https://www.linkedin.com/posts/femaleswitch_adobe-is-set-to-shut-down-marketo-engage-activity-7478393222986256384-4Eqw", "type": "static",
+      "content": { "transcript_or_caption": "\"Adobe is set to shut down Marketo Engage. This news comes as a surprise for many marketers...\"", "on_cover_text": "not available" },
+      "numbers": { "likes": 2, "comments": 0, "shares": 0, "saves": null, "views": null },
+      "why_it_won": "Timely industry-news hook (a named tool being discontinued) reads as more concrete than generic 'trends' recaps.",
+      "repeatable_formula": "React to a specific, named industry news event rather than a generic monthly trend summary."
+    },
+    {
+      "rank": 7, "platform": "linkedin", "url": "https://www.linkedin.com/posts/femaleswitch_startup-valuations-are-changing-in-june-activity-7477084653389094912-TD5g", "type": "static",
+      "content": { "transcript_or_caption": "\"Startup valuations are changing. In June 2026, founders can learn to price smarter and dodge overvaluation traps...\"", "on_cover_text": "not available" },
+      "numbers": { "likes": 2, "comments": 0, "shares": 0, "saves": null, "views": null },
+      "why_it_won": "Funding/valuation topics are a recurring higher-performing sub-theme within the digest pillar.",
+      "repeatable_formula": "Funding/valuation angle within the news-digest template."
+    },
+    {
+      "rank": 8, "platform": "x", "url": "https://x.com/fms_rpg/status/1928154422942527624", "type": "static",
+      "content": { "transcript_or_caption": "\"Ready to unleash your inner boss babe? You gotta be curious and creative to spot amazing opportunities. Think you're up for it?\"", "on_cover_text": "not available" },
+      "numbers": { "likes": 0, "comments": 0, "shares": 0, "saves": null, "views": 46 },
+      "why_it_won": "Highest view count in the X sample (engagement itself is negligible platform-wide); the recurring 'boss babe' quiz-prompt series drew the most impressions of any recurring format on this platform.",
+      "repeatable_formula": "Recurring self-assessment/quiz-style prompt with a direct link."
+    },
+    {
+      "rank": 9, "platform": "x", "url": "https://x.com/fms_rpg/status/1925850998918050063", "type": "static",
+      "content": { "transcript_or_caption": "\"Got a startup idea? Meet your new AI co-founder! PlayPal can help you validate it. Discover how SANDBOX makes it easier.\"", "on_cover_text": "not available" },
+      "numbers": { "likes": 0, "comments": 0, "shares": 0, "saves": null, "views": 42 },
+      "why_it_won": "Second-highest X impressions; ties the AI-co-founder hook directly to the Sandbox product surface.",
+      "repeatable_formula": "Name the AI co-founder + name the specific product feature it powers, in one short post."
+    },
+    {
+      "rank": 10, "platform": "instagram", "url": "https://www.instagram.com/p/DZHueNYEh_-/", "type": "reel",
+      "content": { "transcript_or_caption": "Transcript (Whisper, tier-4 pass): \"Thank you.\" — minimal spoken content; caption/on-screen text not captured in this field.", "on_cover_text": "not available" },
+      "numbers": { "likes": 2, "comments": 0, "shares": null, "saves": null, "views": 111 },
+      "why_it_won": "Above-median view count for a recent reel; included as the next-best recent performer after the pinned/legacy posts, though the driving content isn't clear from the (largely silent) transcript alone.",
+      "repeatable_formula": "not conclusively determinable from available data — flagged as lower-confidence inclusion."
+    }
+  ],
+
+  "6_paid_partnerships": {
+    "active_ads": [],
+    "partnerships": []
+  },
+
+  "7_audience_community": {
+    "sentiment": { "praise": [], "complaints": [], "overall": "not available — comment volume across all platforms was effectively zero in the pulled sample (max 2 comments on any single post), too sparse to characterize sentiment." },
+    "whitespace": [
+      "Near-zero engagement across all three scraped platforms despite a legitimate, differentiated product — suggests distribution/format, not product-market message, is the binding constraint.",
+      "X account has been dormant since Feb 2026 while LinkedIn/Instagram stayed active — an abandoned channel with an existing (small) follower base."
+    ],
+    "responsiveness": { "replies": false, "speed": "not available", "notes": "No comment-reply activity observed in the pulled datasets to assess responsiveness." },
+    "owned_community": [
+      { "type": "forum", "detail": "Free 'Community Forum' / 'The Lounge' described on femaleswitch.com as part of the Start (free) tier." },
+      { "type": "blog", "detail": "blog.mean.ceo and the femaleswitch.com blog — the founder's SEO/content operation referenced in COMPETITORS.md as the one genuinely transferable content-strategy asset in this competitor set." }
+    ]
+  },
+
+  "8_synthesis": {
+    "winning_formula": "A genuinely differentiated, feature-rich product (AI co-founder, validation sandbox, portable credentials, token economy) marketed through high-volume, low-production, largely automated content — strong on product depth, weak on content craft and community engagement.",
+    "recent_strategic_shifts": "A pivot toward near-daily automated 'startup news digest' posting on LinkedIn and Instagram in the most recent ~2 weeks of the pull window, replacing what was previously a slower, more personal/founder-voice cadence — and in parallel, the X account appears to have been deprioritized entirely since February 2026.",
+    "steal_avoid_test": {
+      "steal": [
+        "Named, personified AI tools (Annie, Aiden, Elona) each with one clear job — makes an abstract 'AI features' pitch concrete.",
+        "A pinned, benefit-by-tier pricing explainer post as the top-of-profile anchor content.",
+        "A free, single-purpose AI micro-tool (e.g. canvas generator) as a lead-gen/awareness hook."
+      ],
+      "avoid": [
+        "High-volume, low-differentiation automated news-digest posting — it produced the platform's largest content share and its lowest engagement; volume did not buy attention.",
+        "Letting a platform (X) go fully dormant rather than either committing to it or formally sunsetting/redirecting it.",
+        "Relying on captions to carry all substance in 'reel' format video, leaving the video itself nearly silent — undercuts the reel format's actual strength (spoken hooks)."
+      ],
+      "test": [
+        "Whether narrated, story-driven case-study reels (the VetCove post) reliably outperform the text-overlay digest format at larger sample sizes — the one data point here is suggestive but not conclusive.",
+        "A cheap (~€2–3/mo) entry-tier price point as a wedge before the main subscription, mirroring F/MS's 'Intern' tier."
+      ]
+    },
+    "content_pack_hooks": [
+      { "pillar_or_format": "Named AI mentor/co-founder persona as hero messaging", "why_feed_forward": "Directly transferable to Altitut's own AI mentor ('Alti') — F/MS's homepage proves this framing can be the primary hook rather than a supporting feature." },
+      { "pillar_or_format": "Portable, named micro-credentials tied to quest/module completion", "why_feed_forward": "Altitut's RPG progression could badge completed modules as shareable, resume-usable credentials, mirroring F/MS's 'Live Certificates.'" }
+    ]
+  },
+
+  "sources": [
+    { "claim_ref": "1_identity, 2_product_website", "actor_id": "n/a (WebSearch/WebFetch desk research)", "run_or_dataset_id": "n/a", "url": "https://femaleswitch.com; https://femaleswitch.com/our-company; https://femaleswitch.com/faq; https://femaleswitch.com/build-your-first-startup; https://femaleswitch.app; https://tech.mt/media/tech-of-the-week/fe-male-switch-startup-simulator/", "pull_date": "2026-07-09", "reliability": "high for on-site copy; medium for unverified search-snippet figures (5,000-entrepreneurs claim, one testimonial)" },
+    { "claim_ref": "3_social_presence.linkedin, 5_top_performers (LinkedIn items)", "actor_id": "harvestapi/linkedin-company (UwSdACBp7ymaGUJjS); harvestapi/linkedin-company-posts (WI0tj4Ieb5Kq458gB)", "run_or_dataset_id": "dataset 0V0D54pC1zc7lzSpn (company); dataset 7TK43SIk5ATTvaYYm (50 posts)", "url": "https://www.linkedin.com/company/femaleswitch/", "pull_date": "2026-07-09", "reliability": "high — Tier 1 structured data" },
+    { "claim_ref": "3_social_presence.instagram, 4_content_strategy, 5_top_performers (IG items)", "actor_id": "apify/instagram-profile-scraper (dSCLg0C3YEZ83HzYX); apify/instagram-post-scraper (nH2AHrwxeTRJoN5hX)", "run_or_dataset_id": "dataset FHpQjJgCb15CGtEGh (profile); dataset CAIhKLrI99msGxV4g (50 posts)", "url": "https://www.instagram.com/gamepreneurship/", "pull_date": "2026-07-09", "reliability": "high — Tier 1 structured data" },
+    { "claim_ref": "5_top_performers reel transcripts", "actor_id": "apple_yang/instagram-transcripts-scraper (S9A11NvceWaGorwwh)", "run_or_dataset_id": "dataset Eceae6NKfdHCAHazR", "url": "https://www.instagram.com/p/C0B54nUI8Gi/; https://www.instagram.com/p/DaXUB_8k_66/; https://www.instagram.com/p/DZHueNYEh_-/", "pull_date": "2026-07-09", "reliability": "medium — automated Whisper transcript, tier 4 sampled pass on 3 items only" },
+    { "claim_ref": "3_social_presence.x", "actor_id": "xquik/x-tweet-scraper (wAusCMrm284Voaw86)", "run_or_dataset_id": "dataset QkF8YUmnyw61cSnZc (50 tweets)", "url": "https://x.com/fms_rpg", "pull_date": "2026-07-09", "reliability": "high — Tier 1 structured data" },
+    { "claim_ref": "3_social_presence.facebook, 3_social_presence.youtube (handles only)", "actor_id": "n/a (WebFetch)", "run_or_dataset_id": "n/a", "url": "https://femaleswitch.com/build-your-first-startup", "pull_date": "2026-07-09", "reliability": "medium — handle confirmed on-site, no stats pulled" }
+  ]
+}

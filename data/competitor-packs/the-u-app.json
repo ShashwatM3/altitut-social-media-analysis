@@ -1,0 +1,105 @@
+{
+  "meta": {
+    "name": "The U App",
+    "slug": "the-u-app",
+    "tier": "partial",
+    "snapshot_date": "2026-07-09",
+    "overall_confidence": "low",
+    "refresh_cadence": "quarterly — product-only benchmark, low expected rate of change; not worth a tighter cadence given thin public footprint"
+  },
+  "1_identity": {
+    "snapshot": {
+      "one_liner": "Self-described 'gamified entrepreneurial learning platform' (theu.app) offering gamified courses, cohort programs, live sessions, and community, tied to something called 'ELITE — Elite Entrepreneurial Institute.'",
+      "tier": "partial",
+      "why_they_compete": "On-the-nose category match by name and positioning ('the gamified entrepreneurial learning platform'), per COMPETITORS.md (#3 of 10), though public information is thin."
+    },
+    "positioning": {
+      "value_prop": "not available — the site is heavily JS-rendered and yielded almost no crawlable content beyond the homepage tagline and an 'About ELITE' page title.",
+      "differentiation": "not available"
+    },
+    "audience_icp": "Described generically as 'aspiring entrepreneurs' — no confirmation of student vs. adult-founder focus.",
+    "similarity_to_us": {
+      "c1_presence": 3,
+      "c2_audience": 3,
+      "c3_motive": 5,
+      "rationale": "Positioning language matches Altitut closely, but almost nothing about actual product depth, audience, or traction could be verified — low confidence in any similarity score. Directional judgment, not a scoring model."
+    }
+  },
+  "2_product_website": {
+    "highlight_features": [],
+    "most_attractive_features": [],
+    "messaging_conversion": {
+      "headline_copy": "not available — not captured in this desk-research pass",
+      "pricing": "not available",
+      "primary_ctas": [
+        "not available"
+      ],
+      "funnel_path": "not available",
+      "social_proof": "not available"
+    },
+    "insights_to_imbibe": [
+      "Cannot responsibly extract product insights without more verifiable content — flagged as a genuine research gap rather than filled with speculation."
+    ]
+  },
+  "3_social_presence": {
+    "platforms": [],
+    "_note": "Not scraped this pass — COMPETITORS.md flags this competitor as having little/no scrapeable consumer social presence; treated as a product benchmark, not a social one. Sections 3-7 are marked not available rather than guessed. No Instagram, LinkedIn, TikTok, Facebook, X, or YouTube handles located — thin/unverified public footprint confirmed."
+  },
+  "4_content_strategy": {
+    "pillars": [],
+    "recurring_series": [],
+    "hook_patterns": [],
+    "cta_funnel_intent": {
+      "dominant_intent": "not available",
+      "notes": "not available"
+    },
+    "brand_voice": "not available",
+    "production_style": {
+      "style": "not available",
+      "trend_audio_usage": "not available"
+    },
+    "per_platform_divergence": "not available",
+    "_note": "Not scraped this pass — COMPETITORS.md flags this competitor as having little/no scrapeable consumer social presence; treated as a product benchmark, not a social one. Sections 3-7 are marked not available rather than guessed."
+  },
+  "5_top_performers": [],
+  "6_paid_partnerships": {
+    "active_ads": [],
+    "partnerships": []
+  },
+  "7_audience_community": {
+    "sentiment": {
+      "praise": [],
+      "complaints": [],
+      "overall": "not available"
+    },
+    "whitespace": [],
+    "responsiveness": {
+      "replies": false,
+      "speed": "not available",
+      "notes": "not available"
+    },
+    "owned_community": []
+  },
+  "8_synthesis": {
+    "winning_formula": "not available — insufficient data.",
+    "recent_strategic_shifts": "not available — insufficient data.",
+    "steal_avoid_test": {
+      "steal": [],
+      "avoid": [],
+      "test": [
+        "Whether a follow-up pass with a JS-rendering-capable fetch tool (headless browser) surfaces meaningfully more product detail than static WebFetch did."
+      ]
+    },
+    "content_pack_hooks": []
+  },
+  "sources": [
+    {
+      "claim_ref": "1_identity, 2_product_website",
+      "actor_id": "n/a (WebSearch/WebFetch desk research)",
+      "run_or_dataset_id": "n/a",
+      "url": "https://theu.app/; https://theu.app/about",
+      "pull_date": "2026-07-09",
+      "reliability": "low — JS-rendered site returned almost no crawlable content across multiple fetch attempts"
+    }
+  ]
+}

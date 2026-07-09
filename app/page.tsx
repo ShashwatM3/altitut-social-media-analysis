@@ -1,6 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import { PackPanel } from "./components/pack-panel";
+import { COMPETITOR_PACKS } from "../data/competitor-packs";
+import { CONTENT_PACKS } from "../data/content-packs";
 import styles from "./page.module.css";
 
 const TABS = ["Competitors Analysis", "Content Creation"] as const;
@@ -43,7 +46,19 @@ export default function Home() {
           </ul>
         </nav>
         <main className={styles.content}>
-          <h2 className={styles.contentTitle}>{activeTab}</h2>
+          <header className={styles.contentHeader}>
+            <h2 className={styles.contentTitle}>{activeTab}</h2>
+            <p className={styles.contentDescription}>
+              {activeTab === "Competitors Analysis"
+                ? "Structured intelligence packs for each tracked competitor."
+                : "Repeatable content series the social team can execute."}
+            </p>
+          </header>
+          {activeTab === "Competitors Analysis" ? (
+            <PackPanel packs={COMPETITOR_PACKS} ariaLabel="Competitor packs" />
+          ) : (
+            <PackPanel packs={CONTENT_PACKS} ariaLabel="Content packs" />
+          )}
         </main>
       </div>
     </div>

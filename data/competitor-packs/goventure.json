@@ -1,0 +1,128 @@
+{
+  "meta": {
+    "name": "GoVenture",
+    "slug": "goventure",
+    "tier": "direct",
+    "snapshot_date": "2026-07-09",
+    "overall_confidence": "low",
+    "refresh_cadence": "quarterly — product-only benchmark, low expected rate of change; not worth a tighter cadence given thin public footprint"
+  },
+  "1_identity": {
+    "snapshot": {
+      "one_liner": "Long-running series of educational business/entrepreneurship simulation games and curriculum (business, entrepreneurship, marketing, accounting, leadership, financial literacy), spanning software sims and tabletop/board games.",
+      "tier": "direct",
+      "why_they_compete": "Strong match on the game and course-embedded axis, per COMPETITORS.md (#5 of 10)."
+    },
+    "positioning": {
+      "value_prop": "'Easier teaching and deeper, faster learning through simulated practice' — emphasizes reducing instructor workload via automated assessment/real-time feedback and 100+ microlearning modules.",
+      "differentiation": "A level-up business progression: players start at a lemonade stand and progress up to full businesses (restaurant, gym, hotel, etc.); ADA 508-compliant/accessible design."
+    },
+    "audience_icp": "K-12 teachers, university professors, corporate trainers; students across ability levels including at-risk/gifted/special-needs populations.",
+    "similarity_to_us": {
+      "c1_presence": 7,
+      "c2_audience": 6,
+      "c3_motive": 8,
+      "rationale": "High similarity on the game-plus-curriculum axis; explicit accessibility focus and K-12 depth are differentiators from Altitut. Directional judgment, not a scoring model."
+    }
+  },
+  "2_product_website": {
+    "highlight_features": [
+      {
+        "feature": "Level-up business progression (lemonade stand → full business)",
+        "why_pushed": "Core pedagogical/gamification mechanic — a concrete difficulty curve."
+      },
+      {
+        "feature": "100+ microlearning modules",
+        "why_pushed": "Breadth positioning against competing curricula."
+      },
+      {
+        "feature": "Automated assessment / real-time feedback",
+        "why_pushed": "Reduces instructor grading workload — a direct B2B (teacher) pain point."
+      }
+    ],
+    "most_attractive_features": [
+      {
+        "feature": "Level-up business progression",
+        "why_it_lands": "A concrete, escalating difficulty curve (lemonade stand to full business) that mirrors game-design skill-tree pacing."
+      }
+    ],
+    "messaging_conversion": {
+      "headline_copy": "not available — not captured in this desk-research pass",
+      "pricing": "Verbatim structure: Student Account Subscriptions priced per number of accounts (purchased in multiples of 5, 1-year term, reassignable); Site/Perpetual License (one-time payment, unlimited use at one school, ~1yr free upgrades); a 'Suite' option (low yearly fee vs. higher upfront perpetual cost). Exact dollar amounts require a quote.",
+      "primary_ctas": [
+        "not available"
+      ],
+      "funnel_path": "not available — quote-based B2B sales motion to schools/institutions.",
+      "social_proof": "not available"
+    },
+    "insights_to_imbibe": [
+      "The 'level-up' business progression (lemonade stand → kiosk → food truck → full business) is a concrete gamified-difficulty-curve model Altitut's RPG framing could borrow directly for skill-tree pacing."
+    ]
+  },
+  "3_social_presence": {
+    "platforms": [],
+    "_note": "Not scraped this pass — COMPETITORS.md flags this competitor as having little/no scrapeable consumer social presence; treated as a product benchmark, not a social one. Sections 3-7 are marked not available rather than guessed. No official GoVenture Instagram/LinkedIn/Facebook/TikTok/YouTube with follower counts found; an unrelated Instagram '@goventures_' (483 followers, unrelated social-commerce agency) is not GoVenture's own account."
+  },
+  "4_content_strategy": {
+    "pillars": [],
+    "recurring_series": [],
+    "hook_patterns": [],
+    "cta_funnel_intent": {
+      "dominant_intent": "not available",
+      "notes": "not available"
+    },
+    "brand_voice": "not available",
+    "production_style": {
+      "style": "not available",
+      "trend_audio_usage": "not available"
+    },
+    "per_platform_divergence": "not available",
+    "_note": "Not scraped this pass — COMPETITORS.md flags this competitor as having little/no scrapeable consumer social presence; treated as a product benchmark, not a social one. Sections 3-7 are marked not available rather than guessed."
+  },
+  "5_top_performers": [],
+  "6_paid_partnerships": {
+    "active_ads": [],
+    "partnerships": []
+  },
+  "7_audience_community": {
+    "sentiment": {
+      "praise": [],
+      "complaints": [],
+      "overall": "not available"
+    },
+    "whitespace": [],
+    "responsiveness": {
+      "replies": false,
+      "speed": "not available",
+      "notes": "not available"
+    },
+    "owned_community": []
+  },
+  "8_synthesis": {
+    "winning_formula": "A long-running, accessibility-focused simulation-and-curriculum bundle sold via quote-based licensing into K-12 and higher-ed, built around an escalating business-complexity progression.",
+    "recent_strategic_shifts": "not available — insufficient historical data this pass.",
+    "steal_avoid_test": {
+      "steal": [
+        "Explicit, escalating business-complexity tiers (lemonade stand → full business) as a skill-tree pacing model."
+      ],
+      "avoid": [],
+      "test": []
+    },
+    "content_pack_hooks": [
+      {
+        "pillar_or_format": "Escalating business-complexity skill tree",
+        "why_feed_forward": "A ready-made pacing model for Altitut's RPG world progression (Spark → Forge → Vault → Summit)."
+      }
+    ]
+  },
+  "sources": [
+    {
+      "claim_ref": "1_identity, 2_product_website",
+      "actor_id": "n/a (WebSearch/WebFetch desk research)",
+      "run_or_dataset_id": "n/a",
+      "url": "https://www.goventure.net/schools-universities; https://www.goventure.net/k-12-schools; https://playgoventure.com/pricing",
+      "pull_date": "2026-07-09",
+      "reliability": "medium — pricing structure confirmed on-site, exact dollar amounts require a quote and were not obtained"
+    }
+  ]
+}

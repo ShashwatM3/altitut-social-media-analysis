@@ -1,0 +1,136 @@
+{
+  "meta": {
+    "name": "Startup Wars",
+    "slug": "startup-wars",
+    "tier": "direct",
+    "snapshot_date": "2026-07-09",
+    "overall_confidence": "low",
+    "refresh_cadence": "quarterly — product-only benchmark, low expected rate of change; not worth a tighter cadence given thin public footprint"
+  },
+  "1_identity": {
+    "snapshot": {
+      "one_liner": "Browser-based, gamified startup simulation platform where students launch virtual businesses across industries, guided by an AI coach ('Milton'); course-embedded in high school CTE/business courses.",
+      "tier": "direct",
+      "why_they_compete": "Closest match to Altitut's game-plus-course-embedded model with a student audience and an AI coach, per COMPETITORS.md (#2 of 10)."
+    },
+    "positioning": {
+      "value_prop": "\"Learn. Apply. Win.\" — practice real founder decisions (pivoting, resource allocation, forecasting) 'without the risk,' with real-time feedback and instructor learning analytics.",
+      "differentiation": "A named, persistent AI coach ('Milton') as product mascot/interface, plus institutional learning-analytics for instructors."
+    },
+    "audience_icp": "High school (CTE/business courses) and community college students; also university business programs, corporate training, homeschoolers.",
+    "similarity_to_us": {
+      "c1_presence": 8,
+      "c2_audience": 8,
+      "c3_motive": 8,
+      "rationale": "Directly comparable game-plus-course-embedded model and AI-coach interface; primary gap is Altitut's broader web-app/LMS layer beyond the simulation itself. Directional judgment, not a scoring model."
+    }
+  },
+  "2_product_website": {
+    "highlight_features": [
+      {
+        "feature": "Virtual business simulation across industries (t-shirt brands, food trucks, tech startups)",
+        "why_pushed": "Core product surface; the simulation itself is the product."
+      },
+      {
+        "feature": "Milton (AI entrepreneurship coach)",
+        "why_pushed": "Positioned as a differentiator and a persistent brand mascot."
+      },
+      {
+        "feature": "Instructor learning analytics",
+        "why_pushed": "Targets the B2B (school/instructor) buyer directly."
+      }
+    ],
+    "most_attractive_features": [
+      {
+        "feature": "Milton AI coach",
+        "why_it_lands": "Personified guidance reduces intimidation for first-time student founders, similar to Fe/male Switch's AI co-founder pattern."
+      },
+      {
+        "feature": "Real-time feedback + instructor analytics",
+        "why_it_lands": "Directly solves the classroom-adoption problem (instructor visibility into student progress)."
+      }
+    ],
+    "messaging_conversion": {
+      "headline_copy": "not available — not captured in this desk-research pass",
+      "pricing": "Verbatim license tiers: Basic Access Pass $24.99 (1 simulation, 3 assignments, 12-month access); Startup Access Pass $29.99 (2 simulations, 6 assignments, Milton AI Classroom Guide — marked 'Most Requested'); Premium Access Pass $59.99 (full catalog, 15+ assignments, Milton AI).",
+      "primary_ctas": [
+        "not available"
+      ],
+      "funnel_path": "Per-license purchase by instructor/institution — not a self-serve consumer funnel.",
+      "social_proof": "Claims 10,000+ students across 100+ institutions and a 97%+ instructor satisfaction rate (on-site claim, not independently verified)."
+    },
+    "insights_to_imbibe": [
+      "The tiered, transparent per-license pricing tied directly to catalog breadth/assignment count is a clean, easy-to-copy monetization ladder for an instructor/institution buyer.",
+      "A named AI coach as a persistent product mascot/interface is a strong branding device — directly comparable to what Altitut could do with its own AI mentor."
+    ]
+  },
+  "3_social_presence": {
+    "platforms": [],
+    "_note": "Not scraped this pass — COMPETITORS.md flags this competitor as having little/no scrapeable consumer social presence; treated as a product benchmark, not a social one. Sections 3-7 are marked not available rather than guessed. LinkedIn company page ('STARTUP WARS') shows ~736 followers per search snippet; Facebook page (facebook.com/startupwarsapp) exists with no follower count found; Instagram/TikTok/X/YouTube not found."
+  },
+  "4_content_strategy": {
+    "pillars": [],
+    "recurring_series": [],
+    "hook_patterns": [],
+    "cta_funnel_intent": {
+      "dominant_intent": "not available",
+      "notes": "not available"
+    },
+    "brand_voice": "not available",
+    "production_style": {
+      "style": "not available",
+      "trend_audio_usage": "not available"
+    },
+    "per_platform_divergence": "not available",
+    "_note": "Not scraped this pass — COMPETITORS.md flags this competitor as having little/no scrapeable consumer social presence; treated as a product benchmark, not a social one. Sections 3-7 are marked not available rather than guessed."
+  },
+  "5_top_performers": [],
+  "6_paid_partnerships": {
+    "active_ads": [],
+    "partnerships": []
+  },
+  "7_audience_community": {
+    "sentiment": {
+      "praise": [],
+      "complaints": [],
+      "overall": "not available"
+    },
+    "whitespace": [],
+    "responsiveness": {
+      "replies": false,
+      "speed": "not available",
+      "notes": "not available"
+    },
+    "owned_community": []
+  },
+  "8_synthesis": {
+    "winning_formula": "Transparent, tiered per-license B2B pricing plus a personified AI coach, sold directly into classroom/CTE adoption rather than a consumer funnel.",
+    "recent_strategic_shifts": "not available — insufficient historical data this pass.",
+    "steal_avoid_test": {
+      "steal": [
+        "Tiered per-license pricing tied to catalog breadth, transparent and easy to compare.",
+        "A named, persistent AI coach as the product's face."
+      ],
+      "avoid": [],
+      "test": [
+        "Whether a named AI-mentor mascot (mirroring Milton) measurably improves conversion/engagement for Altitut's own AI guide 'Alti.'"
+      ]
+    },
+    "content_pack_hooks": [
+      {
+        "pillar_or_format": "Named AI coach as persistent brand interface",
+        "why_feed_forward": "Directly transferable to Altitut's 'Alti' mentor — proven pattern across two competitors in this set (F/MS's Elona/PlayPal, Startup Wars' Milton)."
+      }
+    ]
+  },
+  "sources": [
+    {
+      "claim_ref": "1_identity, 2_product_website",
+      "actor_id": "n/a (WebSearch/WebFetch desk research)",
+      "run_or_dataset_id": "n/a",
+      "url": "https://www.startupwars.com/; https://portal.startupwars.com/; https://www.startupwars.com/pricing/; https://www.linkedin.com/company/startup-wars-inc; https://www.facebook.com/startupwarsapp/",
+      "pull_date": "2026-07-09",
+      "reliability": "medium — on-site pricing/claims not cross-verified against a second source"
+    }
+  ]
+}

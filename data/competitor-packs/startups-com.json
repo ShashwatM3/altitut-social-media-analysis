@@ -1,0 +1,124 @@
+{
+  "meta": {
+    "name": "Startups.com",
+    "slug": "startups-com",
+    "tier": "partial",
+    "snapshot_date": "2026-07-09",
+    "overall_confidence": "low",
+    "refresh_cadence": "quarterly — product-only benchmark, low expected rate of change; not worth a tighter cadence given thin public footprint"
+  },
+  "1_identity": {
+    "snapshot": {
+      "one_liner": "Founder platform bundling startup courses/masterclasses with practical tools (Bizplan for business planning, Fundable for equity crowdfunding, Launchrock for customer acquisition), plus the Startup Therapy podcast (since 2018, hosted by CEO Wil Schroter and Ryan Rutan).",
+      "tier": "partial",
+      "why_they_compete": "Education plus tools platform, but for adult founders and not gamified, per COMPETITORS.md (#10 of 10)."
+    },
+    "positioning": {
+      "value_prop": "'One Price, Every Product' — a single subscription unlocks all four integrated platforms plus community/advisory access; markets personalized roadmaps matching founders to investors, advisors, co-founders, and talent.",
+      "differentiation": "Bundles course content, practical tools, and a media arm (podcast) under one subscription price, rather than selling them separately."
+    },
+    "audience_icp": "Early-stage startup founders across sectors (SaaS, fintech, marketplaces, consumer, AI); notable messaging around addressing founder isolation, including for women entrepreneurs.",
+    "similarity_to_us": {
+      "c1_presence": 6,
+      "c2_audience": 4,
+      "c3_motive": 7,
+      "rationale": "Strong education-plus-tools-platform match, but targets adult/professional founders rather than students, and has no gamification layer. Directional judgment, not a scoring model."
+    }
+  },
+  "2_product_website": {
+    "highlight_features": [
+      {
+        "feature": "Bundled subscription (Bizplan + Fundable + Launchrock + 600+ masterclasses)",
+        "why_pushed": "The core commercial model — one price for everything, positioned against buying tools separately."
+      },
+      {
+        "feature": "Personalized roadmaps (investor/advisor/co-founder/talent matching)",
+        "why_pushed": "A relationship-matching layer beyond pure content/tools."
+      }
+    ],
+    "most_attractive_features": [
+      {
+        "feature": "Bundled subscription model",
+        "why_it_lands": "Removes the friction of evaluating and paying for multiple separate point-solutions."
+      }
+    ],
+    "messaging_conversion": {
+      "headline_copy": "not available — not captured in this desk-research pass",
+      "pricing": "Verbatim tiers: Monthly $29/mo; Annual $249/yr ('Most Popular,' ≈$20.75/mo); Lifetime Access $349. Includes 600+ masterclasses/courses, unlimited use of Bizplan/Fundable/Launchrock, founder community/forums, resource library. A separate ~$99/month live-workshop/advisory tier was referenced in a third-party review but not directly confirmed on-site.",
+      "primary_ctas": [
+        "not available"
+      ],
+      "funnel_path": "not available",
+      "social_proof": "Claims 1M+ registered users, 96% founder satisfaction (on-site claims, not independently verified)."
+    },
+    "insights_to_imbibe": [
+      "The 'one subscription, bundle of tools' model (course content + practical business-building tools + podcast/media arm under one price) is a strong template — Altitut could bundle its LMS/RPG content with practical founder tools (pitch deck builder, plan templates) under a single price tier rather than separate add-ons."
+    ]
+  },
+  "3_social_presence": {
+    "platforms": [],
+    "_note": "Not scraped this pass — COMPETITORS.md flags this competitor as having little/no scrapeable consumer social presence; treated as a product benchmark, not a social one. Sections 3-7 are marked not available rather than guessed. Facebook (facebook.com/startups/), X/Twitter (twitter.com/startupsco), LinkedIn (linkedin.com/company/startups-co), Instagram (instagram.com/startups.co/) — company follower counts not available; founder Wil Schroter personally has ~14K Instagram, ~14.4K X, ~21.5K LinkedIn followers (personal brand, not company account, not scraped this pass)."
+  },
+  "4_content_strategy": {
+    "pillars": [],
+    "recurring_series": [],
+    "hook_patterns": [],
+    "cta_funnel_intent": {
+      "dominant_intent": "not available",
+      "notes": "not available"
+    },
+    "brand_voice": "not available",
+    "production_style": {
+      "style": "not available",
+      "trend_audio_usage": "not available"
+    },
+    "per_platform_divergence": "not available",
+    "_note": "Not scraped this pass — COMPETITORS.md flags this competitor as having little/no scrapeable consumer social presence; treated as a product benchmark, not a social one. Sections 3-7 are marked not available rather than guessed."
+  },
+  "5_top_performers": [],
+  "6_paid_partnerships": {
+    "active_ads": [],
+    "partnerships": []
+  },
+  "7_audience_community": {
+    "sentiment": {
+      "praise": [],
+      "complaints": [],
+      "overall": "not available"
+    },
+    "whitespace": [],
+    "responsiveness": {
+      "replies": false,
+      "speed": "not available",
+      "notes": "not available"
+    },
+    "owned_community": []
+  },
+  "8_synthesis": {
+    "winning_formula": "A single bundled subscription (courses + tools + community) sold directly to adult founders, reinforced by a founder-hosted podcast as an organic media/trust-building arm.",
+    "recent_strategic_shifts": "not available — insufficient historical data this pass.",
+    "steal_avoid_test": {
+      "steal": [
+        "A single bundled subscription price covering content, tools, and community/advisory access, rather than separately priced add-ons."
+      ],
+      "avoid": [],
+      "test": []
+    },
+    "content_pack_hooks": [
+      {
+        "pillar_or_format": "Bundled single-price subscription (content + tools + community)",
+        "why_feed_forward": "Applicable to Altitut's own pricing structure if/when it moves beyond a single flat tier — bundling LMS content with practical tools under one price is a proven founder-platform pattern."
+      }
+    ]
+  },
+  "sources": [
+    {
+      "claim_ref": "1_identity, 2_product_website",
+      "actor_id": "n/a (WebSearch/WebFetch desk research)",
+      "run_or_dataset_id": "n/a",
+      "url": "https://www.startups.com/; https://site.startups.com/pricing; https://www.startups.com/podcast; https://www.linkedin.com/in/wilschroter",
+      "pull_date": "2026-07-09",
+      "reliability": "medium — on-site pricing confirmed; the ~$99/mo advisory tier is third-party-sourced only"
+    }
+  ]
+}
