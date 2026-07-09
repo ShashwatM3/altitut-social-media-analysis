@@ -1,0 +1,40 @@
+/* Carbon Design System color tokens (g10 / g100) used across the app */
+:root {
+  --cds-background: #f4f4f4;
+  --cds-layer: #ffffff;
+  --cds-layer-active: #e0e0e0;
+  --cds-border-subtle: #e0e0e0;
+  --cds-border-strong: #8d8d8d;
+  --cds-text-primary: #161616;
+  --cds-text-secondary: #525252;
+  --cds-interactive: #0f62fe;
+  --cds-header-bg: #161616;
+  --cds-header-border: #393939;
+  --cds-header-text: #f4f4f4;
+  --cds-header-text-secondary: #c6c6c6;
+  --cds-header-hover: #353535;
+}
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: var(--cds-background);
+  color: var(--cds-text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button {
+  font-family: inherit;
+}
