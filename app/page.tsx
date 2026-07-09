@@ -55,7 +55,11 @@ export default function Home() {
             </p>
           </header>
           {activeTab === "Competitors Analysis" ? (
-            <PackPanel packs={COMPETITOR_PACKS} ariaLabel="Competitor packs" />
+            <PackPanel
+              packs={COMPETITOR_PACKS}
+              ariaLabel="Competitor packs"
+              variant="competitor"
+            />
           ) : (
             <PackPanel packs={CONTENT_PACKS} ariaLabel="Content packs" />
           )}

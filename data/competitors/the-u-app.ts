@@ -3,7 +3,10 @@ import type { AnalysisPack } from "../../app/components/pack-panel";
 export const THE_U_APP_PACK: AnalysisPack = {
   name: "The U App",
   tag: "Category Match",
-  meta: "theu.app · Tier 1 competitor",
+  meta: "Tier 1 competitor",
+  links: {
+    website: "https://theu.app",
+  },
   sections: [
     {
       id: "identity",

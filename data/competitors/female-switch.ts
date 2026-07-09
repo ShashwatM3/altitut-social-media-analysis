@@ -3,7 +3,13 @@ import type { AnalysisPack } from "../../app/components/pack-panel";
 export const FEMALE_SWITCH_PACK: AnalysisPack = {
   name: "Fe/male Switch (F/MS)",
   tag: "Closest Match",
-  meta: "femaleswitch.com · Tier 1 competitor",
+  meta: "Tier 1 competitor",
+  links: {
+    website: "https://femaleswitch.com",
+    linkedin: "https://www.linkedin.com/company/femaleswitch",
+    instagram: "https://www.instagram.com/gamepreneurship/",
+    twitter: "https://x.com/fms_rpg",
+  },
   sections: [
     {
       id: "identity",

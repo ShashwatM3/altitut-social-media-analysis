@@ -3,7 +3,11 @@ import type { AnalysisPack } from "../../app/components/pack-panel";
 export const STARTUP_WARS_PACK: AnalysisPack = {
   name: "Startup Wars",
   tag: "High Similarity",
-  meta: "startupwars.com · Tier 1 competitor",
+  meta: "Tier 1 competitor",
+  links: {
+    website: "https://www.startupwars.com",
+    linkedin: "https://www.linkedin.com/company/startup-wars-inc",
+  },
   sections: [
     {
       id: "identity",

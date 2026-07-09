@@ -5,6 +5,10 @@ export const CONTENT_PACKS: AnalysisPack[] = [
     name: "Startup Teardown",
     tag: "Pack 01",
     meta: "45–90s Reel · IG / TikTok / Shorts",
+    referenceReels: [
+      "https://www.instagram.com/p/DTtSpEKgSo_/",
+      "https://www.instagram.com/p/DZDnyi4pvBv/",
+    ],
     sections: [
       {
         id: "overview",
@@ -626,6 +630,11 @@ export const CONTENT_PACKS: AnalysisPack[] = [
     name: "Becoming a Multi-Million Dollar Founder, One Day at a Time",
     tag: "Pack 02",
     meta: "30–60s Reel · IG / TikTok / Shorts",
+    referenceReels: [
+      "https://www.instagram.com/reel/DYi7At9NNlV/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==",
+      "https://www.instagram.com/p/DZiWRe4RhTy/",
+      "https://www.instagram.com/p/DRdKchtDWG2/",
+    ],
     sections: [
       {
         id: "overview",
