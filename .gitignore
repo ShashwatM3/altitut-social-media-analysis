@@ -10,8 +10,11 @@ dist/
 # Node / frontend
 node_modules/
 .next/
+out/
 dist/
 .cache/
+next-env.d.ts
+*.tsbuildinfo
 
 # Terraform
 **/.terraform/
