@@ -1,10 +1,17 @@
 import type { Metadata } from "next";
-import { IBM_Plex_Sans } from "next/font/google";
+import { Inter, Montserrat } from "next/font/google";
 import "./globals.css";
 
-const ibmPlexSans = IBM_Plex_Sans({
+const inter = Inter({
   subsets: ["latin"],
-  weight: ["300", "400", "600"],
+  weight: ["500", "600", "700", "800"],
+  variable: "--font-inter",
+});
+
+const montserrat = Montserrat({
+  subsets: ["latin"],
+  weight: ["600", "700", "800"],
+  variable: "--font-montserrat",
 });
 
 export const metadata: Metadata = {
@@ -19,8 +26,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={ibmPlexSans.className}>{children}</body>
+    <html lang="en" className={`${inter.variable} ${montserrat.variable}`}>
+      <body className="font-sans">{children}</body>
     </html>
   );
 }

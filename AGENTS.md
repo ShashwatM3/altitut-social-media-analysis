@@ -56,24 +56,52 @@ short: the old codebase is browsable as plain files at
 
 ## Stack & setup
 
-The app is a **Next.js (App Router) + TypeScript** webapp at the repo root,
-styled after **IBM's Carbon Design System** (IBM Plex Sans via `next/font`,
-Carbon color tokens hand-rolled in plain CSS / CSS modules — no Carbon or
-Tailwind dependency). Layout: dark Carbon-style header (title + "Help ?"
-button), a 20%-width side nav with two tabs (Competitors Analysis, Content
-Creation), and an 80%-width content pane.
+The app is a **Next.js (App Router) + TypeScript + Tailwind CSS 3.4** webapp at
+the repo root, styled to the Altitut design system (Inter/Montserrat via
+`next/font`, brand tokens in `tailwind.config.js`, utilities in
+`app/globals.css` — see `resources/DESIGN_GUIDE.md` and
+`resources/DESIGN_GUIDE_P2.md`). Layout: white header (title + "Help ?"),
+a side nav with two tabs (Competitors Analysis, Content Creation), and a
+content pane.
 
 - `npm install` — install dependencies
 - `npm run dev` — dev server
 - `npm run build` / `npm run start` — production build and serve
+- `npm run seed` — (re)ingest predefined competitor/content packs + RAG chunks
+  into Firestore
+- `npm run telegram:webhook -- <https-url>` — register the Telegram bot webhook
 - No test suite yet.
 
-Keep new UI consistent with the Carbon tokens defined in `app/globals.css`.
+### Feature map (added 2026-07)
+
+- **Data & persistence** — Firestore project `altitut-sma-dashboard`
+  (`lib/firebase.ts`, open rules). Collections: `competitors`, `contentPacks`
+  (both rendered live via `onSnapshot` in `app/page.tsx`, with the static packs
+  in `data/` as fallback), `ragChunks` (vector store), `scoutRuns`,
+  `telegramUpdates`. Pack CRUD + model-output normalization: `lib/packs.ts`.
+- **Competitor Scout** (`app/components/scout-dialog.tsx`, `app/api/scout/route.ts`,
+  `lib/scout.ts`) — client-driven 8-step workflow: Exa company discovery → site
+  crawl → social mapping (Apify Instagram profile scrape + Exa) → deep research →
+  three GPT synthesis passes producing the exact 8-section competitor-pack
+  structure (`resources/competitor_pack_structure`) + TL;DR → save to Firestore
+  + RAG ingest.
+- **Competitor chatbot** (`app/components/chat-panel.tsx`, `app/api/chat/route.ts`,
+  `lib/rag.ts`) — hybrid RAG (OpenAI `text-embedding-3-small` @512 dims cosine +
+  lexical scoring) over all packs + `docs/ALTITUT-PRODUCT-OVERVIEW.md`; streams
+  via Vercel AI SDK (`useChat`), renders markdown with react-markdown.
+- **Telegram content-pack bot** (`app/api/telegram/route.ts`, `lib/telegram.ts`,
+  `lib/reel.ts`) — reel link → Apify `instagram-scraper` → Whisper transcript →
+  two-pass GPT synthesis into the 5-section content-pack structure
+  (`resources/content_pack_structure`) → Firestore + RAG. Needs
+  `TELEGRAM_BOT_TOKEN` (see `SETUP_NEEDED_FROM_YOU.md`).
+- **Connectors** — `lib/exa.ts` (search/contents), `lib/apify.ts` (actor runs),
+  `lib/openai.ts` (chat-JSON with retry, embeddings), `lib/altitut.ts` (product
+  context constants).
 
 ## Working notes
 
-- `.env` / `.env.example` at the repo root carry over credentials from the
-  previous build (see the archive guide); `.env` is gitignored — never commit
-  it.
+- `.env` / `.env.example` at the repo root carry the credentials (OpenAI, Exa,
+  Apify, Telegram); `.env` is gitignored — never commit it. API routes that run
+  long declare `maxDuration = 300` for Vercel Fluid Compute.
 - If you materially change the stack or add tooling, update the section above
   so the next agent isn't left guessing.

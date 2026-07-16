@@ -8,6 +8,7 @@ export const STARTUP_WARS_PACK: AnalysisPack = {
     website: "https://www.startupwars.com",
     linkedin: "https://www.linkedin.com/company/startup-wars-inc",
   },
+  tldr: "Startup Wars is a Tier 1 product competitor: a browser-based startup simulation sold into high-school and district entrepreneurship programs, where students run virtual companies with an AI coach (Milton) while teachers grade through analytics dashboards. Structural overlap with Altitut's game + course model is high — 8/10 on product, learning flow, and gamification alike.\n\nIts social presence is effectively nonexistent (~124 Facebook likes, no other verified accounts) and growth is entirely sales-led through district procurement, so treat it as a product benchmark, not a social one. The play for Altitut: steal its decision-scenario mechanics and instructor-analytics sales story, and own the student-facing social category Startup Wars has left completely open.",
   sections: [
     {
       id: "identity",

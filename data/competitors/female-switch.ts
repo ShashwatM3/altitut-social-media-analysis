@@ -10,6 +10,7 @@ export const FEMALE_SWITCH_PACK: AnalysisPack = {
     instagram: "https://www.instagram.com/gamepreneurship/",
     twitter: "https://x.com/fms_rpg",
   },
+  tldr: "Fe/male Switch is the closest feature-for-feature analog to Altitut: a women-first startup RPG and business simulator with quests, an AI co-founder (Elona), live-updating micro-credentials, and community — Tier 1 on both product architecture and content operation, and the one competitor whose distribution engine is genuinely worth studying.\n\nFollower counts are modest, but a founder-led brand (Violetta \"Mean CEO\" Bonenkamp) plus an SEO/content machine at blog.mean.ceo turns every post into a product demo — consistency over virality. Altitut's counter: match the founder-face energy and product-as-content playbook while owning the inclusive, classroom-ready, student-first slot that F/MS's women-first framing narrows away from.",
   sections: [
     {
       id: "identity",

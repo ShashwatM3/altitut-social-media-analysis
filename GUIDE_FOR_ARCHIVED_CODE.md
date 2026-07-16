@@ -6,10 +6,29 @@ frontend, connectors, docs) was **not deleted** — it's preserved and still ful
 usable. This file explains how to find it, look at it, recover it, or merge pieces
 of it back into the new build.
 
+## Remotes (canonical vs backup)
+
+As of 2026-07-09, day-to-day work pushes to the Altitut org repo. The personal
+GitHub copy is kept only as an optional backup remote.
+
+| Remote | URL | Role |
+|--------|-----|------|
+| **`origin`** | https://github.com/altitut/altitut-social-media.git | Canonical — default for `git push` / `git pull` |
+| **`personal`** | https://github.com/ShashwatM3/altitut-social-media-analysis.git | Optional backup — push only when you want a mirror |
+
+```bash
+git push                 # → origin (Altitut)
+git push personal main   # → optional backup to the old personal repo
+```
+
+The `archive-v1` tag is on **both** remotes. Changing or renaming remotes does
+**not** delete the tag, the local worktree, or the personal-repo copy of history.
+
 ## Where the archived code lives
 
 - **Git tag:** `archive-v1` — points at commit `27451f1`, the last commit before
-  the reset. This tag is permanent and will never move.
+  the reset. This tag is permanent and will never move. It is pushed to
+  `origin` (Altitut) and also exists on `personal`.
 - **Live checkout (git worktree):** `../ALTITUT-SOCIAL-MEDIA-ANALYSIS-archive-v1`
   — a sibling directory next to this repo, checked out from `archive-v1`. It's a
   real, ordinary set of files on disk — no git commands are needed to read it.
@@ -73,12 +92,24 @@ If those are needed for the new build, copy them from
 
 ## Maintenance notes
 
-- Do not delete the `archive-v1` tag or force-push over it.
+- Do not delete the `archive-v1` tag or force-push over it on `origin` or
+  `personal`.
 - Do not delete or move the `../ALTITUT-SOCIAL-MEDIA-ANALYSIS-archive-v1`
   directory — it's a git worktree, not an independent clone. Removing it without
   running `git worktree remove` first will leave the main repo's worktree
   metadata stale (fix with `git worktree prune` if that happens).
-- If this repo is ever re-cloned elsewhere, the worktree directory won't come
-  along automatically — only the `archive-v1` tag will (assuming it was pushed).
-  Recreate the worktree there with:
-  `git worktree add ../ALTITUT-SOCIAL-MEDIA-ANALYSIS-archive-v1 archive-v1`
+- If this repo is ever re-cloned elsewhere, clone the **canonical** remote and
+  recreate the worktree. The worktree directory does not travel with a clone —
+  only the `archive-v1` tag does (it is on `origin`):
+
+  ```bash
+  git clone https://github.com/altitut/altitut-social-media.git
+  cd altitut-social-media
+  git worktree add ../ALTITUT-SOCIAL-MEDIA-ANALYSIS-archive-v1 archive-v1
+  ```
+
+  Optionally re-add the personal backup remote:
+
+  ```bash
+  git remote add personal https://github.com/ShashwatM3/altitut-social-media-analysis.git
+  ```
