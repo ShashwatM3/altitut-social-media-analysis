@@ -2,7 +2,7 @@
  * Seeds Firestore with everything the dashboard knows today:
  *   1. The three predefined competitor packs  -> `competitors` collection
  *   2. The predefined content packs           -> `contentPacks` collection
- *   3. RAG chunks (packs + Altitut overview)  -> `ragChunks` collection
+ *   3. RAG chunks (packs + Altitut overview + platform guide) -> `ragChunks`
  *
  * Idempotent — documents are keyed by slug, so re-running overwrites in place.
  *
@@ -15,6 +15,7 @@ import { COMPETITOR_PACKS } from "../data/competitor-packs";
 import { CONTENT_PACKS } from "../data/content-packs";
 import { COLLECTIONS } from "../lib/firebase";
 import { savePack } from "../lib/packs";
+import { platformGuideChunks } from "../lib/platform-guide";
 import { chunkMarkdown, chunkPack, ingestChunks } from "../lib/rag";
 
 async function main() {
@@ -41,6 +42,7 @@ async function main() {
         "utf-8",
       ),
     ),
+    ...platformGuideChunks(),
   ];
   const count = await ingestChunks(pending);
   console.log(`  ragChunks   ✓ ${count} chunks embedded and stored`);

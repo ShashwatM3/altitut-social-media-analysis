@@ -12,10 +12,16 @@ import { COLLECTIONS, db } from "./firebase";
 import { embedTexts } from "./openai";
 import { packEntryText, slugify } from "./packs";
 
+export type RagDocType =
+  | "competitor"
+  | "content-pack"
+  | "altitut"
+  | "platform-guide";
+
 export type RagChunk = {
   id: string;
   /** Which corpus the chunk belongs to. */
-  docType: "competitor" | "content-pack" | "altitut";
+  docType: RagDocType;
   /** Pack name or document title the chunk came from. */
   sourceName: string;
   sectionTitle: string;
@@ -82,10 +88,11 @@ export function chunkPack(
   return chunks;
 }
 
-/** Chunk a markdown document by ## headings (used for the Altitut overview). */
+/** Chunk a markdown document by ## headings (Altitut overview, platform guide, …). */
 export function chunkMarkdown(
   title: string,
   markdown: string,
+  docType: RagDocType = "altitut",
 ): PendingChunk[] {
   const sections = markdown.split(/\n(?=## )/g);
   const chunks: PendingChunk[] = [];
@@ -102,8 +109,8 @@ export function chunkMarkdown(
       if (!buffer.trim()) return;
       part += 1;
       chunks.push({
-        id: `altitut-${slugify(`${heading}-${part}`)}`,
-        docType: "altitut",
+        id: `${docType}-${slugify(`${heading}-${part}`)}`,
+        docType,
         sourceName: title,
         sectionTitle: heading,
         entryLabel: part > 1 ? `${heading} (${part})` : heading,
@@ -241,14 +248,24 @@ function lexicalScore(queryTokens: string[], chunk: RagChunk): number {
   return score / new Set(queryTokens).size;
 }
 
+export type HybridRetrieveOptions = {
+  /** When set, only search chunks whose docType is in this list. */
+  docTypes?: RagDocType[];
+};
+
 export async function hybridRetrieve(
   queryText: string,
   topK = 12,
+  options?: HybridRetrieveOptions,
 ): Promise<RetrievedChunk[]> {
-  const [chunks, [queryEmbedding]] = await Promise.all([
+  const [allChunks, [queryEmbedding]] = await Promise.all([
     loadChunks(),
     embedTexts([queryText]),
   ]);
+  const allowed = options?.docTypes;
+  const chunks = allowed?.length
+    ? allChunks.filter((chunk) => allowed.includes(chunk.docType))
+    : allChunks;
   const queryTokens = tokenize(queryText);
   const queryLower = queryText.toLowerCase();
 

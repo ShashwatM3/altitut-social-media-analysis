@@ -68,7 +68,7 @@ content pane.
 - `npm run dev` — dev server
 - `npm run build` / `npm run start` — production build and serve
 - `npm run seed` — (re)ingest predefined competitor/content packs + RAG chunks
-  into Firestore
+  (including the platform guide) into Firestore
 - `npm run telegram:webhook -- <https-url>` — register the Telegram bot webhook
 - No test suite yet.
 
@@ -89,6 +89,10 @@ content pane.
   `lib/rag.ts`) — hybrid RAG (OpenAI `text-embedding-3-small` @512 dims cosine +
   lexical scoring) over all packs + `docs/ALTITUT-PRODUCT-OVERVIEW.md`; streams
   via Vercel AI SDK (`useChat`), renders markdown with react-markdown.
+- **Help / platform guide** (`app/components/help-dialog.tsx`,
+  `app/api/help-chat/route.ts`, `lib/platform-guide.ts`, `docs/PLATFORM-GUIDE.md`)
+  — **Help ?** opens a guide + help assistant. Help chat RAG is scoped to
+  `docType: "platform-guide"` chunks (auto-ingested on first ask if missing).
 - **Telegram content-pack bot** (`app/api/telegram/route.ts`, `lib/telegram.ts`,
   `lib/reel.ts`) — reel link → Apify `instagram-scraper` → Whisper transcript →
   vision-grounded reel-analysis pass (frames as base64 data URLs; produces a

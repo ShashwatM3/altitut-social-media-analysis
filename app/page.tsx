@@ -5,6 +5,7 @@ import { COMPETITOR_PACKS } from "../data/competitor-packs";
 import { CONTENT_PACKS } from "../data/content-packs";
 import { listenToPacks, type StoredPack } from "../lib/packs";
 import { ChatPanel } from "./components/chat-panel";
+import { HelpButton } from "./components/help-dialog";
 import { PackPanel, type AnalysisPack } from "./components/pack-panel";
 import { RunCompetitorScout } from "./components/scout-dialog";
 
@@ -62,12 +63,7 @@ export default function Home() {
               Competitor insights and content creation ideas for Altitut
             </p>
           </div>
-          <button
-            type="button"
-            className="rounded-lg border border-gray-300 px-6 py-2 font-semibold text-gray-700 transition-colors hover:bg-gray-50"
-          >
-            Help ?
-          </button>
+          <HelpButton />
         </div>
       </header>
       <div className="mx-auto flex w-full max-w-7xl flex-1 gap-8 px-4 py-6 sm:px-6 lg:px-8">
