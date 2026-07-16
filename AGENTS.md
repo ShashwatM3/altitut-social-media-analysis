@@ -91,8 +91,11 @@ content pane.
   via Vercel AI SDK (`useChat`), renders markdown with react-markdown.
 - **Telegram content-pack bot** (`app/api/telegram/route.ts`, `lib/telegram.ts`,
   `lib/reel.ts`) — reel link → Apify `instagram-scraper` → Whisper transcript →
-  two-pass GPT synthesis into the 5-section content-pack structure
-  (`resources/content_pack_structure`) → Firestore + RAG. Needs
+  vision-grounded reel-analysis pass (frames as base64 data URLs; produces a
+  "1. UNDERSTANDING THE REEL" section + an observed-facts sheet) → two-pass GPT
+  synthesis of the transfer plan (sections 2–6, the classic
+  `resources/content_pack_structure`, hard-grounded in the observed facts so
+  visual/audio/caption recipes mirror the real reel) → Firestore + RAG. Needs
   `TELEGRAM_BOT_TOKEN` (see `SETUP_NEEDED_FROM_YOU.md`).
 - **Connectors** — `lib/exa.ts` (search/contents), `lib/apify.ts` (actor runs),
   `lib/openai.ts` (chat-JSON with retry, embeddings), `lib/altitut.ts` (product

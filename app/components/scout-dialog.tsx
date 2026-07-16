@@ -274,6 +274,20 @@ export function RunCompetitorScout({ existingNames, onComplete }: ScoutRunnerPro
               </div>
             ) : null}
 
+            {isFinished && finishedPack ? (
+              <div className="mt-4 flex items-center gap-3 rounded-lg border border-green-200 bg-green-50 p-4">
+                <span className="flex h-8 w-8 flex-none items-center justify-center rounded-full bg-green-100 text-green-700">
+                  <CheckIcon />
+                </span>
+                <p className="text-sm text-green-800">
+                  <strong className="font-semibold">{finishedPack.name}</strong>{" "}
+                  has been saved to your dashboard — {finishedPack.tag} ·{" "}
+                  {finishedPack.meta}. It&apos;s live in the competitor list below
+                  and the copilot already knows about it.
+                </p>
+              </div>
+            ) : null}
+
             <div className="mt-5 flex justify-end gap-3">
               {error ? (
                 <button

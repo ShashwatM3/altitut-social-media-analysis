@@ -23,11 +23,13 @@ export const EMBEDDING_DIMENSIONS = 512;
 
 /**
  * Chat completion that must return a JSON object. Parses the response and
- * retries once with the parse error appended before giving up.
+ * retries once with the parse error appended before giving up. Optional
+ * `images` (URLs) are attached to the user turn for vision grounding.
  */
 export async function completeJson<T>(options: {
   system: string;
   user: string;
+  images?: string[];
   maxOutputTokens?: number;
   validate?: (parsed: unknown) => T;
 }): Promise<T> {
@@ -35,17 +37,34 @@ export async function completeJson<T>(options: {
   let lastError = "";
 
   for (let attempt = 0; attempt < 2; attempt += 1) {
-    const user =
+    const userText =
       attempt === 0
         ? options.user
         : `${options.user}\n\nYour previous answer was invalid JSON or failed validation (${lastError}). Respond again with ONLY the corrected JSON object.`;
+    const userContent:
+      | string
+      | (
+          | { type: "text"; text: string }
+          | { type: "image_url"; image_url: { url: string; detail: "low" } }
+        )[] = options.images?.length
+      ? [
+          { type: "text", text: userText },
+          ...options.images.slice(0, 4).map(
+            (url) =>
+              ({
+                type: "image_url",
+                image_url: { url, detail: "low" },
+              }) as const,
+          ),
+        ]
+      : userText;
     const response = await openai.chat.completions.create({
       model: CHAT_MODEL,
       response_format: { type: "json_object" },
       max_tokens: options.maxOutputTokens ?? 4096,
       messages: [
         { role: "system", content: options.system },
-        { role: "user", content: user },
+        { role: "user", content: userContent },
       ],
     });
     const text = response.choices[0]?.message?.content ?? "";
