@@ -101,6 +101,13 @@ content pane.
   `resources/content_pack_structure`, hard-grounded in the observed facts so
   visual/audio/caption recipes mirror the real reel) → Firestore + RAG. Needs
   `TELEGRAM_BOT_TOKEN` (see `SETUP_NEEDED_FROM_YOU.md`).
+- **Auto-Post** (`app/components/autopost-*.tsx`, `app/api/autopost/route.ts`,
+  `app/api/autopost/accounts/route.ts`, `app/api/autopost/caption/route.ts`,
+  `lib/social-posts.ts`, `lib/social/accounts.ts`, `lib/storage.ts`, `lib/social/*`)
+  — a four-step composer that uploads media directly to Firebase Storage, writes
+  AI-generated per-platform copy, and publishes to LinkedIn, Facebook and
+  Instagram through Upload-Post. Needs `UPLOAD_POST_API_KEY`,
+  `UPLOAD_POST_PROFILE` and open Firebase Storage rules.
 - **Connectors** — `lib/exa.ts` (search/contents), `lib/apify.ts` (actor runs),
   `lib/openai.ts` (chat-JSON with retry, embeddings), `lib/altitut.ts` (product
   context constants).

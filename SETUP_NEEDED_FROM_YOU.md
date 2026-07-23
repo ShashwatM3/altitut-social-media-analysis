@@ -5,10 +5,10 @@ credentials already in `.env` (OpenAI, Exa, Apify, Firebase). The dashboard, the
 Competitor Scout, the RAG chatbot, and Firestore ingestion all work right now with
 zero action from you — run `npm run dev` and use them.
 
-There are exactly **two things** I could not do without you, both for the Telegram
-bot (Task 4): creating the bot (Telegram requires *your* phone/account) and
-deploying publicly (Vercel requires *your* login). Follow the steps below in order —
-each step says exactly what to click and type.
+There are exactly **three things** I could not do without you: the Telegram bot
+(Task 4), the Upload-Post account for Auto-Post, and Firebase Storage rules for
+direct media uploads. Follow the steps below in order — each step says exactly what
+to click and type.
 
 ---
 
@@ -111,3 +111,39 @@ a summary; the new pack appears in the **Content Creation** tab of the dashboard
   API routes/scripts.
 - **Where everything lives:** see the "Stack & setup" section of `AGENTS.md`
   (updated) for a file-by-file map of the new features.
+
+---
+
+## Part E — Auto-Post / Upload-Post setup (≈10 minutes)
+
+Auto-Post publishes to LinkedIn, Facebook and Instagram through Upload-Post so
+you do not need a LinkedIn developer app or Meta App Review.
+
+1. Go to https://app.upload-post.com and create a free account (no credit card).
+2. In the Upload-Post dashboard, create a **Profile** with the username you want
+   to use (e.g. `altitut`). This is the `UPLOAD_POST_PROFILE` value.
+3. Connect LinkedIn, Facebook and Instagram to that profile:
+   - Facebook: connect a **Page** (not a personal profile) that you admin.
+   - Instagram: the account must be a **Business or Creator** account.
+   - LinkedIn: connect your personal profile and/or a company page you admin.
+4. Go to **API Keys** and generate a key. Copy it.
+5. Open `.env` in this repo and fill in:
+   ```
+   UPLOAD_POST_API_KEY=your-key-here
+   UPLOAD_POST_PROFILE=your-profile-name
+   ```
+6. Open the Firebase console → Storage → Rules and paste:
+   ```
+   rules_version = '2';
+   service firebase.storage {
+     match /b/{bucket}/o {
+       match /autopost/{allPaths=**} {
+         allow read, write: if true;
+       }
+     }
+   }
+   ```
+   This lets the browser upload videos/images directly to Firebase Storage.
+   Firestore rules are already open on this project.
+7. Restart `npm run dev` and open the **Auto-Post** tab. Upload a video or
+   image, write copy, and publish.

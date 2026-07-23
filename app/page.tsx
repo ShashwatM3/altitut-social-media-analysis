@@ -7,9 +7,10 @@ import { listenToPacks, type StoredPack } from "../lib/packs";
 import { ChatPanel } from "./components/chat-panel";
 import { HelpButton } from "./components/help-dialog";
 import { PackPanel, type AnalysisPack } from "./components/pack-panel";
+import { AutoPostPanel } from "./components/autopost-panel";
 import { RunCompetitorScout } from "./components/scout-dialog";
 
-const TABS = ["Competitors Analysis", "Content Creation"] as const;
+const TABS = ["Competitors Analysis", "Content Creation", "Auto-Post"] as const;
 
 type Tab = (typeof TABS)[number];
 
@@ -99,7 +100,9 @@ export default function Home() {
               <p className="mt-1 max-w-2xl text-sm text-gray-600 lg:text-base">
                 {activeTab === "Competitors Analysis"
                   ? "Structured intelligence packs for each tracked competitor."
-                  : "Repeatable content series the social team can execute."}
+                  : activeTab === "Content Creation"
+                    ? "Repeatable content series the social team can execute."
+                    : "Publish to LinkedIn, Facebook and Instagram from one console."}
               </p>
             </div>
             {activeTab === "Competitors Analysis" ? (
@@ -120,8 +123,10 @@ export default function Home() {
                 variant="competitor"
               />
             </>
-          ) : (
+          ) : activeTab === "Content Creation" ? (
             <PackPanel packs={contentPacks} ariaLabel="Content packs" />
+          ) : (
+            <AutoPostPanel />
           )}
         </main>
       </div>

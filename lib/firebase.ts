@@ -25,4 +25,6 @@ export const COLLECTIONS = {
   ragChunks: "ragChunks",
   scoutRuns: "scoutRuns",
   telegramUpdates: "telegramUpdates",
+  socialPosts: "socialPosts",
+  socialAccounts: "socialAccounts",
 } as const;
