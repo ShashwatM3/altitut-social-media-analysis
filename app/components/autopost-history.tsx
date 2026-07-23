@@ -107,9 +107,24 @@ function PlatformResult({ result }: { result: SocialPost["results"][number] }) {
         <span className="text-xs text-bright-coral" title={result.error}>
           Failed
         </span>
+      ) : result.status === "skipped" ? (
+        <span className="text-xs text-amber-600" title={result.error}>
+          Skipped
+        </span>
       ) : (
         <span className="text-xs text-gray-500">{result.status}</span>
       )}
+    </div>
+  );
+}
+
+function Warnings({ warnings }: { warnings?: string[] }) {
+  if (!warnings || warnings.length === 0) return null;
+  return (
+    <div className="mt-2 rounded-md bg-amber-50 px-3 py-2 text-xs text-amber-800">
+      {warnings.map((w, i) => (
+        <p key={i}>• {w}</p>
+      ))}
     </div>
   );
 }
@@ -228,6 +243,7 @@ function HistoryRow({ post }: { post: SocialPost }) {
       <td className="px-5 py-3">
         <div className="grid gap-1">
           {post.results?.map((r) => <PlatformResult key={r.platform} result={r} />)}
+          <Warnings warnings={post.warnings} />
         </div>
       </td>
       <td className="px-5 py-3">
@@ -266,6 +282,7 @@ function HistoryCard({ post }: { post: SocialPost }) {
       </div>
       <div className="mt-3 grid gap-1">
         {post.results?.map((r) => <PlatformResult key={r.platform} result={r} />)}
+        <Warnings warnings={post.warnings} />
       </div>
     </div>
   );

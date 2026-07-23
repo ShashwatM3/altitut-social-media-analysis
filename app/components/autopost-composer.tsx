@@ -58,11 +58,12 @@ type AutopostState = {
   jobId?: string;
   results?: Array<{
     platform: Platform;
-    status: "pending" | "success" | "failed";
+    status: "pending" | "success" | "failed" | "skipped";
     postUrl?: string;
     platformPostId?: string;
     error?: string;
   }>;
+  warnings?: string[];
   done?: boolean;
   availablePages?: Array<{ id: string; name: string }>;
 };
@@ -464,9 +465,10 @@ export function AutoPostComposer({
     if (!results || results.length === 0) return "publishing";
     const statuses = results.map((r) => r.status);
     if (statuses.every((s) => s === "success")) return "published";
-    if (statuses.every((s) => s === "failed")) return "failed";
+    if (statuses.every((s) => s === "failed" || s === "skipped")) return "failed";
     if (statuses.some((s) => s === "success")) return "partial";
-    return "publishing";
+    if (statuses.some((s) => s === "pending")) return "publishing";
+    return "failed";
   }
 
   async function fetchCaptions(
@@ -652,6 +654,12 @@ export function AutoPostComposer({
         <p className="mt-1 text-sm text-gray-600">
           Select where this post will go and how it should appear.
         </p>
+        {accounts.some((a) => a.status === "needs_reauth") ? (
+          <p className="mt-2 text-xs text-amber-700">
+            Platforms marked “needs reconnect” are not configured yet. They will be
+            skipped at publish time so the others can still go live.
+          </p>
+        ) : null}
         <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-3">
           {(["linkedin", "facebook", "instagram"] as Platform[]).map((platform) => {
             const selected = targets.some((t) => t.platform === platform);
@@ -695,7 +703,7 @@ export function AutoPostComposer({
                       />
                       <span className="text-gray-700">{account.displayName}</span>
                       {account.status === "needs_reauth" ? (
-                        <span className="text-amber-600">(needs reconnect)</span>
+                        <span className="text-amber-600">(will be skipped)</span>
                       ) : null}
                     </>
                   ) : (
@@ -966,6 +974,42 @@ export function AutoPostComposer({
                     Close
                   </button>
                 </div>
+              </div>
+            ) : null}
+            {publishPhase === "published" && publishState?.results ? (
+              <div className="mt-4 grid gap-3 rounded-lg border border-gray-200 bg-gray-50 p-3 text-sm">
+                {publishState.results.map((r) => (
+                  <div key={r.platform} className="flex items-center justify-between gap-2">
+                    <span className="font-medium capitalize">{r.platform}</span>
+                    {r.status === "success" && r.postUrl ? (
+                      <a
+                        href={r.postUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-deep-teal underline hover:text-darker-teal"
+                      >
+                        View
+                      </a>
+                    ) : r.status === "skipped" ? (
+                      <span className="text-amber-600" title={r.error}>
+                        Skipped
+                      </span>
+                    ) : r.status === "failed" ? (
+                      <span className="text-red-600" title={r.error}>
+                        Failed
+                      </span>
+                    ) : (
+                      <span className="text-gray-500">{r.status}</span>
+                    )}
+                  </div>
+                ))}
+                {publishState.warnings && publishState.warnings.length > 0 ? (
+                  <div className="rounded-md bg-amber-50 px-2.5 py-2 text-xs text-amber-800">
+                    {publishState.warnings.map((w, i) => (
+                      <p key={i}>• {w}</p>
+                    ))}
+                  </div>
+                ) : null}
               </div>
             ) : null}
           </div>

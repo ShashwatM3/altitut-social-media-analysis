@@ -119,20 +119,23 @@ a summary; the new pack appears in the **Content Creation** tab of the dashboard
 Auto-Post publishes to LinkedIn, Facebook and Instagram through Upload-Post so
 you do not need a LinkedIn developer app or Meta App Review.
 
-1. Go to https://app.upload-post.com and create a free account (no credit card).
-2. In the Upload-Post dashboard, create a **Profile** with the username you want
-   to use (e.g. `altitut`). This is the `UPLOAD_POST_PROFILE` value.
-3. Connect LinkedIn, Facebook and Instagram to that profile:
-   - Facebook: connect a **Page** (not a personal profile) that you admin.
-   - Instagram: the account must be a **Business or Creator** account.
-   - LinkedIn: connect your personal profile and/or a company page you admin.
-4. Go to **API Keys** and generate a key. Copy it.
-5. Open `.env` in this repo and fill in:
+**For the full, hold-your-hand version of these steps, see `AUTOPOST_SETUP.md`.**
+The short version is:
+
+1. Create a free account at `https://app.upload-post.com`.
+2. Create a **Profile** (e.g. `altitut`) — this becomes `UPLOAD_POST_PROFILE`.
+3. Connect at least one platform to that profile:
+   - **Facebook Page** you admin (not a personal profile).
+   - **Instagram Business or Creator** account.
+   - **LinkedIn** personal profile or company page you admin.
+   You can add the others later; the app skips unconfigured platforms and still
+   publishes to the connected ones.
+4. Generate an **API key** and paste it into `.env`:
    ```
    UPLOAD_POST_API_KEY=your-key-here
-   UPLOAD_POST_PROFILE=your-profile-name
+   UPLOAD_POST_PROFILE=altitut
    ```
-6. Open the Firebase console → Storage → Rules and paste:
+5. Open Firebase console → Storage → Rules and allow `/autopost/**`:
    ```
    rules_version = '2';
    service firebase.storage {
@@ -143,7 +146,4 @@ you do not need a LinkedIn developer app or Meta App Review.
      }
    }
    ```
-   This lets the browser upload videos/images directly to Firebase Storage.
-   Firestore rules are already open on this project.
-7. Restart `npm run dev` and open the **Auto-Post** tab. Upload a video or
-   image, write copy, and publish.
+6. Restart `npm run dev`, open the **Auto-Post** tab, and publish.

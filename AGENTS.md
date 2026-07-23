@@ -110,8 +110,9 @@ content pane.
   content pack in `app/components/pack-panel.tsx`; the pack is flattened into
   ground truth (`lib/packs.ts` helpers) and fed to the caption generator, so
   platforms, placement, hashtags and descriptions are pre-built from the pack.
-  Needs `UPLOAD_POST_API_KEY`, `UPLOAD_POST_PROFILE` and open Firebase Storage
-  rules.
+  Gracefully skips any platform that is not connected and still publishes the
+  rest. Setup: `AUTOPOST_SETUP.md`. Needs `UPLOAD_POST_API_KEY`,
+  `UPLOAD_POST_PROFILE` and open Firebase Storage rules.
 - **Connectors** — `lib/exa.ts` (search/contents), `lib/apify.ts` (actor runs),
   `lib/openai.ts` (chat-JSON with retry, embeddings), `lib/altitut.ts` (product
   context constants).

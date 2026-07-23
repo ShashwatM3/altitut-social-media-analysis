@@ -40,6 +40,7 @@ export type AutopostState = {
   vendorRequestId?: string;
   jobId?: string;
   results?: UploadPostResult[];
+  warnings?: string[];
   done?: boolean;
   availablePages?: Array<{ id: string; name: string }>;
 };
@@ -47,9 +48,10 @@ export type AutopostState = {
 function computeStatus(results: UploadPostResult[]): SocialPost["status"] {
   const statuses = results.map((r) => r.status);
   if (statuses.every((s) => s === "success")) return "published";
-  if (statuses.every((s) => s === "failed")) return "failed";
+  if (statuses.every((s) => s === "failed" || s === "skipped")) return "failed";
   if (statuses.some((s) => s === "success")) return "partial";
-  return "publishing";
+  if (statuses.some((s) => s === "pending")) return "publishing";
+  return "failed";
 }
 
 async function mediaUrlReachable(url: string): Promise<boolean> {
@@ -138,16 +140,49 @@ async function validateStep(
     }
   }
 
-  // Resolve and cache connected account / page IDs.
-  const nextState: AutopostState = { ...state, availablePages: undefined };
+  // Resolve and cache connected account / page IDs. If a platform is not
+  // configured, skip it gracefully so the others can still publish.
+  const nextState: AutopostState = {
+    ...state,
+    availablePages: undefined,
+    warnings: state.warnings ? [...state.warnings] : [],
+    results: state.results ? [...state.results] : [],
+  };
+  const readyTargets: AutopostState["targets"] = [];
+
+  function setResult(platform: Provider, result: UploadPostResult) {
+    const idx = nextState.results?.findIndex((r) => r.platform === platform);
+    if (idx !== undefined && idx >= 0 && nextState.results) {
+      nextState.results[idx] = result;
+    } else {
+      nextState.results?.push(result);
+    }
+  }
+
   for (const target of state.targets) {
     try {
       const account = await resolveSocialAccount(target.platform, profile);
+      if (account.status === "needs_reauth") {
+        nextState.warnings?.push(
+          `${target.platform} is not connected and will be skipped.`,
+        );
+        setResult(target.platform, {
+          platform: target.platform,
+          status: "skipped",
+          error: "Account not connected in Upload-Post.",
+        });
+        continue;
+      }
       if (target.platform === "facebook" && !account.facebookPageId) {
-        return {
-          state,
-          error: `No Facebook Pages found for profile ${profile}. Connect a Page in Upload-Post.`,
-        };
+        nextState.warnings?.push(
+          `${target.platform}: no Facebook Page found; skipped.`,
+        );
+        setResult(target.platform, {
+          platform: target.platform,
+          status: "skipped",
+          error: "No Facebook Page connected to this profile.",
+        });
+        continue;
       }
       target.pageId =
         target.platform === "facebook"
@@ -155,16 +190,34 @@ async function validateStep(
           : target.platform === "linkedin"
             ? account.linkedinPageId
             : undefined;
+      readyTargets.push(target);
     } catch (error) {
       console.error(`[autopost] resolve ${target.platform}:`, error);
-      return {
-        state,
+      nextState.warnings?.push(
+        `${target.platform}: ${error instanceof Error ? error.message : "could not resolve account"}; skipped.`,
+      );
+      setResult(target.platform, {
+        platform: target.platform,
+        status: "skipped",
         error:
           error instanceof Error
             ? error.message
             : `Could not resolve ${target.platform} account.`,
-      };
+      });
     }
+  }
+
+  nextState.targets = readyTargets;
+
+  if (nextState.targets.length === 0) {
+    return {
+      state: nextState,
+      error: "None of the selected platforms are connected. Check AUTOPOST_SETUP.md.",
+    };
+  }
+
+  if (nextState.warnings?.length) {
+    console.log("[autopost] validate warnings:", nextState.warnings);
   }
 
   return { state: nextState };
@@ -219,18 +272,33 @@ async function publishStep(
       };
     }
 
+    // Merge new results with any pre-existing skipped-platform results.
+    const nextResults: UploadPostResult[] = [...(state.results ?? [])];
+    if (res.results) {
+      for (const r of res.results) {
+        const idx = nextResults.findIndex((x) => x.platform === r.platform);
+        if (idx >= 0) nextResults[idx] = r;
+        else nextResults.push(r);
+      }
+    }
+    for (const t of state.targets) {
+      if (!nextResults.some((r) => r.platform === t.platform)) {
+        nextResults.push({ platform: t.platform, status: "pending" });
+      }
+    }
+
     const nextState: AutopostState = {
       ...state,
       vendorRequestId: res.requestId,
       jobId: res.jobId,
-      results: res.results,
-      done: res.results ? computeStatus(res.results) !== "publishing" : false,
+      results: nextResults,
+      done: computeStatus(nextResults) !== "publishing",
     };
-    if (nextState.results && nextState.done) {
-      nextState.status = computeStatus(nextState.results);
-    } else {
-      nextState.status = state.scheduledFor ? "scheduled" : "publishing";
-    }
+    nextState.status = nextState.done
+      ? computeStatus(nextResults)
+      : state.scheduledFor
+        ? "scheduled"
+        : "publishing";
     return { state: nextState };
   } catch (error) {
     console.error("[autopost] publish failed:", error);
@@ -259,13 +327,22 @@ async function pollStep(
       id,
       state.jobId ? "job" : "request",
     );
+    // Merge polled results with any pre-existing skipped-platform results.
+    const nextResults: UploadPostResult[] = [...(state.results ?? [])];
+    if (results) {
+      for (const r of results) {
+        const idx = nextResults.findIndex((x) => x.platform === r.platform);
+        if (idx >= 0) nextResults[idx] = r;
+        else nextResults.push(r);
+      }
+    }
     const nextState: AutopostState = {
       ...state,
-      results,
+      results: nextResults,
       done,
     };
-    if (done && results) {
-      nextState.status = computeStatus(results);
+    if (done) {
+      nextState.status = computeStatus(nextResults);
     }
     return { state: nextState };
   } catch (error) {
@@ -288,6 +365,7 @@ async function saveStep(state: AutopostState): Promise<{ state: AutopostState; e
       id: state.postId,
       createdAt: new Date().toISOString(),
       status: state.status ?? "publishing",
+      warnings: state.warnings,
       media: state.media,
       brief: state.brief,
       copy: state.copy,

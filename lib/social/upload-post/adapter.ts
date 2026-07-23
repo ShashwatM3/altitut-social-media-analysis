@@ -14,7 +14,7 @@ export type UploadPostTarget = {
 
 export type UploadPostResult = {
   platform: Provider;
-  status: "pending" | "success" | "failed";
+  status: "pending" | "success" | "failed" | "skipped";
   postUrl?: string;
   platformPostId?: string;
   error?: string;
@@ -63,9 +63,10 @@ function mapRawResult(raw: RawResult): UploadPostResult | null {
     raw.success === false ||
     statusLower === "failed" ||
     statusLower === "error";
+  const skipped = statusLower === "skipped";
   return {
     platform,
-    status: success ? "success" : failed ? "failed" : "pending",
+    status: success ? "success" : failed ? "failed" : skipped ? "skipped" : "pending",
     postUrl: raw.post_url,
     platformPostId: raw.platform_post_id ?? raw.post_id,
     error: raw.error ?? raw.message,

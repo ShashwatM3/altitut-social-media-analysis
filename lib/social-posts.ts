@@ -21,6 +21,8 @@ export type SocialPost = {
     | "partial"
     | "failed"
     | "scheduled";
+  /** Human-readable warnings, e.g. a skipped platform that was not connected. */
+  warnings?: string[];
   media: {
     kind: "video" | "image" | "none";
     urls: string[];
@@ -45,7 +47,7 @@ export type SocialPost = {
   jobId?: string;
   results: Array<{
     platform: Provider;
-    status: "pending" | "success" | "failed";
+    status: "pending" | "success" | "failed" | "skipped";
     postUrl?: string;
     platformPostId?: string;
     error?: string;
