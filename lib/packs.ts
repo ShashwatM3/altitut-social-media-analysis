@@ -17,6 +17,7 @@ import type {
   PackSection,
 } from "../app/components/pack-panel";
 import { COLLECTIONS, db } from "./firebase";
+import type { Provider } from "./social-posts";
 
 export type StoredPack = AnalysisPack & {
   id: string;
@@ -242,4 +243,123 @@ export function packEntryText(entry: PackEntry): string {
     parts.push(entry.value);
   }
   return parts.join("\n");
+}
+
+function packAllText(pack: AnalysisPack): string {
+  const parts: string[] = [];
+  parts.push(`Pack name: ${pack.name}`);
+  if (pack.tag) parts.push(`Pack tag: ${pack.tag}`);
+  if (pack.meta) parts.push(`Pack meta: ${pack.meta}`);
+  if (pack.tldr) parts.push(`TL;DR: ${pack.tldr}`);
+
+  for (const section of pack.sections) {
+    parts.push(`\n# ${section.title}`);
+    for (const entry of section.entries ?? []) {
+      parts.push(`\n## ${entry.label}`);
+      parts.push(packEntryText(entry));
+    }
+    for (const episode of section.episodes ?? []) {
+      parts.push(`\n## Episode: ${episode.title}`);
+      for (const entry of episode.entries ?? []) {
+        parts.push(`### ${entry.label}`);
+        parts.push(packEntryText(entry));
+      }
+    }
+  }
+  return parts.join("\n").slice(0, 4000);
+}
+
+function firstSentence(text: string): string {
+  const match = text.match(/^[^.!?]*[.!?]/);
+  return match ? match[0].trim() : text.split(/\n/)[0]?.trim() ?? text;
+}
+
+/** Ground truth the caption generator should respect (caption templates, hashtags, tone). */
+export function packToGroundTruth(pack: AnalysisPack): string {
+  return packAllText(pack);
+}
+
+/** A one-line brief derived from the pack. */
+export function packToBrief(pack: AnalysisPack): string {
+  const candidates: string[] = [];
+  if (pack.tldr) candidates.push(firstSentence(pack.tldr));
+
+  for (const section of pack.sections) {
+    for (const episode of section.episodes ?? []) {
+      const titleEntry = episode.entries.find((e) =>
+        e.label.toLowerCase().includes("title / angle"),
+      );
+      if (titleEntry) {
+        const text = packEntryText(titleEntry);
+        if (text) candidates.push(text);
+      }
+    }
+  }
+
+  // best-effort: first primary goal listed in the second section (usually Strategy).
+  const strategySection = pack.sections[1];
+  const goalEntry = strategySection?.entries?.find((e) =>
+    e.label.toLowerCase().includes("goal"),
+  );
+  const goalBlock = goalEntry?.blocks?.find((b) => b.type === "labeled" || b.type === "bullets");
+  if (goalBlock && "items" in goalBlock && Array.isArray(goalBlock.items)) {
+    const goal = goalBlock.items[1] ?? goalBlock.items[0];
+    if (typeof goal === "string" && goal) candidates.push(goal);
+  }
+
+  const brief = candidates.filter(Boolean)[0] ?? pack.name;
+  return `${pack.name}${pack.meta ? ` · ${pack.meta}` : ""}: ${brief}`.slice(0, 500);
+}
+
+/** Guess whether the pack is meant for video or image output. */
+export function deriveMediaKindFromPack(
+  pack: AnalysisPack,
+): "video" | "image" {
+  const text = packAllText(pack).toLowerCase();
+  if (
+    text.includes("reel") ||
+    text.includes("video") ||
+    text.includes("talking-head") ||
+    text.includes("ugc") ||
+    text.includes("short")
+  ) {
+    return "video";
+  }
+  if (
+    text.includes("carousel") ||
+    text.includes("photo") ||
+    text.includes("image") ||
+    text.includes("static")
+  ) {
+    return "image";
+  }
+  return "video";
+}
+
+/** Derive the intended placement for a given platform from the pack copy. */
+export function derivePlacementFromPack(
+  pack: AnalysisPack,
+): "feed" | "reel" | "story" {
+  const text = packAllText(pack).toLowerCase();
+  if (text.includes("reel")) return "reel";
+  if (text.includes("story")) return "story";
+  return "feed";
+}
+
+/** Derive the intended social platforms from the pack copy. */
+export function derivePlatformsFromPack(pack: AnalysisPack): Provider[] {
+  const text = packAllText(pack).toLowerCase();
+  const platforms: Provider[] = [];
+  if (
+    text.includes("instagram") ||
+    text.includes(" ig ") ||
+    text.includes("reel") ||
+    text.includes("tiktok") ||
+    text.includes("youtube shorts")
+  ) {
+    platforms.push("instagram");
+  }
+  if (text.includes("facebook")) platforms.push("facebook");
+  if (text.includes("linkedin")) platforms.push("linkedin");
+  return platforms.length > 0 ? platforms : ["instagram"];
 }

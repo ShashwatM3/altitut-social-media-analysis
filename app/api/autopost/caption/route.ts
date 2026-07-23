@@ -37,6 +37,8 @@ export async function POST(request: Request) {
     body.existingCopy && typeof body.existingCopy === "object"
       ? (body.existingCopy as Partial<Record<string, string>>)
       : undefined;
+  const packContext =
+    typeof body.packContext === "string" ? body.packContext : undefined;
 
   if (!brief && mode !== "shorten") {
     return NextResponse.json(
@@ -59,6 +61,7 @@ export async function POST(request: Request) {
       tone,
       mode,
       existingCopy,
+      packContext,
     });
     return NextResponse.json(captions);
   } catch (error) {

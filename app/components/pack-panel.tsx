@@ -1,3 +1,8 @@
+"use client";
+
+import { useState } from "react";
+import { AutoPostComposer } from "./autopost-composer";
+
 export type ContentBlock =
   | { type: "paragraph"; text: string }
   | { type: "bullets"; items: string[] }
@@ -361,6 +366,7 @@ export function PackPanel({
   variant = "content",
 }: PackPanelProps) {
   const isCompetitor = variant === "competitor";
+  const [postingPack, setPostingPack] = useState<AnalysisPack | null>(null);
 
   return (
     <section className="grid gap-6" aria-label={ariaLabel}>
@@ -372,6 +378,19 @@ export function PackPanel({
           <details className="group">
             <summary className="flex cursor-pointer list-none items-center gap-3 rounded-t-xl px-5 py-4 transition-colors hover:bg-gray-50 [&::-webkit-details-marker]:hidden">
               <PackSummary pack={pack} showLinks={isCompetitor} />
+              {!isCompetitor ? (
+                <button
+                  type="button"
+                  onClick={(event) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    setPostingPack(pack);
+                  }}
+                  className="ml-2 rounded-lg bg-deep-teal px-3 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-darker-teal"
+                >
+                  Post
+                </button>
+              ) : null}
             </summary>
             <div className="grid gap-3 border-t border-gray-200 p-4 md:p-5">
               {pack.tldr ? <PackTldr text={pack.tldr} /> : null}
@@ -424,6 +443,44 @@ export function PackPanel({
           </details>
         </article>
       ))}
+
+      {postingPack ? (
+        <div
+          className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-gray-900/50 p-4 backdrop-blur-subtle"
+          role="dialog"
+          aria-modal="true"
+          onClick={() => setPostingPack(null)}
+        >
+          <div
+            className="my-8 w-full max-w-5xl rounded-2xl bg-gray-50 p-2 shadow-2xl"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="flex items-center justify-between rounded-t-xl bg-white px-5 py-4 shadow-sm">
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900">
+                  Post from: {postingPack.name}
+                </h3>
+                <p className="text-sm text-gray-600">
+                  Upload the video. The copy is pre-built from the pack.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setPostingPack(null)}
+                className="rounded-lg px-3 py-1.5 text-sm font-semibold text-gray-600 hover:bg-gray-100"
+              >
+                Close
+              </button>
+            </div>
+            <div className="p-4">
+              <AutoPostComposer
+                pack={postingPack}
+                onPublish={() => setPostingPack(null)}
+              />
+            </div>
+          </div>
+        </div>
+      ) : null}
     </section>
   );
 }

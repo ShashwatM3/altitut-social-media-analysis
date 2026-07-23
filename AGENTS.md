@@ -106,8 +106,12 @@ content pane.
   `lib/social-posts.ts`, `lib/social/accounts.ts`, `lib/storage.ts`, `lib/social/*`)
   — a four-step composer that uploads media directly to Firebase Storage, writes
   AI-generated per-platform copy, and publishes to LinkedIn, Facebook and
-  Instagram through Upload-Post. Needs `UPLOAD_POST_API_KEY`,
-  `UPLOAD_POST_PROFILE` and open Firebase Storage rules.
+  Instagram through Upload-Post. Also exposed as a **Post** button on each
+  content pack in `app/components/pack-panel.tsx`; the pack is flattened into
+  ground truth (`lib/packs.ts` helpers) and fed to the caption generator, so
+  platforms, placement, hashtags and descriptions are pre-built from the pack.
+  Needs `UPLOAD_POST_API_KEY`, `UPLOAD_POST_PROFILE` and open Firebase Storage
+  rules.
 - **Connectors** — `lib/exa.ts` (search/contents), `lib/apify.ts` (actor runs),
   `lib/openai.ts` (chat-JSON with retry, embeddings), `lib/altitut.ts` (product
   context constants).

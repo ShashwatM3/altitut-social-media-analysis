@@ -1,6 +1,14 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import type { AnalysisPack } from "./pack-panel";
+import {
+  deriveMediaKindFromPack,
+  derivePlacementFromPack,
+  derivePlatformsFromPack,
+  packToBrief,
+  packToGroundTruth,
+} from "../../lib/packs";
 import { reelsTabEligible } from "../../lib/social/reels";
 import type { MediaFile } from "./media-dropzone";
 import { MediaDropzone } from "./media-dropzone";
@@ -9,6 +17,8 @@ import { PlatformCopyCard } from "./platform-copy-card";
 type Platform = "linkedin" | "facebook" | "instagram";
 
 type Copy = { caption: string; firstComment?: string };
+
+type CaptionResponse = { captions: Record<Platform, Copy> };
 
 type Target = {
   platform: Platform;
@@ -172,7 +182,13 @@ function formatDateForInput(iso: string | null): string {
   return local.toISOString().slice(0, 16);
 }
 
-export function AutoPostComposer() {
+export function AutoPostComposer({
+  pack,
+  onPublish,
+}: {
+  pack?: AnalysisPack;
+  onPublish?: () => void;
+}) {
   const [activeStep, setActiveStep] = useState<(typeof STEPS)[number]["id"]>("media");
   const [mediaFiles, setMediaFiles] = useState<MediaFile[]>([]);
   const [targets, setTargets] = useState<Target[]>([
@@ -184,6 +200,7 @@ export function AutoPostComposer() {
   const [aiTone, setAiTone] = useState<Tone>("professional");
   const [briefOpen, setBriefOpen] = useState(false);
   const [generatingFor, setGeneratingFor] = useState<Platform | null>(null);
+  const [packGenerating, setPackGenerating] = useState(false);
   const [aiDisabled, setAiDisabled] = useState(false);
   const [pendingCaptions, setPendingCaptions] = useState<Partial<Record<Platform, Copy>> | null>(null);
   const [scheduled, setScheduled] = useState(false);
@@ -228,7 +245,33 @@ export function AutoPostComposer() {
     }
   }
 
+  // If opened from a content pack, pre-select platforms, pre-write the brief,
+  // and generate platform-tailored captions using the pack as ground truth.
+  useEffect(() => {
+    if (!pack) return;
+    const platforms = derivePlatformsFromPack(pack);
+    const placement = derivePlacementFromPack(pack);
+    const brief = packToBrief(pack);
+    setAiBrief(brief);
+    setTargets(
+      platforms.map((platform) => ({
+        platform,
+        placement,
+        visibility: platform === "linkedin" ? "PUBLIC" : undefined,
+      })),
+    );
+    setActiveStep("media");
+    void generateForPlatforms(platforms, "generate", brief, aiTone, true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pack]);
+
   const mediaKind = useMemo(() => mediaKindFromFiles(mediaFiles), [mediaFiles]);
+
+  const captionMediaKind = useMemo(() => {
+    if (pack) return deriveMediaKindFromPack(pack);
+    if (mediaKind === "none") return "video" as const;
+    return mediaKind;
+  }, [pack, mediaKind]);
 
   const selectedPlatforms = useMemo(
     () => targets.map((t) => t.platform),
@@ -374,6 +417,7 @@ export function AutoPostComposer() {
       setPublishSteps((s) => updateStep(s, "save", "done"));
       setPublishPhase("published");
       setPublishState(state);
+      onPublish?.();
       return;
     }
 
@@ -403,6 +447,7 @@ export function AutoPostComposer() {
     setPublishSteps((s) => updateStep(s, "save", "done"));
     setPublishPhase("published");
     setPublishState(state);
+    onPublish?.();
   }
 
   function updateStep(
@@ -424,43 +469,52 @@ export function AutoPostComposer() {
     return "publishing";
   }
 
+  async function fetchCaptions(
+    platforms: Platform[],
+    mode: "generate" | "shorten" | "punchy",
+    brief: string,
+    tone: Tone,
+  ): Promise<CaptionResponse> {
+    const apiMode = mode === "punchy" ? "refine" : mode;
+    const apiTone = mode === "punchy" ? "punchy" : tone;
+    const existingCopy: Partial<Record<Platform, string>> = {};
+    for (const p of platforms) {
+      if (copy[p]?.caption) existingCopy[p] = copy[p].caption;
+    }
+    const res = await fetch("/api/autopost/caption", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        platforms,
+        mediaKind: captionMediaKind,
+        brief,
+        tone: apiTone,
+        mode: apiMode,
+        existingCopy: Object.keys(existingCopy).length ? existingCopy : undefined,
+        packContext: pack ? packToGroundTruth(pack) : undefined,
+      }),
+    });
+    const json = (await res.json().catch(() => ({}))) as {
+      captions?: Record<Platform, Copy & { hashtags?: string[] }>;
+      error?: string;
+    };
+    if (!res.ok) {
+      if (res.status === 503) setAiDisabled(true);
+      throw new Error(json.error ?? "Caption generation failed.");
+    }
+    return { captions: json.captions ?? ({} as Record<Platform, Copy>) };
+  }
+
   async function handleGenerate(platform: Platform, mode: "generate" | "shorten" | "punchy") {
     if (!aiBrief && mode !== "shorten") {
       setGeneratingFor(platform);
       setBriefOpen(true);
       return;
     }
-    await generateFor(platform, mode, aiBrief, aiTone);
-  }
-
-  async function generateFor(platform: Platform, mode: "generate" | "shorten" | "punchy", brief: string, tone: Tone) {
     setGeneratingFor(platform);
-    const apiMode = mode === "punchy" ? "refine" : mode;
-    const apiTone = mode === "punchy" ? "punchy" : tone;
     try {
-      const res = await fetch("/api/autopost/caption", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          platforms: [platform],
-          mediaKind,
-          brief,
-          tone: apiTone,
-          mode: apiMode,
-          existingCopy: copy[platform]?.caption
-            ? { [platform]: copy[platform].caption }
-            : undefined,
-        }),
-      });
-      const json = (await res.json().catch(() => ({}))) as {
-        captions?: Partial<Record<Platform, Copy & { hashtags?: string[] }>>;
-        error?: string;
-      };
-      if (!res.ok) {
-        if (res.status === 503) setAiDisabled(true);
-        throw new Error(json.error ?? "Caption generation failed.");
-      }
-      const generated = json.captions?.[platform];
+      const { captions } = await fetchCaptions([platform], mode, aiBrief, aiTone);
+      const generated = captions[platform];
       if (generated) {
         setPendingCaptions((prev) => ({ ...prev, [platform]: generated }));
       }
@@ -468,6 +522,32 @@ export function AutoPostComposer() {
       setPublishError(error instanceof Error ? error.message : "AI failed");
     } finally {
       setGeneratingFor(null);
+    }
+  }
+
+  async function generateForPlatforms(
+    platforms: Platform[],
+    mode: "generate" | "shorten" | "punchy",
+    brief: string,
+    tone: Tone,
+    applyDirectly = false,
+  ): Promise<void> {
+    setPackGenerating(true);
+    try {
+      const { captions } = await fetchCaptions(platforms, mode, brief, tone);
+      if (applyDirectly) {
+        const next: Partial<Record<Platform, Copy>> = {};
+        for (const p of platforms) {
+          next[p] = captions[p];
+        }
+        setCopy(next);
+      } else {
+        setPendingCaptions((prev) => ({ ...prev, ...captions }));
+      }
+    } catch (error) {
+      setPublishError(error instanceof Error ? error.message : "AI failed");
+    } finally {
+      setPackGenerating(false);
     }
   }
 
@@ -488,10 +568,9 @@ export function AutoPostComposer() {
 
   function handleBriefSubmit() {
     if (!generatingFor) return;
-    const brief = aiBrief.trim();
-    if (!brief) return;
+    if (!aiBrief.trim()) return;
     setBriefOpen(false);
-    void generateFor(generatingFor, "generate", brief, aiTone);
+    void handleGenerate(generatingFor, "generate");
   }
 
   function renderStepper() {
@@ -738,7 +817,7 @@ export function AutoPostComposer() {
               copy={defaultCopyFor(platform)}
               onChange={(next) => setPlatformCopy(platform, next)}
               onGenerate={(mode) => void handleGenerate(platform, mode)}
-              aiBusy={generatingFor === platform}
+              aiBusy={generatingFor === platform || packGenerating}
               aiDisabled={aiDisabled}
               charLimit={PLATFORM_META[platform].charLimit}
               firstCommentHint={PLATFORM_META[platform].firstCommentHint}

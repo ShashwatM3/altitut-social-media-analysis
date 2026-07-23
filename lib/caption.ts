@@ -22,6 +22,8 @@ type Request = {
   tone?: Tone;
   mode?: CaptionMode;
   existingCopy?: Partial<Record<Platform, string>>;
+  /** Full content-pack ground truth the captions should respect. */
+  packContext?: string;
 };
 
 const PLATFORM_RULES = `
@@ -57,12 +59,17 @@ function buildPrompt(req: Request): string {
         .join("\n")}`
     : "";
 
+  const groundTruth = req.packContext
+    ? `Content-pack ground truth — use the caption templates, hashtags, CTA, and tone below as source of truth, but still adapt per platform (do not copy the templates verbatim when the platform voice demands it):\n---\n${req.packContext}\n---`
+    : "";
+
   return [
     `Media kind: ${req.mediaKind}`,
     `Brief: ${req.brief}`,
     req.tone ? `Tone: ${req.tone}` : "",
     modeInstruction,
     existing,
+    groundTruth,
     `Requested platforms: ${req.platforms.join(", ")}`,
     `Respond with this exact JSON shape:\n${JSON_SCHEMA}`,
   ]
