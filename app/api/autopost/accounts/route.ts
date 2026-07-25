@@ -37,7 +37,9 @@ export async function POST(request: Request) {
       const account = await resolveSocialAccount(platform, profile);
       accounts.push(account);
     } catch (error) {
-      console.error(`[autopost/accounts] ${platform}:`, error);
+      // Graceful fallback: if we cannot resolve an account, mark it as needing
+      // re-auth so the UI skips it instead of crashing.
+      console.warn(`[autopost/accounts] ${platform}:`, error instanceof Error ? error.message : error);
       accounts.push({
         provider: platform,
         vendor: "upload_post",

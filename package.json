@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "seed": "tsx scripts/seed-firestore.ts",
-    "telegram:webhook": "tsx scripts/set-telegram-webhook.ts"
+    "telegram:webhook": "tsx scripts/set-telegram-webhook.ts",
+    "test:autopost": "tsx --tsconfig tsconfig.test.json scripts/test-upload-post.ts && tsx --tsconfig tsconfig.test.json scripts/test-status-queued.ts && tsx --tsconfig tsconfig.test.json scripts/test-accounts.ts"
   },
   "dependencies": {
     "@ai-sdk/openai": "^4.0.15",

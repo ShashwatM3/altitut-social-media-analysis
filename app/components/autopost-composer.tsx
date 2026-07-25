@@ -269,9 +269,9 @@ export function AutoPostComposer({
   const mediaKind = useMemo(() => mediaKindFromFiles(mediaFiles), [mediaFiles]);
 
   const captionMediaKind = useMemo(() => {
+    if (mediaKind !== "none") return mediaKind;
     if (pack) return deriveMediaKindFromPack(pack);
-    if (mediaKind === "none") return "video" as const;
-    return mediaKind;
+    return "video" as const;
   }, [pack, mediaKind]);
 
   const selectedPlatforms = useMemo(
@@ -405,8 +405,7 @@ export function AutoPostComposer({
     }
     state = publishRes.state;
 
-    // Save publishing state to Firestore so it appears in history.
-    state.status = state.scheduledFor ? "scheduled" : "publishing";
+    // publishStep already computed the correct status (published/publishing/scheduled).
     await callAutopost("save", state);
 
     setPublishSteps((s) => updateStep(s, "publish", "done"));
@@ -442,7 +441,20 @@ export function AutoPostComposer({
       attempts += 1;
     }
 
-    setPublishSteps((s) => updateStep(s, "process", "done"));
+    if (done) {
+      setPublishSteps((s) => updateStep(s, "process", "done"));
+    } else {
+      setPublishSteps((s) => updateStep(s, "process", "error"));
+      state.status = "failed";
+      setPublishError(
+        "Publishing is still in progress after the maximum wait time. The post may still complete in the background; check Post history.",
+      );
+      setPublishPhase("error");
+      await callAutopost("save", state);
+      setPublishState(state);
+      return;
+    }
+
     state.status = computeStatusFromResults(state.results ?? []);
     await callAutopost("save", state);
     setPublishSteps((s) => updateStep(s, "save", "done"));
@@ -667,49 +679,54 @@ export function AutoPostComposer({
             const account = accounts.find((a) => a.provider === platform);
             const disabled = platform === "instagram" && mediaKind === "none";
             return (
-              <button
+              <div
                 key={platform}
-                type="button"
-                disabled={disabled}
-                onClick={() => !disabled && togglePlatform(platform)}
                 className={`rounded-xl border bg-white p-4 text-left transition-all ${
                   selected
                     ? "border-deep-teal ring-2 ring-teal-500/30 shadow-modern"
-                    : "border-gray-200 hover:border-gray-300 hover-lift disabled:opacity-50"
-                }`}
+                    : "border-gray-200 hover:border-gray-300 hover-lift"
+                } ${disabled ? "opacity-50" : ""}`}
               >
-                <div className="flex items-center justify-between">
-                  <span className="font-semibold text-gray-900">
-                    {PLATFORM_META[platform].name}
-                  </span>
-                  {selected ? (
-                    <span className="flex h-5 w-5 items-center justify-center rounded-full bg-deep-teal text-white">
-                      <CheckIcon />
+                <button
+                  type="button"
+                  disabled={disabled}
+                  onClick={() => !disabled && togglePlatform(platform)}
+                  className="w-full text-left disabled:cursor-not-allowed"
+                  aria-pressed={selected}
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="font-semibold text-gray-900">
+                      {PLATFORM_META[platform].name}
                     </span>
-                  ) : (
-                    <span className="h-5 w-5 rounded-full border-2 border-gray-300" />
-                  )}
-                </div>
-                <div className="mt-2 flex items-center gap-1.5 text-xs">
-                  {account ? (
-                    <>
-                      <span
-                        className={`inline-block h-2 w-2 rounded-full ${
-                          account.status === "active"
-                            ? "bg-green-500"
-                            : "bg-amber-500"
-                        }`}
-                        aria-hidden="true"
-                      />
-                      <span className="text-gray-700">{account.displayName}</span>
-                      {account.status === "needs_reauth" ? (
-                        <span className="text-amber-600">(will be skipped)</span>
-                      ) : null}
-                    </>
-                  ) : (
-                    <span className="text-gray-500">{PLATFORM_META[platform].note}</span>
-                  )}
-                </div>
+                    {selected ? (
+                      <span className="flex h-5 w-5 items-center justify-center rounded-full bg-deep-teal text-white">
+                        <CheckIcon />
+                      </span>
+                    ) : (
+                      <span className="h-5 w-5 rounded-full border-2 border-gray-300" />
+                    )}
+                  </div>
+                  <div className="mt-2 flex items-center gap-1.5 text-xs">
+                    {account ? (
+                      <>
+                        <span
+                          className={`inline-block h-2 w-2 rounded-full ${
+                            account.status === "active"
+                              ? "bg-green-500"
+                              : "bg-amber-500"
+                          }`}
+                          aria-hidden="true"
+                        />
+                        <span className="text-gray-700">{account.displayName}</span>
+                        {account.status === "needs_reauth" ? (
+                          <span className="text-amber-600">(will be skipped)</span>
+                        ) : null}
+                      </>
+                    ) : (
+                      <span className="text-gray-500">{PLATFORM_META[platform].note}</span>
+                    )}
+                  </div>
+                </button>
                 {selected ? (
                   <div className="mt-4 space-y-3">
                     {platform === "linkedin" ? (
@@ -717,7 +734,6 @@ export function AutoPostComposer({
                         <label className="text-xs font-medium text-gray-700">Visibility</label>
                         <select
                           value={target?.visibility ?? "PUBLIC"}
-                          onClick={(e) => e.stopPropagation()}
                           onChange={(e) => setVisibility(platform, e.target.value)}
                           className="mt-1 w-full rounded-lg border border-gray-300 p-2 text-sm"
                         >
@@ -737,10 +753,7 @@ export function AutoPostComposer({
                               <button
                                 key={p.key}
                                 type="button"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setPlacement(platform, p.key);
-                                }}
+                                onClick={() => setPlacement(platform, p.key)}
                                 className={`flex-1 rounded-md px-2 py-1 text-xs font-medium ${
                                   target?.placement === p.key
                                     ? "bg-deep-teal text-white"
@@ -758,7 +771,7 @@ export function AutoPostComposer({
                     ) : null}
                   </div>
                 ) : null}
-              </button>
+              </div>
             );
           })}
         </div>
@@ -849,23 +862,38 @@ export function AutoPostComposer({
             <div className="mt-3">
               {mediaFiles.length > 0 ? (
                 mediaFiles[0].kind === "video" ? (
-                  <video
-                    src={mediaFiles[0].url}
-                    controls
-                    muted
-                    playsInline
-                    className="max-h-64 rounded-lg"
-                  />
+                  mediaFiles[0].url ? (
+                    <video
+                      src={mediaFiles[0].url}
+                      controls
+                      muted
+                      playsInline
+                      className="max-h-64 rounded-lg"
+                    />
+                  ) : (
+                    <div className="flex h-40 items-center justify-center rounded-lg bg-gray-100 text-sm text-gray-500">
+                      Uploading…
+                    </div>
+                  )
                 ) : (
                   <div className="grid grid-cols-2 gap-2">
-                    {mediaFiles.slice(0, 4).map((f) => (
-                      <img
-                        key={f.id}
-                        src={f.url}
-                        alt=""
-                        className="h-32 w-full rounded-lg object-cover"
-                      />
-                    ))}
+                    {mediaFiles.slice(0, 4).map((f) =>
+                      f.url ? (
+                        <img
+                          key={f.id}
+                          src={f.url}
+                          alt=""
+                          className="h-32 w-full rounded-lg object-cover"
+                        />
+                      ) : (
+                        <div
+                          key={f.id}
+                          className="flex h-32 items-center justify-center rounded-lg bg-gray-100 text-xs text-gray-500"
+                        >
+                          Uploading…
+                        </div>
+                      ),
+                    )}
                   </div>
                 )
               ) : (

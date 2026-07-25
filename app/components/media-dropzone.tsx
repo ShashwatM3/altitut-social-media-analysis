@@ -20,7 +20,7 @@ export type MediaFile = {
 
 type MediaDropzoneProps = {
   files: MediaFile[];
-  onChange: (files: MediaFile[]) => void;
+  onChange: (files: MediaFile[] | ((prev: MediaFile[]) => MediaFile[])) => void;
   onError: (message: string) => void;
 };
 
@@ -34,6 +34,10 @@ function formatBytes(bytes: number): string {
 
 function generateId() {
   return crypto.randomUUID?.() ?? `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+}
+
+function revokeIfBlob(url: string | undefined) {
+  if (url?.startsWith("blob:")) URL.revokeObjectURL(url);
 }
 
 function ProgressRing({ progress }: { progress: number }) {
@@ -78,7 +82,15 @@ export function MediaDropzone({ files, onChange, onError }: MediaDropzoneProps) 
   const existingKind = files.length > 0 ? files[0].kind : undefined;
 
   function updateFile(id: string, patch: Partial<MediaFile>) {
-    onChange(files.map((f) => (f.id === id ? { ...f, ...patch } : f)));
+    onChange((prev) =>
+      prev.map((f) => {
+        if (f.id !== id) return f;
+        if (patch.url !== undefined && patch.url !== f.url) {
+          revokeIfBlob(f.url);
+        }
+        return { ...f, ...patch };
+      }),
+    );
   }
 
   function readImageMetadata(url: string, id: string) {
@@ -104,30 +116,20 @@ export function MediaDropzone({ files, onChange, onError }: MediaDropzoneProps) 
     video.src = url;
   }
 
-  function startUpload(file: File, kind: "video" | "image"): string {
-    const id = generateId();
-    const newFile: MediaFile = {
-      id,
-      kind,
-      file,
-      url: "",
-      path: "",
-      bytes: file.size,
-      progress: 0,
-      status: "uploading",
-    };
-    onChange([...files, newFile]);
+  function beginUpload(item: MediaFile) {
+    if (!item.file) return;
 
-    uploadToStorage(file, (progress) => updateFile(id, { progress }))
+    if (item.kind === "image") readImageMetadata(item.url, item.id);
+    else readVideoMetadata(item.url, item.id);
+
+    uploadToStorage(item.file, (progress) => updateFile(item.id, { progress }))
       .then((result: StorageUploadResult) => {
-        updateFile(id, {
+        updateFile(item.id, {
           url: result.url,
           path: result.path,
           status: "done",
           progress: 100,
         });
-        if (kind === "image") readImageMetadata(result.url, id);
-        else readVideoMetadata(result.url, id);
       })
       .catch((error: unknown) => {
         const code = (error as { code?: string })?.code;
@@ -137,11 +139,9 @@ export function MediaDropzone({ files, onChange, onError }: MediaDropzoneProps) 
             : error instanceof Error
               ? error.message
               : "Upload failed.";
-        updateFile(id, { status: "error", error: message });
+        updateFile(item.id, { status: "error", error: message });
         onError(message);
       });
-
-    return id;
   }
 
   function handleFiles(fileList: FileList | null) {
@@ -183,20 +183,42 @@ export function MediaDropzone({ files, onChange, onError }: MediaDropzoneProps) 
     }
 
     const incomingKind = hasVideo ? "video" : "image";
-    for (const file of incoming) {
-      startUpload(file, incomingKind);
-    }
+    const queued: MediaFile[] = incoming.map((file) => ({
+      id: generateId(),
+      kind: incomingKind,
+      file,
+      url: URL.createObjectURL(file),
+      path: "",
+      bytes: file.size,
+      progress: 0,
+      status: "uploading",
+    }));
+
+    // Add to state first so progress/metadata patches always find the file.
+    onChange((prev) => [...prev, ...queued]);
+    // Defer uploads until after React commits the new files (blob metadata can load sync).
+    queueMicrotask(() => {
+      for (const item of queued) beginUpload(item);
+    });
+
+    if (inputRef.current) inputRef.current.value = "";
   }
 
   function move(from: number, to: number) {
-    const next = [...files];
-    const [removed] = next.splice(from, 1);
-    next.splice(to, 0, removed);
-    onChange(next);
+    onChange((prev) => {
+      const next = [...prev];
+      const [removed] = next.splice(from, 1);
+      next.splice(to, 0, removed);
+      return next;
+    });
   }
 
   function remove(id: string) {
-    onChange(files.filter((f) => f.id !== id));
+    onChange((prev) => {
+      const target = prev.find((f) => f.id === id);
+      revokeIfBlob(target?.url);
+      return prev.filter((f) => f.id !== id);
+    });
   }
 
   const allDone = files.length > 0 && files.every((f) => f.status === "done");
@@ -266,13 +288,17 @@ export function MediaDropzone({ files, onChange, onError }: MediaDropzoneProps) 
           {files[0].kind === "video" ? (
             <div className="relative rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
               <div className="relative overflow-hidden rounded-lg bg-black">
-                <video
-                  src={files[0].url}
-                  controls
-                  muted
-                  playsInline
-                  className="max-h-80 w-full"
-                />
+                {files[0].url ? (
+                  <video
+                    src={files[0].url}
+                    controls
+                    muted
+                    playsInline
+                    className="max-h-80 w-full"
+                  />
+                ) : (
+                  <div className="flex h-48 items-center justify-center bg-gray-900" />
+                )}
                 {files[0].status === "uploading" ? (
                   <div className="absolute inset-0 flex items-center justify-center bg-black/50">
                     <ProgressRing progress={files[0].progress} />
@@ -331,11 +357,13 @@ export function MediaDropzone({ files, onChange, onError }: MediaDropzoneProps) 
                   className="relative rounded-xl border border-gray-200 bg-white p-2 shadow-sm"
                 >
                   <div className="relative aspect-square overflow-hidden rounded-lg bg-gray-100">
-                    <img
-                      src={file.url}
-                      alt=""
-                      className="h-full w-full object-cover"
-                    />
+                    {file.url ? (
+                      <img
+                        src={file.url}
+                        alt=""
+                        className="h-full w-full object-cover"
+                      />
+                    ) : null}
                     {file.status === "uploading" ? (
                       <div className="absolute inset-0 flex items-center justify-center bg-black/40">
                         <ProgressRing progress={file.progress} />

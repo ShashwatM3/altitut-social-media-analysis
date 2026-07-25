@@ -56,8 +56,15 @@ function computeStatus(results: UploadPostResult[]): SocialPost["status"] {
 
 async function mediaUrlReachable(url: string): Promise<boolean> {
   try {
-    const res = await fetch(url, { method: "HEAD" });
-    return res.ok;
+    const headRes = await fetch(url, { method: "HEAD" });
+    if (headRes.ok) return true;
+    // Some public object stores (including certain Firebase Storage setups) do
+    // not allow HEAD but do allow GET. Retry with GET when HEAD is blocked.
+    if (headRes.status === 405 || headRes.status >= 500) {
+      const getRes = await fetch(url, { method: "GET" });
+      return getRes.ok;
+    }
+    return false;
   } catch {
     return false;
   }
@@ -192,7 +199,7 @@ async function validateStep(
             : undefined;
       readyTargets.push(target);
     } catch (error) {
-      console.error(`[autopost] resolve ${target.platform}:`, error);
+      console.warn(`[autopost] resolve ${target.platform}:`, error instanceof Error ? error.message : error);
       nextState.warnings?.push(
         `${target.platform}: ${error instanceof Error ? error.message : "could not resolve account"}; skipped.`,
       );

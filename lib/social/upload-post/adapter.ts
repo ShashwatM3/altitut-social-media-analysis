@@ -26,19 +26,33 @@ type RawResult = {
   platform?: string;
   success?: boolean;
   status?: string;
+  // Upload-Post returns `url` (and sometimes legacy `post_url`) for the live post link.
+  url?: string;
   post_url?: string;
+  // Platform-specific IDs returned in different fields.
   platform_post_id?: string;
   post_id?: string;
+  publish_id?: string;
+  container_id?: string;
+  video_id?: string;
+  video_urn?: string;
+  video_reel_id?: string;
+  image_urns?: string[];
+  post_ids?: string[];
   error?: string;
   message?: string;
 };
+
+// Upload-Post returns synchronous results as an object keyed by platform, or
+// async results as an array under `results` / `platforms`.
+type RawResults = Record<string, RawResult> | RawResult[];
 
 type PublishResponse = {
   success?: boolean;
   request_id?: string;
   job_id?: string;
-  results?: RawResult[];
-  platforms?: RawResult[];
+  results?: RawResults;
+  platforms?: RawResults;
   available_pages?: UploadPostPage[];
   error?: string;
   message?: string;
@@ -51,25 +65,97 @@ function asProvider(value: string): Provider | undefined {
   return undefined;
 }
 
+function rawResultsToArray(raw: RawResults | undefined): RawResult[] {
+  if (!raw) return [];
+  if (Array.isArray(raw)) return raw;
+  return Object.entries(raw).map(([platform, result]) => ({
+    ...result,
+    platform: result?.platform ?? platform,
+  }));
+}
+
+function extractPostUrl(raw: RawResult): string | undefined {
+  return raw.url ?? raw.post_url;
+}
+
+function extractPlatformPostId(raw: RawResult): string | undefined {
+  return (
+    raw.platform_post_id ??
+    raw.publish_id ??
+    raw.post_id ??
+    raw.container_id ??
+    raw.video_id ??
+    raw.video_reel_id ??
+    raw.video_urn ??
+    raw.image_urns?.[0] ??
+    raw.post_ids?.[0]
+  );
+}
+
+function isTerminalMessage(message: string | undefined): boolean {
+  if (!message) return false;
+  const lower = message.toLowerCase();
+  return lower === "published" || lower === "completed" || lower.startsWith("fail");
+}
+
 function mapRawResult(raw: RawResult): UploadPostResult | null {
   const platform = asProvider(raw.platform ?? "");
   if (!platform) return null;
+
   const statusLower = (raw.status ?? "").toLowerCase();
-  const success =
-    raw.success === true ||
+  const messageLower = (raw.message ?? "").toLowerCase();
+
+  // `success: true` by itself is not enough: Upload-Post status responses can
+  // return `success: true` with `message: "Queued"` while the top-level status
+  // is still "in_progress". We must look at the explicit status/message first.
+  const terminalStatus =
     statusLower === "completed" ||
-    statusLower === "success";
-  const failed =
-    raw.success === false ||
+    statusLower === "success" ||
     statusLower === "failed" ||
-    statusLower === "error";
-  const skipped = statusLower === "skipped";
+    statusLower === "error" ||
+    messageLower === "published";
+  const pendingStatus =
+    statusLower === "pending" ||
+    statusLower === "queued" ||
+    statusLower === "processing" ||
+    statusLower === "in_progress" ||
+    messageLower === "queued";
+  const failedStatus = statusLower === "failed" || statusLower === "error";
+  const skippedStatus = statusLower === "skipped";
+
+  let status: UploadPostResult["status"];
+  if (failedStatus || raw.success === false) {
+    status = "failed";
+  } else if (skippedStatus) {
+    status = "skipped";
+  } else if (terminalStatus) {
+    status = "success";
+  } else if (pendingStatus) {
+    status = "pending";
+  } else if (raw.success === true && isTerminalMessage(raw.message)) {
+    // Sync upload response with `success: true` and a terminal message.
+    status = "success";
+  } else if (raw.success === true && extractPostUrl(raw)) {
+    // Sync upload response with `success: true` and a real URL.
+    status = "success";
+  } else if (raw.success === true) {
+    // `success: true` but no terminal indicator and no URL yet — keep polling.
+    status = "pending";
+  } else {
+    status = "pending";
+  }
+
+  // Only treat `message` as an error when the result actually failed.
+  // "Queued" and "Published" are progress messages, not errors.
+  const error =
+    raw.error ?? (status === "failed" && raw.message ? raw.message : undefined);
+
   return {
     platform,
-    status: success ? "success" : failed ? "failed" : skipped ? "skipped" : "pending",
-    postUrl: raw.post_url,
-    platformPostId: raw.platform_post_id ?? raw.post_id,
-    error: raw.error ?? raw.message,
+    status,
+    postUrl: extractPostUrl(raw),
+    platformPostId: extractPlatformPostId(raw),
+    error,
   };
 }
 
@@ -106,7 +192,6 @@ export async function publishToUploadPost(
 
   const fd = new FormData();
   fd.append("user", input.profile);
-  fd.append("request_id", input.postId);
   fd.append("async_upload", "true");
 
   for (const target of input.targets) {
@@ -154,10 +239,14 @@ export async function publishToUploadPost(
   // Generic fallbacks; per-platform params below override where the vendor supports them.
   fd.append("title", fallbackTitle);
   if (fallbackText) {
-    fd.append(
-      "description",
-      input.copy.linkedin?.caption ?? input.copy.facebook?.caption ?? fallbackText,
-    );
+    // The generic `description` is used as the Facebook description and as the
+    // LinkedIn commentary fallback. Prefer the Facebook caption when Facebook is
+    // selected, otherwise the LinkedIn caption, then any available caption.
+    const description =
+      input.copy.facebook?.caption ??
+      input.copy.linkedin?.caption ??
+      fallbackText;
+    fd.append("description", description);
   }
 
   for (const target of input.targets) {
@@ -225,7 +314,7 @@ export async function publishToUploadPost(
       idempotencyKey: input.postId,
     });
 
-    const rawResults = res.results ?? res.platforms ?? [];
+    const rawResults = rawResultsToArray(res.results ?? res.platforms);
     return {
       requestId: res.request_id,
       jobId: res.job_id,
@@ -261,27 +350,34 @@ export async function checkUploadPostStatus(
 
   // Defensive parser — the exact response shape is not fully specified in the public
   // docs, so we accept several likely keys. Verified against live response when tested.
-  const rawResults =
-    (s.results as RawResult[] | undefined) ??
-    (s.platforms as RawResult[] | undefined) ??
-    [];
+  const rawResults = rawResultsToArray(
+    (s.results ?? s.platforms) as RawResults | undefined,
+  );
   const topStatus = String(s.status ?? "").toLowerCase();
   const terminalTop =
     topStatus === "completed" ||
     topStatus === "failed" ||
     topStatus === "not_found";
+
+  // A result is terminal when it has an explicit completed/failed/error status,
+  // or a terminal message. We cannot trust `success: true` alone because Upload-Post
+  // returns `success: true` + `message: "Queued"` while the job is still running.
+  const isTerminalResult = (r: RawResult): boolean => {
+    const st = String(r.status ?? "").toLowerCase();
+    const msg = (r.message ?? "").toLowerCase();
+    return (
+      st === "completed" ||
+      st === "success" ||
+      st === "failed" ||
+      st === "error" ||
+      msg === "published" ||
+      msg === "completed"
+    );
+  };
+
   const done =
     terminalTop ||
-    (rawResults.length > 0 &&
-      rawResults.every((r) => {
-        const st = String(r.status ?? "").toLowerCase();
-        return (
-          r.success !== undefined ||
-          st === "completed" ||
-          st === "failed" ||
-          st === "error"
-        );
-      }));
+    (rawResults.length > 0 && rawResults.every(isTerminalResult));
 
   return {
     done,
@@ -296,7 +392,7 @@ export async function unpublishOnUploadPost(
   providerPostId: string,
   profile: string,
 ): Promise<void> {
-  await uploadPostFetch("/uploadposts/unpublish", {
+  await uploadPostFetch("/uploadposts/posts/unpublish", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({

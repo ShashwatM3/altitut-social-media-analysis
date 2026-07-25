@@ -70,7 +70,8 @@ content pane.
 - `npm run seed` — (re)ingest predefined competitor/content packs + RAG chunks
   (including the platform guide) into Firestore
 - `npm run telegram:webhook -- <https-url>` — register the Telegram bot webhook
-- No test suite yet.
+- `npm run test:autopost` — regression tests for the Upload-Post adapter (mocks
+  the Upload-Post API and exercises response parsing / status polling).
 
 ### Feature map (added 2026-07)
 
