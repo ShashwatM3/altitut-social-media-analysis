@@ -1,0 +1,1 @@
+"""Altitut SMA FastAPI backend."""

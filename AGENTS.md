@@ -118,6 +118,19 @@ content pane.
   `lib/openai.ts` (chat-JSON with retry, embeddings), `lib/altitut.ts` (product
   context constants).
 
+## FastAPI backend
+
+The backend is being migrated from Next.js API routes to a FastAPI service in
+`backend/`. It currently mirrors the original pipelines and will receive Redis
+job queues and GitHub Actions CI/CD next.
+
+- Entry point: `backend/app/main.py` (`uvicorn app.main:app` from `backend/`).
+- Routers: `backend/app/api/routers/{competitors,content_packs,chat,help,scout,telegram,autopost}.py`.
+- Services: `backend/app/services/{openai_client,exa_client,apify_client,pack_service,rag_service,scout_service,reel_service,caption_service,autopost_service}.py` plus `backend/app/services/social/` for Upload-Post.
+- Dependencies managed with `uv` (`backend/pyproject.toml`).
+- To run: `cd backend && uv sync && uvicorn app.main:app --reload`.
+- `.env` stays at repo root; `backend/app/config.py` loads it.
+
 ## Working notes
 
 - `.env` / `.env.example` at the repo root carry the credentials (OpenAI, Exa,
