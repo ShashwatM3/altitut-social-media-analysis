@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useRef, useState } from "react";
+import { api } from "../../lib/api";
 import { DEFAULT_ALTITUT_DESCRIPTION } from "../../lib/altitut";
 import type { StoredPack } from "../../lib/packs";
 
@@ -105,18 +106,19 @@ export function RunCompetitorScout({ existingNames, onComplete }: ScoutRunnerPro
         for (let index = startIndex; index < WORKFLOW_STEPS.length; index += 1) {
           const step = WORKFLOW_STEPS[index];
           setStepStatus(step.id, "running");
-          const response = await fetch("/api/scout", {
+          const response = await fetch(api("/api/scout"), {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ step: step.id, state: stateRef.current }),
           });
-          const payload = await response.json().catch(() => ({}));
+          const raw = await response.json().catch(() => ({}));
           if (!response.ok) {
             throw Object.assign(
-              new Error(payload.error ?? `Step "${step.label}" failed.`),
+              new Error(raw.error ?? `Step "${step.label}" failed.`),
               { stepIndex: index },
             );
           }
+          const payload = raw.state ? raw : { state: raw, pack: undefined };
           stateRef.current = payload.state;
           const candidate = (payload.state as { candidate?: { name?: string } })
             ?.candidate;

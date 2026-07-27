@@ -1,10 +1,9 @@
 "use client";
 
-import { useChat } from "@ai-sdk/react";
-import { DefaultChatTransport } from "ai";
 import { useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { useStreamingChat } from "../../lib/use-chat";
 
 const SUGGESTIONS = [
   "Which competitor is the biggest threat to Altitut right now?",
@@ -45,8 +44,8 @@ function MarkdownAnswer({ text }: { text: string }) {
 export function ChatPanel() {
   const [input, setInput] = useState("");
   const scrollRef = useRef<HTMLDivElement>(null);
-  const { messages, sendMessage, status, error, clearError } = useChat({
-    transport: new DefaultChatTransport({ api: "/api/chat" }),
+  const { messages, sendMessage, status, error, clearError } = useStreamingChat({
+    api: "/api/chat",
   });
 
   const isBusy = status === "submitted" || status === "streaming";

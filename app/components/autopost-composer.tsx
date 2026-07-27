@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { api } from "../../lib/api";
 import type { AnalysisPack } from "./pack-panel";
 import {
   deriveMediaKindFromPack,
@@ -232,7 +233,7 @@ export function AutoPostComposer({
 
   async function fetchAccounts() {
     try {
-      const res = await fetch("/api/autopost/accounts", {
+      const res = await fetch(api("/api/autopost/accounts"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ platforms: ["linkedin", "facebook", "instagram"] }),
@@ -347,7 +348,7 @@ export function AutoPostComposer({
   }
 
   async function callAutopost(step: AutopostStepId, state: AutopostState): Promise<{ state?: AutopostState; error?: string }> {
-    const res = await fetch("/api/autopost", {
+    const res = await fetch(api("/api/autopost"), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ step, state }),
@@ -495,7 +496,7 @@ export function AutoPostComposer({
     for (const p of platforms) {
       if (copy[p]?.caption) existingCopy[p] = copy[p].caption;
     }
-    const res = await fetch("/api/autopost/caption", {
+    const res = await fetch(api("/api/autopost/caption"), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

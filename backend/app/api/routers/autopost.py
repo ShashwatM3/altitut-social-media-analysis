@@ -6,6 +6,7 @@ import uuid
 from typing import Any
 
 from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel
 
 from app.config import settings
 from app.models import AutopostState, CaptionRequest, CaptionResponse, MediaInfo, SocialPost
@@ -30,10 +31,15 @@ def caption(req: CaptionRequest) -> CaptionResponse:
     return generate_captions(req)
 
 
-@router.get("/accounts")
-def list_accounts() -> list[dict[str, Any]]:
+class ListAccountsRequest(BaseModel):
+    platforms: list[str] | None = None
+
+
+@router.post("/accounts")
+def list_accounts(req: ListAccountsRequest | None = None) -> dict[str, Any]:
+    platforms = req.platforms if req and req.platforms else ["linkedin", "facebook", "instagram"]
     accounts = []
-    for provider in ("linkedin", "facebook", "instagram"):
+    for provider in platforms:
         try:
             account = resolve_social_account(provider)  # refresh from Upload-Post
         except Exception as exc:
@@ -41,7 +47,7 @@ def list_accounts() -> list[dict[str, Any]]:
             if not account:
                 raise HTTPException(status_code=502, detail=str(exc))
         accounts.append(account.model_dump(mode="json", exclude_none=True))
-    return accounts
+    return {"accounts": accounts}
 
 
 @router.post("/accounts/{provider}/page")
@@ -50,8 +56,15 @@ def set_page(provider: str, page_id: str) -> dict[str, str]:
     return {"provider": provider, "pageId": page_id}
 
 
+class AutopostStepRequest(BaseModel):
+    step: str
+    state: AutopostState
+
+
 @router.post("")
-async def autopost_step(step: str, state: AutopostState) -> dict[str, Any]:
+async def autopost_step(req: AutopostStepRequest) -> dict[str, Any]:
+    step = req.step
+    state = req.state
     # Ensure the state has a stable post id.
     if not state.postId:
         state = state.model_copy(update={"postId": str(uuid.uuid4())})
@@ -72,7 +85,7 @@ async def autopost_step(step: str, state: AutopostState) -> dict[str, Any]:
     if error:
         raise HTTPException(status_code=400, detail=error)
 
-    return next_state.model_dump(mode="json", exclude_none=True)
+    return {"state": next_state.model_dump(mode="json", exclude_none=True)}
 
 
 @router.get("/{post_id}", response_model=SocialPost | None)

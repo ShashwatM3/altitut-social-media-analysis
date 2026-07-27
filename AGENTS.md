@@ -69,7 +69,7 @@ content pane.
 - `npm run build` / `npm run start` — production build and serve
 - `npm run seed` — (re)ingest predefined competitor/content packs + RAG chunks
   (including the platform guide) into Firestore
-- `npm run telegram:webhook -- <https-url>` — register the Telegram bot webhook
+- `npm run telegram:webhook -- <https-backend-url>` — register the Telegram bot webhook with the FastAPI backend (e.g. `https://api.altitut.dev`)
 - `npm run test:autopost` — regression tests for the Upload-Post adapter (mocks
   the Upload-Post API and exercises response parsing / status polling).
 
@@ -114,9 +114,9 @@ content pane.
   pre-built from the pack. Gracefully skips any platform that is not connected
   and still publishes the rest. Setup: `AUTOPOST_SETUP.md`. Needs
   `UPLOAD_POST_API_KEY`, `UPLOAD_POST_PROFILE` and open Firebase Storage rules.
-- **Connectors** — `lib/exa.ts` (search/contents), `lib/apify.ts` (actor runs),
-  `lib/openai.ts` (chat-JSON with retry, embeddings), `lib/altitut.ts` (product
-  context constants).
+- **Connectors** — Python clients in `backend/app/services/{exa_client,apify_client,openai_client,telegram_client}.py`;
+  shared product context in `lib/altitut.ts` (frontend) and `backend/app/services/altitut_context.py`. The old TypeScript
+  connector files (`lib/exa.ts`, `lib/apify.ts`, `lib/openai.ts`) are no longer used.
 
 ## FastAPI backend (only backend)
 
@@ -134,7 +134,9 @@ Next.js `app/api/*` routes have been removed.
 
 - `.env` / `.env.example` at the repo root carry the credentials (OpenAI, Exa,
   Apify, Telegram, Firebase); `.env` is gitignored — never commit it.
-- Frontend Next.js components will be pointed at `VITE_API_BASE_URL` (or the
-  equivalent env var) going forward.
+- Frontend Next.js components use `NEXT_PUBLIC_API_BASE_URL=http://127.0.0.1:8000`
+  to reach the FastAPI backend.
+- Firebase: set `FIREBASE_SERVICE_ACCOUNT_PATH` to a downloaded key file, or paste
+  the full key JSON into `FIREBASE_SERVICE_ACCOUNT_JSON`.
 - If you materially change the stack or add tooling, update the section above
   so the next agent isn't left guessing.

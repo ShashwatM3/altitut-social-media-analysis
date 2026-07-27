@@ -5,6 +5,7 @@ from __future__ import annotations
 from typing import Any
 
 from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel
 
 from app.firebase_client import COLLECTIONS, db
 from app.models import AnalysisPack, ScoutState
@@ -24,6 +25,11 @@ from app.services.scout_service import (
 router = APIRouter()
 
 
+class ScoutStepRequest(BaseModel):
+    step: str
+    state: ScoutState
+
+
 class ScoutSaveRequest(ScoutState):
     """Save request containing the assembled pack and the scout state that produced it."""
 
@@ -39,6 +45,35 @@ _STEP_HANDLERS = {
     "synthesize-social": step_synthesize_social,
     "synthesize-verdict": step_synthesize_verdict,
 }
+
+
+@router.post("")
+async def scout_step(req: ScoutStepRequest) -> dict[str, Any]:
+    """Client-driven scout workflow step, including the final save step."""
+    if req.step == "save":
+        pack = assemble_pack(req.state)
+        stored = save_pack(COLLECTIONS["competitors"], pack, "competitor-scout")
+        ingest_pack(stored, "competitor")
+        run_doc: dict[str, Any] = {
+            "completedAt": datetime_now(),
+            "competitorId": stored.id,
+            "competitorName": stored.name,
+        }
+        if req.state.productDescription:
+            run_doc["productDescription"] = req.state.productDescription
+        if req.state.alternates:
+            run_doc["alternates"] = req.state.alternates
+        db.collection(COLLECTIONS["scoutRuns"]).add(run_doc)
+        return {"state": req.state, "pack": stored}
+
+    handler = _STEP_HANDLERS.get(req.step)
+    if not handler:
+        raise HTTPException(status_code=400, detail=f"Unknown scout step: {req.step}")
+    try:
+        new_state = await handler(req.state)
+        return {"state": new_state}
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=str(exc)) from exc
 
 
 @router.post("/step/{step_id}")

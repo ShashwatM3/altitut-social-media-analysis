@@ -1,10 +1,9 @@
 "use client";
 
-import { useChat } from "@ai-sdk/react";
-import { DefaultChatTransport } from "ai";
 import { useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { useStreamingChat } from "../../lib/use-chat";
 import { PLATFORM_GUIDE_SECTIONS } from "../../lib/platform-guide-content";
 
 const HELP_SUGGESTIONS = [
@@ -80,8 +79,8 @@ function GuideMarkdown({ text }: { text: string }) {
 function HelpChatPanel() {
   const [input, setInput] = useState("");
   const scrollRef = useRef<HTMLDivElement>(null);
-  const { messages, sendMessage, status, error, clearError } = useChat({
-    transport: new DefaultChatTransport({ api: "/api/help-chat" }),
+  const { messages, sendMessage, status, error, clearError } = useStreamingChat({
+    api: "/api/help",
   });
 
   const isBusy = status === "submitted" || status === "streaming";

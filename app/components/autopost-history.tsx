@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { api } from "../../lib/api";
 import {
   deleteSocialPost,
   listenToSocialPosts,
@@ -153,7 +154,7 @@ function DeleteButton({ post }: { post: SocialPost }) {
 
   async function handleDelete() {
     try {
-      await fetch("/api/autopost", {
+      await fetch(api("/api/autopost"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ step: "delete", state: post }),

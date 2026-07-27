@@ -37,6 +37,7 @@ class Settings(BaseSettings):
     # Firebase
     firebase_project_id: str = "altitut-sma-dashboard"
     firebase_service_account_path: str | None = None
+    firebase_service_account_json: str | None = None
 
     # Redis / Celery
     redis_url: str = "redis://localhost:6379/0"
