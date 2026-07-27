@@ -11,7 +11,6 @@ from app.config import settings
 from app.models import AutopostState, Provider, UploadPostResult
 from app.services.social.errors import SocialPublishError
 
-
 BASE = settings.upload_post_base_url
 
 
@@ -28,11 +27,15 @@ def upload_post_fetch(
     method: str = "GET",
     data: dict[str, Any] | None = None,
     json_body: dict[str, Any] | None = None,
+    files: list[tuple[str, Any]] | None = None,
     idempotency_key: str | None = None,
 ) -> Any:
     url = f"{BASE}{path}"
     with httpx.Client(timeout=120) as client:
-        if method.upper() == "POST" and data is not None:
+        if method.upper() == "POST" and files is not None:
+            # Multipart/form-data is required by Upload-Post's /upload* endpoints.
+            response = client.post(url, data=data, files=files, headers=_headers(idempotency_key))
+        elif method.upper() == "POST" and data is not None:
             response = client.post(url, data=data, headers=_headers(idempotency_key))
         elif method.upper() == "POST":
             response = client.post(url, json=json_body, headers=_headers(idempotency_key))
@@ -111,7 +114,10 @@ def _map_raw_result(raw: dict[str, Any]) -> UploadPostResult | None:
     failed = status_lower in ("failed", "error") or raw.get("success") is False
     skipped = status_lower == "skipped"
     terminal = status_lower in ("completed", "success") or message_lower == "published"
-    pending = status_lower in ("pending", "queued", "processing", "in_progress") or message_lower == "queued"
+    pending = (
+        status_lower in ("pending", "queued", "processing", "in_progress")
+        or message_lower == "queued"
+    )
 
     if failed:
         status = "failed"
@@ -189,11 +195,7 @@ def list_linkedin_pages(profile: str) -> list[dict[str, str]]:
     res = upload_post_fetch(f"/uploadposts/linkedin/pages?profile={urllib.parse.quote(profile)}")
     if not isinstance(res, dict):
         res = {}
-    pages = (
-        res.get("pages")
-        or res.get("linkedin_pages")
-        or (res if isinstance(res, list) else [])
-    )
+    pages = res.get("pages") or res.get("linkedin_pages") or (res if isinstance(res, list) else [])
     if not isinstance(pages, list):
         return []
     return [
@@ -212,15 +214,23 @@ def publish_to_upload_post(state: AutopostState) -> dict[str, Any]:
     if not settings.upload_post_profile:
         raise SocialPublishError("CONFIG", "UPLOAD_POST_PROFILE is not set.", retryable=False)
 
-    data: dict[str, Any] = {
-        "user": settings.upload_post_profile,
-        "async_upload": "true",
-        "platform[]": [t.platform for t in state.targets],
-    }
+    # Upload-Post's upload endpoints require multipart/form-data, not
+    # application/x-www-form-urlencoded. Build a list of (field, (None, value))
+    # tuples so httpx sends a multipart body with no file attachments.
+    fields: list[tuple[str, Any]] = []
+
+    def _add_field(name: str, value: str | None) -> None:
+        if value is not None:
+            fields.append((name, (None, value)))
+
+    _add_field("user", settings.upload_post_profile)
+    _add_field("async_upload", "true")
+    for target in state.targets:
+        _add_field("platform[]", target.platform)
 
     if state.scheduledFor:
-        data["scheduled_date"] = state.scheduledFor
-        data["timezone"] = state.timezone or "UTC"
+        _add_field("scheduled_date", state.scheduledFor)
+        _add_field("timezone", state.timezone or "UTC")
 
     first_target = state.targets[0] if state.targets else None
     first_copy = state.copy.get(first_target.platform) if first_target else None
@@ -233,23 +243,25 @@ def publish_to_upload_post(state: AutopostState) -> dict[str, Any]:
     if has_video and has_image:
         path = "/upload_photos"
         for url in state.media.urls:
-            data.setdefault("photos[]", []).append(url)
+            _add_field("photos[]", url)
     elif has_video:
         path = "/upload"
         if state.media.urls:
-            data["video"] = state.media.urls[0]
+            _add_field("video", state.media.urls[0])
     elif has_image:
         path = "/upload_photos"
         for url in state.media.urls:
-            data.setdefault("photos[]", []).append(url)
+            _add_field("photos[]", url)
     else:
         path = "/upload_text"
 
-    data["title"] = fallback_title
+    if fallback_title:
+        _add_field("title", fallback_title)
     if fallback_text:
-        data["description"] = (
-            state.copy.get("facebook", first_copy).caption if state.copy.get("facebook") else fallback_text
-        )
+        fb_copy = state.copy.get("facebook")
+        description = fb_copy.caption if fb_copy else fallback_text
+        if description:
+            _add_field("description", description)
 
     for target in state.targets:
         copy = state.copy.get(target.platform)
@@ -257,13 +269,14 @@ def publish_to_upload_post(state: AutopostState) -> dict[str, Any]:
         first_comment = copy.firstComment if copy else ""
 
         if target.platform == "linkedin":
-            data["linkedin_description"] = caption
-            data["linkedin_title"] = caption
-            data["visibility"] = target.visibility or "PUBLIC"
+            if caption:
+                _add_field("linkedin_description", caption)
+                _add_field("linkedin_title", caption)
+            _add_field("visibility", target.visibility or "PUBLIC")
             if target.pageId:
-                data["target_linkedin_page_id"] = target.pageId
+                _add_field("target_linkedin_page_id", target.pageId)
             if first_comment:
-                data["linkedin_first_comment"] = first_comment
+                _add_field("linkedin_first_comment", first_comment)
 
         elif target.platform == "facebook":
             if not target.pageId:
@@ -272,36 +285,49 @@ def publish_to_upload_post(state: AutopostState) -> dict[str, Any]:
                     "Facebook requires a target Page. Connect a Page in Upload-Post and run setup.",
                     retryable=False,
                 )
-            data["facebook_page_id"] = target.pageId
-            data["facebook_title"] = caption
+            if target.pageId:
+                _add_field("facebook_page_id", target.pageId)
+            if caption:
+                _add_field("facebook_title", caption)
             if has_video:
-                media_type = "STORIES" if target.placement == "story" else "REELS" if target.placement == "reel" else "VIDEO"
-                data["facebook_media_type"] = media_type
+                media_type = (
+                    "STORIES"
+                    if target.placement == "story"
+                    else "REELS"
+                    if target.placement == "reel"
+                    else "VIDEO"
+                )
+                _add_field("facebook_media_type", media_type)
             elif has_image:
-                data["facebook_media_type"] = "STORIES" if target.placement == "story" else "POSTS"
+                _add_field(
+                    "facebook_media_type", "STORIES" if target.placement == "story" else "POSTS"
+                )
             if first_comment:
-                data["facebook_first_comment"] = first_comment
+                _add_field("facebook_first_comment", first_comment)
 
         elif target.platform == "instagram":
-            data["instagram_title"] = caption
+            if caption:
+                _add_field("instagram_title", caption)
             if has_video:
                 if target.placement == "reel":
-                    data["media_type"] = "REELS"
+                    _add_field("media_type", "REELS")
                 if target.placement == "story":
-                    data["media_type"] = "STORIES"
+                    _add_field("media_type", "STORIES")
             elif has_image:
                 if target.placement == "story":
-                    data["media_type"] = "STORIES"
+                    _add_field("media_type", "STORIES")
             if first_comment:
-                data["instagram_first_comment"] = first_comment
+                _add_field("instagram_first_comment", first_comment)
 
-    res = upload_post_fetch(path, method="POST", data=data, idempotency_key=state.postId)
+    res = upload_post_fetch(path, method="POST", files=fields, idempotency_key=state.postId)
     results = _raw_results_to_array(res.get("results") or res.get("platforms"))
     return {
         "requestId": res.get("request_id"),
         "jobId": res.get("job_id"),
         "results": [r for r in (_map_raw_result(r) for r in results) if r is not None],
-        "availablePages": res.get("available_pages") if isinstance(res.get("available_pages"), list) else None,
+        "availablePages": res.get("available_pages")
+        if isinstance(res.get("available_pages"), list)
+        else None,
     }
 
 
@@ -318,9 +344,14 @@ def check_upload_post_status(id_value: str, kind: str = "request") -> dict[str, 
     def is_terminal_result(r: dict[str, Any]) -> bool:
         st = str(r.get("status", "")).lower()
         msg = str(r.get("message", "")).lower()
-        return st in ("completed", "success", "failed", "error") or msg in ("published", "completed")
+        return st in ("completed", "success", "failed", "error") or msg in (
+            "published",
+            "completed",
+        )
 
-    done = terminal_top or (len(raw_results) > 0 and all(is_terminal_result(r) for r in raw_results))
+    done = terminal_top or (
+        len(raw_results) > 0 and all(is_terminal_result(r) for r in raw_results)
+    )
     return {
         "done": done,
         "results": [r for r in (_map_raw_result(r) for r in raw_results) if r is not None],

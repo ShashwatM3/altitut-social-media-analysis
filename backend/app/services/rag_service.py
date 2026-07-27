@@ -12,9 +12,8 @@ import numpy as np
 from app.firebase_client import COLLECTIONS, db
 from app.models import (
     AnalysisPack,
-    PackEpisode,
     PackEntry,
-    PackSection,
+    PackEpisode,
     PendingChunk,
     RagChunk,
     RagDocType,
@@ -22,21 +21,106 @@ from app.models import (
 )
 from app.services.openai_client import embed_texts, slugify
 
-
 _STOPWORDS = {
-    "the", "a", "an", "is", "are", "was", "were", "be", "been",
-    "being", "have", "has", "had", "do", "does", "did", "will",
-    "would", "could", "should", "may", "might", "must", "shall",
-    "can", "need", "dare", "ought", "used", "to", "of", "in", "for",
-    "on", "with", "at", "by", "from", "as", "into", "through",
-    "during", "before", "after", "above", "below", "between",
-    "and", "but", "or", "yet", "so", "if", "because", "although",
-    "though", "while", "where", "when", "that", "which", "who",
-    "whom", "whose", "what", "this", "these", "those", "i", "you",
-    "he", "she", "it", "we", "they", "me", "him", "her", "us", "them",
-    "my", "your", "his", "its", "our", "their", "mine", "yours",
-    "hers", "ours", "theirs", "myself", "yourself", "himself",
-    "herself", "itself", "ourselves", "yourselves", "themselves",
+    "the",
+    "a",
+    "an",
+    "is",
+    "are",
+    "was",
+    "were",
+    "be",
+    "been",
+    "being",
+    "have",
+    "has",
+    "had",
+    "do",
+    "does",
+    "did",
+    "will",
+    "would",
+    "could",
+    "should",
+    "may",
+    "might",
+    "must",
+    "shall",
+    "can",
+    "need",
+    "dare",
+    "ought",
+    "used",
+    "to",
+    "of",
+    "in",
+    "for",
+    "on",
+    "with",
+    "at",
+    "by",
+    "from",
+    "as",
+    "into",
+    "through",
+    "during",
+    "before",
+    "after",
+    "above",
+    "below",
+    "between",
+    "and",
+    "but",
+    "or",
+    "yet",
+    "so",
+    "if",
+    "because",
+    "although",
+    "though",
+    "while",
+    "where",
+    "when",
+    "that",
+    "which",
+    "who",
+    "whom",
+    "whose",
+    "what",
+    "this",
+    "these",
+    "those",
+    "i",
+    "you",
+    "he",
+    "she",
+    "it",
+    "we",
+    "they",
+    "me",
+    "him",
+    "her",
+    "us",
+    "them",
+    "my",
+    "your",
+    "his",
+    "its",
+    "our",
+    "their",
+    "mine",
+    "yours",
+    "hers",
+    "ours",
+    "theirs",
+    "myself",
+    "yourself",
+    "himself",
+    "herself",
+    "itself",
+    "ourselves",
+    "yourselves",
+    "themselves",
 }
 
 
@@ -93,7 +177,7 @@ def chunk_pack(pack: AnalysisPack, doc_type: RagDocType) -> list[PendingChunk]:
     if pack.tldr:
         chunks.append(
             PendingChunk(
-                id=f"{doc_type}-{source_slug}-tldr-tldr",
+                id=f"{doc_type}-{source_slug}-tldr",
                 docType=doc_type,
                 sourceName=pack.name,
                 sectionTitle="TL;DR",
@@ -106,7 +190,7 @@ def chunk_pack(pack: AnalysisPack, doc_type: RagDocType) -> list[PendingChunk]:
         for entry in section.entries or []:
             chunks.append(
                 PendingChunk(
-                    id=f"{doc_type}-{source_slug}-{section.id}-{entry.label}",
+                    id=f"{doc_type}-{source_slug}-{slugify(f'{section.id}-{entry.label}')}",
                     docType=doc_type,
                     sourceName=pack.name,
                     sectionTitle=section.title,
@@ -115,23 +199,31 @@ def chunk_pack(pack: AnalysisPack, doc_type: RagDocType) -> list[PendingChunk]:
                 )
             )
         for episode in section.episodes or []:
-            for entry in episode.entries:
-                chunks.append(
-                    PendingChunk(
-                        id=f"{doc_type}-{source_slug}-{section.id}-{episode.title}-{entry.label}",
-                        docType=doc_type,
-                        sourceName=pack.name,
-                        sectionTitle=f"{section.title} · {episode.title}",
-                        entryLabel=entry.label,
-                        text=_entry_text(entry),
-                    )
+            text = _episode_text(episode)
+            if not text:
+                continue
+            chunks.append(
+                PendingChunk(
+                    id=f"{doc_type}-{source_slug}-{slugify(f'{section.id}-{episode.title}')}",
+                    docType=doc_type,
+                    sourceName=pack.name,
+                    sectionTitle=f"{section.title} · {episode.title}",
+                    entryLabel=episode.title,
+                    text=text,
                 )
+            )
     return chunks
 
 
 def _entry_text(entry: PackEntry) -> str:
     from app.services.pack_service import pack_entry_text
+
     return pack_entry_text(entry)
+
+
+def _episode_text(episode: PackEpisode) -> str:
+    parts = [f"{entry.label}\n{_entry_text(entry)}" for entry in episode.entries]
+    return "\n\n".join(part for part in parts if part)
 
 
 def chunk_markdown(

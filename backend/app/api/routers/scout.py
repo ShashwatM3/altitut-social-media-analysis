@@ -2,11 +2,13 @@
 
 from __future__ import annotations
 
+from typing import Any
+
 from fastapi import APIRouter, HTTPException
 
-from app.firebase_client import COLLECTIONS
+from app.firebase_client import COLLECTIONS, db
 from app.models import AnalysisPack, ScoutState
-from app.services.pack_service import save_pack
+from app.services.pack_service import datetime_now, save_pack
 from app.services.rag_service import ingest_pack
 from app.services.scout_service import (
     assemble_pack,
@@ -20,6 +22,13 @@ from app.services.scout_service import (
 )
 
 router = APIRouter()
+
+
+class ScoutSaveRequest(ScoutState):
+    """Save request containing the assembled pack and the scout state that produced it."""
+
+    pack: AnalysisPack
+
 
 _STEP_HANDLERS = {
     "discover": step_discover,
@@ -52,7 +61,17 @@ def assemble_scout_pack(state: ScoutState) -> AnalysisPack:
 
 
 @router.post("/save")
-def save_scout_pack(pack: AnalysisPack) -> dict:
-    stored = save_pack(COLLECTIONS["competitors"], pack, "competitor-scout")
+def save_scout_pack(req: ScoutSaveRequest) -> dict:
+    stored = save_pack(COLLECTIONS["competitors"], req.pack, "competitor-scout")
     ingest_pack(stored, "competitor")
-    return {"id": stored.id}
+    run_doc: dict[str, Any] = {
+        "completedAt": datetime_now(),
+        "competitorId": stored.id,
+        "competitorName": stored.name,
+    }
+    if req.productDescription:
+        run_doc["productDescription"] = req.productDescription
+    if req.alternates:
+        run_doc["alternates"] = req.alternates
+    db.collection(COLLECTIONS["scoutRuns"]).add(run_doc)
+    return {"id": stored.id, "pack": stored}

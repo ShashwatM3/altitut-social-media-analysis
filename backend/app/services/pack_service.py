@@ -3,12 +3,11 @@
 from __future__ import annotations
 
 import json
-import re
-from typing import Any
+from typing import Any, Literal
 
 from pydantic import TypeAdapter
 
-from app.firebase_client import COLLECTIONS, db
+from app.firebase_client import db
 from app.models import (
     AnalysisPack,
     ContentBlock,
@@ -16,11 +15,11 @@ from app.models import (
     PackEpisode,
     PackLinks,
     PackSection,
+    Placement,
     Provider,
     StoredPack,
 )
 from app.services.openai_client import slugify
-
 
 _CONTENT_BLOCK_ADAPTER = TypeAdapter(ContentBlock)
 
@@ -142,7 +141,9 @@ def normalize_section(raw: Any) -> PackSection | None:
             cleaned_entries = [normalize_entry(e) for e in ep_entries]
             cleaned_entries = [e for e in cleaned_entries if e]
             if cleaned_entries:
-                episodes.append(PackEpisode.model_construct(title=ep_title, entries=cleaned_entries))
+                episodes.append(
+                    PackEpisode.model_construct(title=ep_title, entries=cleaned_entries)
+                )
 
     if not entries and not episodes:
         return None
