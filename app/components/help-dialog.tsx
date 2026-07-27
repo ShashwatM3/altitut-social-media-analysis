@@ -175,7 +175,8 @@ function HelpChatPanel() {
         <input
           type="text"
           value={input}
-          onChange={(event) => setInput(event.target.value)}
+          onChange={(event) => setInput(event.currentTarget.value)}
+          onInput={(event) => setInput(event.currentTarget.value)}
           placeholder="e.g. How do I run Competitor Scout?"
           className="w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:border-transparent focus:ring-2 focus:ring-teal-500"
           aria-label="Ask the help assistant"
