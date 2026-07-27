@@ -128,7 +128,7 @@ job queues and GitHub Actions CI/CD next.
 - Routers: `backend/app/api/routers/{competitors,content_packs,chat,help,scout,telegram,autopost}.py`.
 - Services: `backend/app/services/{openai_client,exa_client,apify_client,pack_service,rag_service,scout_service,reel_service,caption_service,autopost_service}.py` plus `backend/app/services/social/` for Upload-Post.
 - Dependencies managed with `uv` (`backend/pyproject.toml`).
-- To run: `cd backend && uv sync && uvicorn app.main:app --reload`.
+- To run: `cd backend && uv sync && uv run uvicorn app.main:app --reload`.
 - `.env` stays at repo root; `backend/app/config.py` loads it.
 
 ## Working notes

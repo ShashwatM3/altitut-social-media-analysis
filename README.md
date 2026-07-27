@@ -161,7 +161,7 @@ Open http://localhost:3000.
 
 ```bash
 cd backend
-uvicorn app.main:app --reload
+uv run uvicorn app.main:app --reload
 ```
 
 Open http://localhost:8000/docs for interactive API docs.
