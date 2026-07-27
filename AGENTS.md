@@ -80,49 +80,48 @@ content pane.
   (both rendered live via `onSnapshot` in `app/page.tsx`, with the static packs
   in `data/` as fallback), `ragChunks` (vector store), `scoutRuns`,
   `telegramUpdates`. Pack CRUD + model-output normalization: `lib/packs.ts`.
-- **Competitor Scout** (`app/components/scout-dialog.tsx`, `app/api/scout/route.ts`,
-  `lib/scout.ts`) — client-driven 8-step workflow: Exa company discovery → site
-  crawl → social mapping (Apify Instagram profile scrape + Exa) → deep research →
-  three GPT synthesis passes producing the exact 8-section competitor-pack
-  structure (`resources/competitor_pack_structure`) + TL;DR → save to Firestore
-  + RAG ingest.
-- **Competitor chatbot** (`app/components/chat-panel.tsx`, `app/api/chat/route.ts`,
-  `lib/rag.ts`) — hybrid RAG (OpenAI `text-embedding-3-small` @512 dims cosine +
-  lexical scoring) over all packs + `docs/ALTITUT-PRODUCT-OVERVIEW.md`; streams
-  via Vercel AI SDK (`useChat`), renders markdown with react-markdown.
+- **Competitor Scout** (`app/components/scout-dialog.tsx`,
+  `backend/app/api/routers/scout.py`) — client-driven 8-step workflow: Exa company
+  discovery → site crawl → social mapping (Apify Instagram profile scrape + Exa) →
+  deep research → three GPT synthesis passes producing the exact 8-section
+  competitor-pack structure (`resources/competitor_pack_structure`) + TL;DR → save
+  to Firestore + RAG ingest.
+- **Competitor chatbot** (`app/components/chat-panel.tsx`,
+  `backend/app/api/routers/chat.py`, `backend/app/services/rag_service.py`) —
+  hybrid RAG (OpenAI `text-embedding-3-small` @512 dims cosine + lexical scoring)
+  over all packs + `docs/ALTITUT-PRODUCT-OVERVIEW.md`; streams as SSE, renders
+  markdown with react-markdown.
 - **Help / platform guide** (`app/components/help-dialog.tsx`,
-  `app/api/help-chat/route.ts`, `lib/platform-guide.ts`, `docs/PLATFORM-GUIDE.md`)
-  — **Help ?** opens a guide + help assistant. Help chat RAG is scoped to
+  `backend/app/api/routers/help.py`, `docs/PLATFORM-GUIDE.md`) — **Help ?**
+  opens a guide + help assistant. Help chat RAG is scoped to
   `docType: "platform-guide"` chunks (auto-ingested on first ask if missing).
-- **Telegram content-pack bot** (`app/api/telegram/route.ts`, `lib/telegram.ts`,
-  `lib/reel.ts`) — reel link → Apify `instagram-scraper` → Whisper transcript →
-  vision-grounded reel-analysis pass (frames as base64 data URLs; produces a
-  "1. UNDERSTANDING THE REEL" section + an observed-facts sheet) → two-pass GPT
-  synthesis of the transfer plan (sections 2–6, the classic
+- **Telegram content-pack bot** (`backend/app/api/routers/telegram.py`,
+  `backend/app/services/reel_service.py`) — reel link → Apify `instagram-scraper`
+  → Whisper transcript → vision-grounded reel-analysis pass (frames as base64
+  data URLs; produces a "1. UNDERSTANDING THE REEL" section + an observed-facts
+  sheet) → two-pass GPT synthesis of the transfer plan (sections 2–6, the classic
   `resources/content_pack_structure`, hard-grounded in the observed facts so
   visual/audio/caption recipes mirror the real reel) → Firestore + RAG. Needs
   `TELEGRAM_BOT_TOKEN` (see `SETUP_NEEDED_FROM_YOU.md`).
-- **Auto-Post** (`app/components/autopost-*.tsx`, `app/api/autopost/route.ts`,
-  `app/api/autopost/accounts/route.ts`, `app/api/autopost/caption/route.ts`,
-  `lib/social-posts.ts`, `lib/social/accounts.ts`, `lib/storage.ts`, `lib/social/*`)
+- **Auto-Post** (`app/components/autopost-*.tsx`,
+  `backend/app/api/routers/autopost.py`, `backend/app/services/social/*`)
   — a four-step composer that uploads media directly to Firebase Storage, writes
   AI-generated per-platform copy, and publishes to LinkedIn, Facebook and
   Instagram through Upload-Post. Also exposed as a **Post** button on each
   content pack in `app/components/pack-panel.tsx`; the pack is flattened into
-  ground truth (`lib/packs.ts` helpers) and fed to the caption generator, so
-  platforms, placement, hashtags and descriptions are pre-built from the pack.
-  Gracefully skips any platform that is not connected and still publishes the
-  rest. Setup: `AUTOPOST_SETUP.md`. Needs `UPLOAD_POST_API_KEY`,
-  `UPLOAD_POST_PROFILE` and open Firebase Storage rules.
+  ground truth (`backend/app/services/pack_service.py` helpers) and fed to the
+  caption generator, so platforms, placement, hashtags and descriptions are
+  pre-built from the pack. Gracefully skips any platform that is not connected
+  and still publishes the rest. Setup: `AUTOPOST_SETUP.md`. Needs
+  `UPLOAD_POST_API_KEY`, `UPLOAD_POST_PROFILE` and open Firebase Storage rules.
 - **Connectors** — `lib/exa.ts` (search/contents), `lib/apify.ts` (actor runs),
   `lib/openai.ts` (chat-JSON with retry, embeddings), `lib/altitut.ts` (product
   context constants).
 
-## FastAPI backend
+## FastAPI backend (only backend)
 
-The backend is being migrated from Next.js API routes to a FastAPI service in
-`backend/`. It currently mirrors the original pipelines and will receive Redis
-job queues and GitHub Actions CI/CD next.
+All API functionality now lives in the FastAPI service in `backend/`. The
+Next.js `app/api/*` routes have been removed.
 
 - Entry point: `backend/app/main.py` (`uvicorn app.main:app` from `backend/`).
 - Routers: `backend/app/api/routers/{competitors,content_packs,chat,help,scout,telegram,autopost}.py`.
@@ -134,7 +133,8 @@ job queues and GitHub Actions CI/CD next.
 ## Working notes
 
 - `.env` / `.env.example` at the repo root carry the credentials (OpenAI, Exa,
-  Apify, Telegram); `.env` is gitignored — never commit it. API routes that run
-  long declare `maxDuration = 300` for Vercel Fluid Compute.
+  Apify, Telegram, Firebase); `.env` is gitignored — never commit it.
+- Frontend Next.js components will be pointed at `VITE_API_BASE_URL` (or the
+  equivalent env var) going forward.
 - If you materially change the stack or add tooling, update the section above
   so the next agent isn't left guessing.
