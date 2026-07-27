@@ -6,8 +6,11 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.routers import autopost, chat, competitors, content_packs, help, scout, telegram
+from app.api.trace import TRACE_ID_HEADER, setup_traceability
 
 app = FastAPI(title="Altitut SMA API", version="0.1.0")
+
+setup_traceability(app)
 
 app.add_middleware(
     CORSMiddleware,
@@ -15,6 +18,7 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=[TRACE_ID_HEADER],
 )
 
 app.include_router(competitors.router, prefix="/api/competitors", tags=["Competitors"])

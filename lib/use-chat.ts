@@ -2,6 +2,7 @@
 
 import { useCallback, useState } from "react";
 import { api } from "./api";
+import { newTraceId, raiseForTrace, TRACE_ID_HEADER, TraceableError } from "./trace";
 
 type ChatMessagePart = { type: "text"; text: string };
 
@@ -20,7 +21,7 @@ function generateId() {
 export function useStreamingChat({ api: path }: { api: string }) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [status, setStatus] = useState<Status>("ready");
-  const [error, setError] = useState<Error | null>(null);
+  const [error, setError] = useState<TraceableError | null>(null);
 
   const clearError = useCallback(() => setError(null), []);
 
@@ -39,20 +40,20 @@ export function useStreamingChat({ api: path }: { api: string }) {
       setMessages(history);
       setStatus("submitted");
 
+      const traceId = newTraceId();
       try {
         const response = await fetch(api(path), {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: { "Content-Type": "application/json", [TRACE_ID_HEADER]: traceId },
           body: JSON.stringify({ messages: history }),
         });
 
         if (!response.ok) {
-          const body = await response.json().catch(() => ({}));
-          throw new Error(body.error ?? `HTTP ${response.status}`);
+          await raiseForTrace(response, `HTTP ${response.status}`);
         }
 
         if (!response.body) {
-          throw new Error("No response body from chat stream.");
+          throw new TraceableError("No response body from chat stream.", traceId);
         }
 
         const reader = response.body.getReader();
@@ -113,7 +114,11 @@ export function useStreamingChat({ api: path }: { api: string }) {
         setStatus("ready");
       } catch (err) {
         setStatus("error");
-        setError(err instanceof Error ? err : new Error(String(err)));
+        setError(
+          err instanceof TraceableError
+            ? err
+            : new TraceableError(err instanceof Error ? err.message : String(err), traceId),
+        );
       }
     },
     [api, path, messages, clearError],

@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { TraceBanner } from "./trace-banner";
 import { useStreamingChat } from "../../lib/use-chat";
 import { PLATFORM_GUIDE_SECTIONS } from "../../lib/platform-guide-content";
 
@@ -158,8 +159,12 @@ function HelpChatPanel() {
           </div>
         )}
         {error ? (
-          <div className="mt-3 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-600">
-            {error.message || "The help assistant hit an error — try again."}
+          <div className="mt-3">
+            <TraceBanner
+              message={error.message || "The help assistant hit an error — try again."}
+              traceId={error.traceId}
+              workflow="Help assistant"
+            />
           </div>
         ) : null}
       </div>

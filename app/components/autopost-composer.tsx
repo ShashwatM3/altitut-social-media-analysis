@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { api } from "../../lib/api";
+import { newTraceId, TRACE_ID_HEADER, TraceableError } from "../../lib/trace";
 import type { AnalysisPack } from "./pack-panel";
 import {
   deriveMediaKindFromPack,
@@ -14,6 +15,7 @@ import { reelsTabEligible } from "../../lib/social/reels";
 import type { MediaFile } from "./media-dropzone";
 import { MediaDropzone } from "./media-dropzone";
 import { PlatformCopyCard } from "./platform-copy-card";
+import { TraceBanner } from "./trace-banner";
 
 type Platform = "linkedin" | "facebook" | "instagram";
 
@@ -213,6 +215,7 @@ export function AutoPostComposer({
     "idle" | "validating" | "submitting" | "processing" | "published" | "error"
   >("idle");
   const [publishError, setPublishError] = useState<string | null>(null);
+  const [publishTraceId, setPublishTraceId] = useState<string | null>(null);
   const [publishState, setPublishState] = useState<AutopostState | null>(null);
   const [publishSteps, setPublishSteps] = useState<{ id: string; label: string; status: "pending" | "running" | "done" | "error" }[]>([]);
 
@@ -347,26 +350,36 @@ export function AutoPostComposer({
     return true;
   }
 
-  async function callAutopost(step: AutopostStepId, state: AutopostState): Promise<{ state?: AutopostState; error?: string }> {
+  async function callAutopost(
+    step: AutopostStepId,
+    state: AutopostState,
+    traceId: string,
+  ): Promise<{ state?: AutopostState; error?: string; traceId?: string }> {
     const res = await fetch(api("/api/autopost"), {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", [TRACE_ID_HEADER]: traceId },
       body: JSON.stringify({ step, state }),
     });
+    const returnedTraceId = res.headers.get(TRACE_ID_HEADER) ?? traceId;
     const json = (await res.json().catch(() => ({}))) as {
       state?: AutopostState;
-      error?: string;
+      error?: string | { message?: string };
     };
     if (!res.ok) {
-      return { error: json.error ?? `Step ${step} failed.` };
+      const message =
+        (typeof json.error === "string" ? json.error : json.error?.message) ??
+        `Step ${step} failed.`;
+      return { error: message, traceId: returnedTraceId };
     }
-    return { state: json.state, error: json.error };
+    return { state: json.state, traceId: returnedTraceId };
   }
 
   async function runPublish() {
     if (abortRef.current) return;
+    const traceId = newTraceId();
     setPublishPhase("validating");
     setPublishError(null);
+    setPublishTraceId(null);
     setPublishSteps([
       { id: "validate", label: "Validating", status: "running" },
       { id: "publish", label: "Submitting to LinkedIn/Facebook/Instagram", status: "pending" },
@@ -385,9 +398,10 @@ export function AutoPostComposer({
       results: targets.map((t) => ({ platform: t.platform, status: "pending" })),
     };
 
-    const validateRes = await callAutopost("validate", initialState);
+    const validateRes = await callAutopost("validate", initialState, traceId);
     if (validateRes.error || !validateRes.state) {
       setPublishError(validateRes.error ?? "Validation failed.");
+      setPublishTraceId(validateRes.traceId ?? traceId);
       setPublishPhase("error");
       setPublishSteps((s) => updateStep(s, "validate", "error"));
       return;
@@ -397,9 +411,10 @@ export function AutoPostComposer({
     setPublishSteps((s) => updateStep(s, "validate", "done"));
     setPublishSteps((s) => updateStep(s, "publish", "running"));
 
-    const publishRes = await callAutopost("publish", state);
+    const publishRes = await callAutopost("publish", state, traceId);
     if (publishRes.error || !publishRes.state) {
       setPublishError(publishRes.error ?? "Publish failed.");
+      setPublishTraceId(publishRes.traceId ?? traceId);
       setPublishPhase("error");
       setPublishSteps((s) => updateStep(s, "publish", "error"));
       return;
@@ -407,14 +422,14 @@ export function AutoPostComposer({
     state = publishRes.state;
 
     // publishStep already computed the correct status (published/publishing/scheduled).
-    await callAutopost("save", state);
+    await callAutopost("save", state, traceId);
 
     setPublishSteps((s) => updateStep(s, "publish", "done"));
 
     if (state.done) {
       setPublishSteps((s) => updateStep(s, "process", "done"));
       state.status = computeStatusFromResults(state.results ?? []);
-      await callAutopost("save", state);
+      await callAutopost("save", state, traceId);
       setPublishSteps((s) => updateStep(s, "save", "done"));
       setPublishPhase("published");
       setPublishState(state);
@@ -430,9 +445,10 @@ export function AutoPostComposer({
     while (!done && attempts < 120) {
       if (abortRef.current) break;
       await new Promise((r) => setTimeout(r, 3000));
-      const pollRes = await callAutopost("poll", state);
+      const pollRes = await callAutopost("poll", state, traceId);
       if (pollRes.error || !pollRes.state) {
         setPublishError(pollRes.error ?? "Status polling failed.");
+        setPublishTraceId(pollRes.traceId ?? traceId);
         setPublishPhase("error");
         setPublishSteps((s) => updateStep(s, "process", "error"));
         return;
@@ -450,14 +466,15 @@ export function AutoPostComposer({
       setPublishError(
         "Publishing is still in progress after the maximum wait time. The post may still complete in the background; check Post history.",
       );
+      setPublishTraceId(traceId);
       setPublishPhase("error");
-      await callAutopost("save", state);
+      await callAutopost("save", state, traceId);
       setPublishState(state);
       return;
     }
 
     state.status = computeStatusFromResults(state.results ?? []);
-    await callAutopost("save", state);
+    await callAutopost("save", state, traceId);
     setPublishSteps((s) => updateStep(s, "save", "done"));
     setPublishPhase("published");
     setPublishState(state);
@@ -496,9 +513,10 @@ export function AutoPostComposer({
     for (const p of platforms) {
       if (copy[p]?.caption) existingCopy[p] = copy[p].caption;
     }
+    const traceId = newTraceId();
     const res = await fetch(api("/api/autopost/caption"), {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", [TRACE_ID_HEADER]: traceId },
       body: JSON.stringify({
         platforms,
         mediaKind: captionMediaKind,
@@ -509,13 +527,17 @@ export function AutoPostComposer({
         packContext: pack ? packToGroundTruth(pack) : undefined,
       }),
     });
+    const returnedTraceId = res.headers.get(TRACE_ID_HEADER) ?? traceId;
     const json = (await res.json().catch(() => ({}))) as {
       captions?: Record<Platform, Copy & { hashtags?: string[] }>;
-      error?: string;
+      error?: string | { message?: string };
     };
     if (!res.ok) {
       if (res.status === 503) setAiDisabled(true);
-      throw new Error(json.error ?? "Caption generation failed.");
+      const message =
+        (typeof json.error === "string" ? json.error : json.error?.message) ??
+        "Caption generation failed.";
+      throw new TraceableError(message, returnedTraceId);
     }
     return { captions: json.captions ?? ({} as Record<Platform, Copy>) };
   }
@@ -534,7 +556,13 @@ export function AutoPostComposer({
         setPendingCaptions((prev) => ({ ...prev, [platform]: generated }));
       }
     } catch (error) {
-      setPublishError(error instanceof Error ? error.message : "AI failed");
+      if (error instanceof TraceableError) {
+        setPublishError(error.message);
+        setPublishTraceId(error.traceId);
+      } else {
+        setPublishError(error instanceof Error ? error.message : "AI failed");
+        setPublishTraceId(null);
+      }
     } finally {
       setGeneratingFor(null);
     }
@@ -560,7 +588,13 @@ export function AutoPostComposer({
         setPendingCaptions((prev) => ({ ...prev, ...captions }));
       }
     } catch (error) {
-      setPublishError(error instanceof Error ? error.message : "AI failed");
+      if (error instanceof TraceableError) {
+        setPublishError(error.message);
+        setPublishTraceId(error.traceId);
+      } else {
+        setPublishError(error instanceof Error ? error.message : "AI failed");
+        setPublishTraceId(null);
+      }
     } finally {
       setPackGenerating(false);
     }
@@ -654,7 +688,13 @@ export function AutoPostComposer({
           />
         </div>
         {publishError ? (
-          <p className="mt-3 text-sm text-bright-coral">{publishError}</p>
+          <div className="mt-3">
+            <TraceBanner
+              message={publishError}
+              traceId={publishTraceId}
+              workflow="Auto-Post"
+            />
+          </div>
         ) : null}
       </div>
     );
@@ -985,8 +1025,12 @@ export function AutoPostComposer({
               ))}
             </ol>
             {publishError ? (
-              <div className="mt-3 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-600">
-                {publishError}
+              <div className="mt-3">
+                <TraceBanner
+                  message={publishError}
+                  traceId={publishTraceId}
+                  workflow="Auto-Post"
+                />
                 <div className="mt-2 flex gap-2">
                   <button
                     type="button"

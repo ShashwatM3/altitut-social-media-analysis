@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { TraceBanner } from "./trace-banner";
 import { useStreamingChat } from "../../lib/use-chat";
 
 const SUGGESTIONS = [
@@ -143,8 +144,12 @@ export function ChatPanel() {
           </div>
         )}
         {error ? (
-          <div className="mt-3 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-600">
-            {error.message || "The copilot hit an error — try again."}
+          <div className="mt-3">
+            <TraceBanner
+              message={error.message || "The copilot hit an error — try again."}
+              traceId={error.traceId}
+              workflow="Competitor chat"
+            />
           </div>
         ) : null}
       </div>

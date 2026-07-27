@@ -2,8 +2,10 @@
 
 import { useCallback, useRef, useState } from "react";
 import { api } from "../../lib/api";
+import { newTraceId, TRACE_ID_HEADER, TraceableError } from "../../lib/trace";
 import { DEFAULT_ALTITUT_DESCRIPTION } from "../../lib/altitut";
 import type { StoredPack } from "../../lib/packs";
+import { TraceBanner } from "./trace-banner";
 
 type StepStatus = "pending" | "running" | "done" | "error";
 
@@ -85,6 +87,7 @@ export function RunCompetitorScout({ existingNames, onComplete }: ScoutRunnerPro
   const [description, setDescription] = useState(DEFAULT_ALTITUT_DESCRIPTION);
   const [steps, setSteps] = useState<WorkflowStep[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [traceId, setTraceId] = useState<string | null>(null);
   const [foundName, setFoundName] = useState<string | null>(null);
   const [finishedPack, setFinishedPack] = useState<StoredPack | null>(null);
   // Serialized workflow state handed between step API calls.
@@ -102,21 +105,31 @@ export function RunCompetitorScout({ existingNames, onComplete }: ScoutRunnerPro
       if (runningRef.current) return;
       runningRef.current = true;
       setError(null);
+      setTraceId(null);
+      const runTraceId = newTraceId();
+      setTraceId(runTraceId);
       try {
         for (let index = startIndex; index < WORKFLOW_STEPS.length; index += 1) {
           const step = WORKFLOW_STEPS[index];
           setStepStatus(step.id, "running");
           const response = await fetch(api("/api/scout"), {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json", [TRACE_ID_HEADER]: runTraceId },
             body: JSON.stringify({ step: step.id, state: stateRef.current }),
           });
           const raw = await response.json().catch(() => ({}));
           if (!response.ok) {
-            throw Object.assign(
-              new Error(raw.error ?? `Step "${step.label}" failed.`),
-              { stepIndex: index },
-            );
+            const message =
+              (typeof raw?.error === "string"
+                ? raw.error
+                : (raw?.error as { message?: string } | undefined)?.message ??
+                  raw?.error ??
+                  raw?.detail ??
+                  `Step "${step.label}" failed.`);
+            const returnedTraceId = response.headers.get(TRACE_ID_HEADER) ?? runTraceId;
+            throw Object.assign(new TraceableError(message, returnedTraceId), {
+              stepIndex: index,
+            });
           }
           const payload = raw.state ? raw : { state: raw, pack: undefined };
           stateRef.current = payload.state;
@@ -137,9 +150,14 @@ export function RunCompetitorScout({ existingNames, onComplete }: ScoutRunnerPro
             ? (caught as { stepIndex: number }).stepIndex
             : startIndex;
         setStepStatus(WORKFLOW_STEPS[failedIndex].id, "error");
-        setError(
-          caught instanceof Error ? caught.message : "The workflow failed unexpectedly.",
-        );
+        if (caught instanceof TraceableError) {
+          setError(caught.message);
+          setTraceId(caught.traceId);
+        } else {
+          setError(
+            caught instanceof Error ? caught.message : "The workflow failed unexpectedly.",
+          );
+        }
       } finally {
         runningRef.current = false;
       }
@@ -153,6 +171,8 @@ export function RunCompetitorScout({ existingNames, onComplete }: ScoutRunnerPro
       existingNames,
     };
     setSteps(WORKFLOW_STEPS.map((step) => ({ ...step, status: "pending" })));
+    setError(null);
+    setTraceId(null);
     setFoundName(null);
     setFinishedPack(null);
     setPhase("progress");
@@ -271,8 +291,12 @@ export function RunCompetitorScout({ existingNames, onComplete }: ScoutRunnerPro
             </ol>
 
             {error ? (
-              <div className="mt-4 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-600">
-                {error}
+              <div className="mt-4">
+                <TraceBanner
+                  message={error}
+                  traceId={traceId}
+                  workflow="Competitor Scout"
+                />
               </div>
             ) : null}
 
