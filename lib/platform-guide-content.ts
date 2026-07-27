@@ -16,7 +16,9 @@ export const PLATFORM_GUIDE_SECTIONS: {
 1. **Competitors Analysis** — read structured intelligence packs on competitors, ask the competitor copilot questions, and run Competitor Scout to research a new competitor automatically.
 2. **Content Creation** — browse content packs (transferable reel playbooks) the social team can execute. New packs arrive from the Telegram reel bot.
 
-Live data comes from Firestore. If Firestore is unreachable, the app falls back to the packs shipped in the repo so the UI still works.`,
+Live data comes from Firestore. If Firestore is unreachable, the app falls back to the packs shipped in the repo so the UI still works.
+
+Full documentation (guides, integrations, and feature deep-dives): https://altitut-sma.mintlify.app`,
   },
   {
     id: "layout",

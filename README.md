@@ -2,6 +2,8 @@
 
 An internal dashboard for the Altitut team to research competitors, generate content packs, and publish to LinkedIn, Facebook and Instagram.
 
+**Documentation:** [https://altitut-sma.mintlify.app](https://altitut-sma.mintlify.app)
+
 ## What it does
 
 - **Competitor Scout** — discover a competitor, crawl their site, map their social presence, run deep research and synthesize a full competitor pack.
@@ -263,4 +265,5 @@ uv run mypy app
 
 ## Support
 
-For Upload-Post specific issues: `info@upload-post.com`.
+- Full product docs: [https://altitut-sma.mintlify.app](https://altitut-sma.mintlify.app)
+- Upload-Post specific issues: `info@upload-post.com`

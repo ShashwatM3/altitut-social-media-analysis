@@ -2,6 +2,8 @@
 
 This dashboard is Altitut's internal Social Media Command Center. Use it to track competitor intelligence and turn strong social content into repeatable content packs for Altitut.
 
+Full documentation: https://altitut-sma.mintlify.app
+
 ## What this platform is for
 
 There are two jobs:
