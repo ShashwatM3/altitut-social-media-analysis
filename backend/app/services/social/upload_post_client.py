@@ -103,7 +103,11 @@ def _is_terminal_message(message: str | None) -> bool:
     return lower == "published" or lower == "completed" or lower.startswith("fail")
 
 
-def _map_raw_result(raw: dict[str, Any]) -> UploadPostResult | None:
+def _map_raw_result(
+    raw: dict[str, Any],
+    *,
+    completed_job: bool = False,
+) -> UploadPostResult | None:
     platform = _as_provider(str(raw.get("platform", "")))
     if not platform:
         return None
@@ -123,7 +127,11 @@ def _map_raw_result(raw: dict[str, Any]) -> UploadPostResult | None:
         status = "failed"
     elif skipped:
         status = "skipped"
-    elif terminal or (raw.get("success") is True and _is_terminal_message(raw.get("message"))):
+    elif (
+        terminal
+        or (raw.get("success") is True and _is_terminal_message(raw.get("message")))
+        or (completed_job and raw.get("success") is True)
+    ):
         status = "success"
     elif pending or raw.get("success") is True:
         status = "pending"
@@ -361,7 +369,14 @@ def check_upload_post_status(id_value: str, kind: str = "request") -> dict[str, 
     )
     return {
         "done": done,
-        "results": [r for r in (_map_raw_result(r) for r in raw_results) if r is not None],
+        "results": [
+            mapped
+            for mapped in (
+                _map_raw_result(result, completed_job=top_status == "completed")
+                for result in raw_results
+            )
+            if mapped is not None
+        ],
     }
 
 

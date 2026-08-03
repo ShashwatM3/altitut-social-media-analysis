@@ -1,8 +1,9 @@
 "use client";
 
-import { api } from "./api";
+import { apiFetch } from "./api";
 import { newTraceId, TRACE_ID_HEADER } from "./trace";
 import type { CampaignPlatform } from "./campaigns";
+import { saveAutopostHistory } from "./social-posts";
 
 export type AutopostResult = {
   platform: CampaignPlatform;
@@ -14,6 +15,7 @@ export type AutopostResult = {
 
 export type AutopostState = {
   postId: string;
+  createdAt?: string;
   status?:
     | "draft"
     | "publishing"
@@ -73,7 +75,7 @@ async function callAutopost(
   state: AutopostState,
   traceId: string,
 ): Promise<AutopostState> {
-  const response = await fetch(api("/api/autopost"), {
+  const response = await apiFetch("/api/autopost", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -98,6 +100,19 @@ async function callAutopost(
   return json.state;
 }
 
+async function persistAutopostState(
+  state: AutopostState,
+  traceId: string,
+): Promise<void> {
+  const [browserResult, serverResult] = await Promise.allSettled([
+    saveAutopostHistory(state),
+    callAutopost("save", state, traceId),
+  ]);
+  if (browserResult.status === "rejected" && serverResult.status === "rejected") {
+    throw browserResult.reason;
+  }
+}
+
 export async function publishCampaignPost(
   initialState: AutopostState,
   onState?: (state: AutopostState) => void | Promise<void>,
@@ -115,7 +130,7 @@ export async function publishCampaignPost(
     state = await callAutopost("publish", state, traceId);
   }
   await onState?.(state);
-  await callAutopost("save", state, traceId);
+  await persistAutopostState(state, traceId);
 
   if (!state.done) {
     // Upload-Post recommends 5–10 second intervals and a two-minute ceiling for
@@ -127,7 +142,7 @@ export async function publishCampaignPost(
     }
   }
 
-  await callAutopost("save", state, traceId);
+  await persistAutopostState(state, traceId);
   return state;
 }
 
@@ -136,6 +151,6 @@ export async function refreshCampaignPost(
 ): Promise<AutopostState> {
   const traceId = newTraceId();
   const state = await callAutopost("poll", initialState, traceId);
-  await callAutopost("save", state, traceId);
+  await persistAutopostState(state, traceId);
   return state;
 }

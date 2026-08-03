@@ -6,10 +6,17 @@ import uuid
 from typing import Any
 
 from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from app.firebase_client import COLLECTIONS
-from app.models import AutopostState, CaptionRequest, CaptionResponse, MediaInfo, SocialPost
+from app.models import (
+    AutopostState,
+    CaptionRequest,
+    CaptionResponse,
+    MediaInfo,
+    Provider,
+    SocialPost,
+)
 from app.services.autopost_service import (
     delete_step,
     poll_step,
@@ -28,7 +35,7 @@ from app.services.pack_service import (
 )
 from app.services.social.accounts import (
     get_social_account,
-    resolve_social_account,
+    resolve_social_accounts,
     set_social_account_page,
 )
 from app.services.social.posts import get_social_post
@@ -42,22 +49,36 @@ def caption(req: CaptionRequest) -> CaptionResponse:
 
 
 class ListAccountsRequest(BaseModel):
-    platforms: list[str] | None = None
+    platforms: list[Provider] | None = None
+    include_pages: bool = Field(False, alias="includePages")
 
 
 @router.post("/accounts")
 def list_accounts(req: ListAccountsRequest | None = None) -> dict[str, Any]:
     platforms = req.platforms if req and req.platforms else ["linkedin", "facebook", "instagram"]
+    try:
+        resolved = resolve_social_accounts(platforms)
+        resolve_error: Exception | None = None
+    except Exception as exc:
+        resolved = {}
+        resolve_error = exc
     accounts = []
     for provider in platforms:
-        try:
-            account = resolve_social_account(provider)  # refresh from Upload-Post
-        except Exception as exc:
+        account = resolved.get(provider)
+        if not account:
             account = get_social_account(provider)
-            if not account:
-                raise HTTPException(status_code=502, detail=str(exc))
+        if not account:
+            raise HTTPException(
+                status_code=502,
+                detail=str(resolve_error or "Could not resolve the social account."),
+            )
         data = account.model_dump(mode="json", exclude_none=True)
-        if provider == "linkedin" and account.status == "active":
+        if (
+            req
+            and req.include_pages
+            and provider == "linkedin"
+            and account.status == "active"
+        ):
             try:
                 from app.services.social.upload_post_client import list_linkedin_pages
 

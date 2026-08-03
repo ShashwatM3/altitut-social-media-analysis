@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { api } from "../../lib/api";
+import { apiFetch } from "../../lib/api";
 import {
   composeCampaignCaption,
   generateCampaignId,
@@ -12,6 +12,7 @@ import {
   type PostCampaign,
 } from "../../lib/campaigns";
 import { MediaDropzone, type MediaFile } from "./media-dropzone";
+import { parseApiError } from "../../lib/trace";
 
 type LinkedInPage = { id: string; name: string };
 type SocialAccount = {
@@ -96,6 +97,7 @@ export function CampaignPostEditor({
   );
   const [account, setAccount] = useState<SocialAccount | null>(null);
   const [accountLoading, setAccountLoading] = useState(true);
+  const [accountError, setAccountError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const dirtyRef = useRef(false);
   const explicitSaveRef = useRef(false);
@@ -138,18 +140,36 @@ export function CampaignPostEditor({
     let cancelled = false;
     async function loadAccount() {
       setAccountLoading(true);
+      setAccountError(null);
       try {
-        const response = await fetch(api("/api/autopost/accounts"), {
+        const response = await apiFetch("/api/autopost/accounts", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ platforms: [campaign.platform] }),
+          body: JSON.stringify({
+            platforms: [campaign.platform],
+            includePages: campaign.platform === "linkedin",
+          }),
         });
+        if (!response.ok) {
+          const parsed = await parseApiError(
+            response,
+            "Could not check the connected social account.",
+          );
+          throw new Error(parsed.message);
+        }
         const json = (await response.json().catch(() => ({}))) as {
           accounts?: SocialAccount[];
         };
         if (!cancelled) setAccount(json.accounts?.[0] ?? null);
-      } catch {
-        if (!cancelled) setAccount(null);
+      } catch (caught) {
+        if (!cancelled) {
+          setAccount(null);
+          setAccountError(
+            caught instanceof Error
+              ? caught.message
+              : "Could not check the connected social account.",
+          );
+        }
       } finally {
         if (!cancelled) setAccountLoading(false);
       }
@@ -604,6 +624,7 @@ export function CampaignPostEditor({
             campaign={campaign}
             account={account}
             accountLoading={accountLoading}
+            accountError={accountError}
             linkedinDestination={linkedinDestination}
             linkedinPageId={linkedinPageId}
             pages={pages}
@@ -682,6 +703,7 @@ function PlatformOptions({
   campaign,
   account,
   accountLoading,
+  accountError,
   linkedinDestination,
   linkedinPageId,
   pages,
@@ -695,6 +717,7 @@ function PlatformOptions({
   campaign: PostCampaign;
   account: SocialAccount | null;
   accountLoading: boolean;
+  accountError: string | null;
   linkedinDestination: "profile" | "page";
   linkedinPageId: string;
   pages: LinkedInPage[];
@@ -733,6 +756,12 @@ function PlatformOptions({
               : "Needs reconnect"}
         </span>
       </div>
+
+      {accountError ? (
+        <p className="mt-3 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-800" role="status">
+          {accountError}
+        </p>
+      ) : null}
 
       {campaign.platform === "linkedin" ? (
         <div className="mt-4 grid gap-4 md:grid-cols-2">

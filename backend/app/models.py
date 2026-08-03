@@ -2,9 +2,20 @@
 
 from __future__ import annotations
 
+import warnings
 from typing import Annotated, Any, Literal
 
 from pydantic import BaseModel, Field
+
+# `copy` is part of the public API payload used by the composer. Pydantic also
+# exposes a deprecated BaseModel.copy() helper, so defining the payload field
+# emits a harmless warning on every backend start. Keep the API stable while
+# silencing only this exact warning for the two affected models.
+warnings.filterwarnings(
+    "ignore",
+    message=r'Field name "copy" in "(AutopostState|SocialPost)" shadows an attribute',
+    category=UserWarning,
+)
 
 Provider = Literal["linkedin", "facebook", "instagram"]
 Tone = Literal["professional", "punchy", "playful", "educational"]
@@ -232,6 +243,7 @@ class UploadPostResult(BaseModel):
 
 class AutopostState(BaseModel):
     postId: str
+    createdAt: str | None = None
     status: PostStatus | None = None
     media: MediaInfo
     brief: str | None = None

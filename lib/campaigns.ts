@@ -151,6 +151,68 @@ export async function deleteCampaign(
   }
 }
 
+export function buildCampaignDuplicate(
+  campaign: PostCampaign,
+  posts: CampaignPost[],
+): { campaign: PostCampaign; posts: CampaignPost[] } {
+  const now = Date.now();
+  const campaignId = generateCampaignId();
+  const duplicatedCampaign: PostCampaign = {
+    ...campaign,
+    id: campaignId,
+    name: `${campaign.name} (Copy)`,
+    createdAt: new Date(now).toISOString(),
+    updatedAt: new Date(now).toISOString(),
+  };
+  const duplicatedPosts = posts.map((post, index): CampaignPost => {
+    const timestamp = new Date(now - index).toISOString();
+    return {
+      id: generateCampaignId(),
+      campaignId,
+      platform: post.platform,
+      title: post.title,
+      description: post.description,
+      hashtags: [...post.hashtags],
+      firstComment: post.firstComment,
+      media: {
+        urls: [...post.media.urls],
+        storagePaths: [...post.media.storagePaths],
+        items: post.media.items?.map((item) => ({ ...item })),
+      },
+      linkedin: post.linkedin ? { ...post.linkedin } : undefined,
+      instagram: post.instagram
+        ? {
+            ...post.instagram,
+            collaborators: [...post.instagram.collaborators],
+          }
+        : undefined,
+      status: "draft",
+      createdAt: timestamp,
+      updatedAt: timestamp,
+    };
+  });
+  return { campaign: duplicatedCampaign, posts: duplicatedPosts };
+}
+
+export async function duplicateCampaign(
+  campaign: PostCampaign,
+  posts: CampaignPost[],
+): Promise<{ campaign: PostCampaign; posts: CampaignPost[] }> {
+  const duplicate = buildCampaignDuplicate(campaign, posts);
+  await saveCampaign(duplicate.campaign);
+  for (let offset = 0; offset < duplicate.posts.length; offset += 500) {
+    const batch = writeBatch(db);
+    for (const post of duplicate.posts.slice(offset, offset + 500)) {
+      batch.set(
+        doc(db, COLLECTIONS.campaignPosts, post.id),
+        toFirestoreData(post),
+      );
+    }
+    await batch.commit();
+  }
+  return duplicate;
+}
+
 export function normalizeHashtag(value: string): string {
   return value.trim().replace(/^#+/, "").replace(/\s+/g, "");
 }

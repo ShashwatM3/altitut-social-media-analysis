@@ -12,6 +12,7 @@ import {
   composeCampaignCaption,
   deleteCampaign,
   deleteCampaignPost,
+  duplicateCampaign,
   generateCampaignId,
   listenToCampaignPosts,
   listenToCampaigns,
@@ -53,6 +54,7 @@ function autopostStateForCampaignPost(
   };
   return {
     postId: post.publishKey ?? post.id,
+    createdAt: post.createdAt,
     status: resultStatus === "failed" ? "failed" : "publishing",
     media: {
       kind: "image",
@@ -138,6 +140,9 @@ export function CampaignsPanel() {
   const [editorPost, setEditorPost] = useState<CampaignPost | null | undefined>(
     undefined,
   );
+  const [duplicatingCampaignId, setDuplicatingCampaignId] = useState<string | null>(
+    null,
+  );
 
   useEffect(() => {
     let campaignsReady = false;
@@ -210,6 +215,35 @@ export function CampaignsPanel() {
           ? caught.message
           : "Could not delete the campaign.",
       );
+    }
+  }
+
+  async function handleDuplicateCampaign(campaign: PostCampaign) {
+    setDuplicatingCampaignId(campaign.id);
+    setLoadError(null);
+    try {
+      const duplicate = await duplicateCampaign(
+        campaign,
+        posts.filter((post) => post.campaignId === campaign.id),
+      );
+      setCampaigns((current) => [
+        duplicate.campaign,
+        ...current.filter((item) => item.id !== duplicate.campaign.id),
+      ]);
+      const duplicatePostIds = new Set(duplicate.posts.map((post) => post.id));
+      setPosts((current) => [
+        ...duplicate.posts,
+        ...current.filter((post) => !duplicatePostIds.has(post.id)),
+      ]);
+      setSelectedCampaignId(duplicate.campaign.id);
+    } catch (caught) {
+      setLoadError(
+        caught instanceof Error
+          ? caught.message
+          : "Could not duplicate the campaign.",
+      );
+    } finally {
+      setDuplicatingCampaignId(null);
     }
   }
 
@@ -309,6 +343,8 @@ export function CampaignsPanel() {
             setCampaignDialogOpen(true);
           }}
           onDeleteCampaign={() => void handleDeleteCampaign(selectedCampaign)}
+          onDuplicateCampaign={() => void handleDuplicateCampaign(selectedCampaign)}
+          duplicating={duplicatingCampaignId === selectedCampaign.id}
           onEdit={(post) => setEditorPost(post)}
           onPublish={(post) => void handlePublish(post)}
           onRefresh={(post) => void handleRefresh(post)}
@@ -452,6 +488,8 @@ function CampaignDetail({
   onCreate,
   onEditCampaign,
   onDeleteCampaign,
+  onDuplicateCampaign,
+  duplicating,
   onEdit,
   onPublish,
   onRefresh,
@@ -463,6 +501,8 @@ function CampaignDetail({
   onCreate: () => void;
   onEditCampaign: () => void;
   onDeleteCampaign: () => void;
+  onDuplicateCampaign: () => void;
+  duplicating: boolean;
   onEdit: (post: CampaignPost) => void;
   onPublish: (post: CampaignPost) => void;
   onRefresh: (post: CampaignPost) => void;
@@ -498,6 +538,14 @@ function CampaignDetail({
             className="rounded-lg border border-red-200 px-4 py-2 text-sm font-semibold text-red-600 transition-colors hover:bg-red-50"
           >
             Delete campaign
+          </button>
+          <button
+            type="button"
+            onClick={onDuplicateCampaign}
+            disabled={duplicating}
+            className="rounded-lg border border-teal-200 px-4 py-2 text-sm font-semibold text-deep-teal transition-colors hover:bg-teal-50 disabled:cursor-wait disabled:opacity-60"
+          >
+            {duplicating ? "Duplicating…" : "Duplicate campaign"}
           </button>
           <button
             type="button"

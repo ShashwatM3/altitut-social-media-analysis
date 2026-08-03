@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import logging
 from datetime import datetime, timezone
 
 import httpx
@@ -12,6 +13,9 @@ from app.services.pack_service import datetime_now
 from app.services.social import upload_post_client
 from app.services.social.accounts import resolve_social_account
 from app.services.social.posts import delete_social_post, save_social_post
+
+logger = logging.getLogger(__name__)
+_history_cache_available: bool | None = None
 
 
 def _compute_status(results: list[UploadPostResult]) -> str:
@@ -159,12 +163,28 @@ def validate_step(state: AutopostState) -> tuple[AutopostState, str | None]:
         try:
             account = resolve_social_account(target.platform)
             if account.status == "needs_reauth":
-                next_state.warnings.append(f"{target.platform} is not connected and will be skipped.")
-                set_result(target.platform, UploadPostResult(platform=target.platform, status="skipped", error="Account not connected in Upload-Post."))
+                next_state.warnings.append(
+                    f"{target.platform} is not connected and will be skipped."
+                )
+                set_result(
+                    target.platform,
+                    UploadPostResult(
+                        platform=target.platform,
+                        status="skipped",
+                        error="Account not connected in Upload-Post.",
+                    ),
+                )
                 continue
             if target.platform == "facebook" and not account.facebookPageId:
                 next_state.warnings.append(f"{target.platform}: no Facebook Page found; skipped.")
-                set_result(target.platform, UploadPostResult(platform=target.platform, status="skipped", error="No Facebook Page connected to this profile."))
+                set_result(
+                    target.platform,
+                    UploadPostResult(
+                        platform=target.platform,
+                        status="skipped",
+                        error="No Facebook Page connected to this profile.",
+                    ),
+                )
                 continue
             if target.platform == "facebook":
                 target.pageId = target.pageId or account.facebookPageId
@@ -179,7 +199,14 @@ def validate_step(state: AutopostState) -> tuple[AutopostState, str | None]:
             ready_targets.append(target)
         except Exception as exc:
             next_state.warnings.append(f"{target.platform}: {exc}; skipped.")
-            set_result(target.platform, UploadPostResult(platform=target.platform, status="skipped", error=str(exc)))
+            set_result(
+                target.platform,
+                UploadPostResult(
+                    platform=target.platform,
+                    status="skipped",
+                    error=str(exc),
+                ),
+            )
 
     next_state.targets = ready_targets
     if not ready_targets:
@@ -195,7 +222,10 @@ def publish_step(state: AutopostState) -> tuple[AutopostState, str | None]:
         return state, str(exc)
 
     if res.get("availablePages"):
-        return state.model_copy(update={"availablePages": res["availablePages"]}), "Multiple Facebook Pages are connected. Pick one and retry."
+        next_state = state.model_copy(
+            update={"availablePages": res["availablePages"]}
+        )
+        return next_state, "Multiple Facebook Pages are connected. Pick one and retry."
 
     next_results: list[UploadPostResult] = list(state.results or [])
     for r in res.get("results") or []:
@@ -209,7 +239,11 @@ def publish_step(state: AutopostState) -> tuple[AutopostState, str | None]:
             next_results.append(UploadPostResult(platform=target.platform, status="pending"))
 
     done = _compute_status(next_results) != "publishing"
-    status = _compute_status(next_results) if done else ("scheduled" if state.scheduledFor else "publishing")
+    status = (
+        _compute_status(next_results)
+        if done
+        else ("scheduled" if state.scheduledFor else "publishing")
+    )
     next_state = state.model_copy(update={
         "vendorRequestId": res.get("requestId"),
         "jobId": res.get("jobId"),
@@ -271,10 +305,13 @@ def poll_step(state: AutopostState) -> tuple[AutopostState, str | None]:
 
 
 def save_step(state: AutopostState) -> tuple[AutopostState, str | None]:
+    global _history_cache_available
+    if _history_cache_available is False:
+        return state, None
     try:
         post = SocialPost(
             id=state.postId,
-            createdAt=datetime_now(),
+            createdAt=state.createdAt or datetime_now(),
             status=state.status or "publishing",
             warnings=state.warnings,
             media=state.media,
@@ -289,25 +326,44 @@ def save_step(state: AutopostState) -> tuple[AutopostState, str | None]:
             results=state.results or [],
         )
         save_social_post(post)
+        _history_cache_available = True
         return state, None
-    except Exception as exc:
-        return state, str(exc)
+    except Exception:
+        # A post may already be live at this point. Firestore Admin is an
+        # optional server-side history cache; the browser mirrors this state
+        # through the Firebase web SDK, so a cache outage must never turn a
+        # successful social publish into a failed publish.
+        _history_cache_available = False
+        logger.warning(
+            "Firebase Admin is unavailable; browser post-history sync remains active."
+        )
+        return state, None
 
 
 def delete_step(state: AutopostState) -> tuple[AutopostState, str | None]:
+    global _history_cache_available
     errors: list[str] = []
     for result in state.results or []:
         if result.platform == "instagram" or not result.platformPostId:
             continue
         try:
-            upload_post_client.unpublish_on_upload_post(result.platform, result.platformPostId, settings.upload_post_profile or "")
+            upload_post_client.unpublish_on_upload_post(
+                result.platform,
+                result.platformPostId,
+                settings.upload_post_profile or "",
+            )
         except Exception as exc:
             errors.append(f"{result.platform}: {exc}")
 
     try:
-        delete_social_post(state.postId)
-    except Exception as exc:
-        return state, str(exc)
+        if _history_cache_available is not False:
+            delete_social_post(state.postId)
+            _history_cache_available = True
+    except Exception:
+        # The browser removes the dashboard record after this endpoint
+        # succeeds. Do not report a live unpublish as failed just because the
+        # optional Admin cache is unavailable locally.
+        _history_cache_available = False
 
     if errors:
         return state, "; ".join(errors)

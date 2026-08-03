@@ -1,8 +1,13 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { api } from "../../lib/api";
-import { newTraceId, TRACE_ID_HEADER, TraceableError } from "../../lib/trace";
+import { apiFetch } from "../../lib/api";
+import {
+  newTraceId,
+  parseApiError,
+  TRACE_ID_HEADER,
+  TraceableError,
+} from "../../lib/trace";
 import type { AnalysisPack } from "./pack-panel";
 import {
   deriveMediaKindFromPack,
@@ -13,6 +18,7 @@ import {
 } from "../../lib/packs";
 import { reelsTabEligible } from "../../lib/social/reels";
 import type { MediaFile } from "./media-dropzone";
+import { saveAutopostHistory } from "../../lib/social-posts";
 import { MediaDropzone } from "./media-dropzone";
 import { PlatformCopyCard } from "./platform-copy-card";
 import { TraceBanner } from "./trace-banner";
@@ -36,6 +42,7 @@ type AutopostStepId = "validate" | "publish" | "poll" | "save" | "delete";
 
 type AutopostState = {
   postId: string;
+  createdAt?: string;
   status?:
     | "draft"
     | "publishing"
@@ -228,6 +235,7 @@ export function AutoPostComposer({
     pageId?: string;
   };
   const [accounts, setAccounts] = useState<Account[]>([]);
+  const [accountError, setAccountError] = useState<string | null>(null);
 
   useEffect(() => {
     void fetchAccounts();
@@ -235,18 +243,28 @@ export function AutoPostComposer({
   }, []);
 
   async function fetchAccounts() {
+    setAccountError(null);
     try {
-      const res = await fetch(api("/api/autopost/accounts"), {
+      const res = await apiFetch("/api/autopost/accounts", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ platforms: ["linkedin", "facebook", "instagram"] }),
       });
+      if (!res.ok) {
+        const parsed = await parseApiError(res, "Could not check connected social accounts.");
+        setAccountError(parsed.message);
+        return;
+      }
       const json = (await res.json().catch(() => ({}))) as {
         accounts?: Account[];
       };
       if (json.accounts) setAccounts(json.accounts);
     } catch (error) {
-      console.error("[autopost] fetch accounts:", error);
+      setAccountError(
+        error instanceof Error
+          ? error.message
+          : "Could not check connected social accounts.",
+      );
     }
   }
 
@@ -355,7 +373,7 @@ export function AutoPostComposer({
     state: AutopostState,
     traceId: string,
   ): Promise<{ state?: AutopostState; error?: string; traceId?: string }> {
-    const res = await fetch(api("/api/autopost"), {
+    const res = await apiFetch("/api/autopost", {
       method: "POST",
       headers: { "Content-Type": "application/json", [TRACE_ID_HEADER]: traceId },
       body: JSON.stringify({ step, state }),
@@ -374,7 +392,49 @@ export function AutoPostComposer({
     return { state: json.state, traceId: returnedTraceId };
   }
 
+  async function persistPublishState(
+    state: AutopostState,
+    traceId: string,
+  ): Promise<void> {
+    const browserSave = saveAutopostHistory(state);
+    const serverSave = (async () => {
+      const result = await callAutopost("save", state, traceId);
+      if (result.error) {
+        throw new TraceableError(result.error, result.traceId);
+      }
+    })();
+    const [browserResult, serverResult] = await Promise.allSettled([
+      browserSave,
+      serverSave,
+    ]);
+    if (browserResult.status === "rejected" && serverResult.status === "rejected") {
+      throw browserResult.reason;
+    }
+  }
+
   async function runPublish() {
+    try {
+      await runPublishWorkflow();
+    } catch (error) {
+      setPublishError(
+        error instanceof Error ? error.message : "Publishing could not continue.",
+      );
+      setPublishTraceId(error instanceof TraceableError ? error.traceId : null);
+      setPublishPhase("error");
+      setPublishSteps((steps) => {
+        let marked = false;
+        return steps.map((step) => {
+          if (!marked && step.status === "running") {
+            marked = true;
+            return { ...step, status: "error" };
+          }
+          return step;
+        });
+      });
+    }
+  }
+
+  async function runPublishWorkflow() {
     if (abortRef.current) return;
     const traceId = newTraceId();
     setPublishPhase("validating");
@@ -389,6 +449,7 @@ export function AutoPostComposer({
 
     const initialState: AutopostState = {
       postId: generateId(),
+      createdAt: new Date().toISOString(),
       media: mediaFromFiles(mediaFiles),
       brief: aiBrief,
       copy,
@@ -422,14 +483,14 @@ export function AutoPostComposer({
     state = publishRes.state;
 
     // publishStep already computed the correct status (published/publishing/scheduled).
-    await callAutopost("save", state, traceId);
+    await persistPublishState(state, traceId);
 
     setPublishSteps((s) => updateStep(s, "publish", "done"));
 
     if (state.done) {
       setPublishSteps((s) => updateStep(s, "process", "done"));
       state.status = computeStatusFromResults(state.results ?? []);
-      await callAutopost("save", state, traceId);
+      await persistPublishState(state, traceId);
       setPublishSteps((s) => updateStep(s, "save", "done"));
       setPublishPhase("published");
       setPublishState(state);
@@ -468,13 +529,13 @@ export function AutoPostComposer({
       );
       setPublishTraceId(traceId);
       setPublishPhase("error");
-      await callAutopost("save", state, traceId);
+      await persistPublishState(state, traceId);
       setPublishState(state);
       return;
     }
 
     state.status = computeStatusFromResults(state.results ?? []);
-    await callAutopost("save", state, traceId);
+    await persistPublishState(state, traceId);
     setPublishSteps((s) => updateStep(s, "save", "done"));
     setPublishPhase("published");
     setPublishState(state);
@@ -514,7 +575,7 @@ export function AutoPostComposer({
       if (copy[p]?.caption) existingCopy[p] = copy[p].caption;
     }
     const traceId = newTraceId();
-    const res = await fetch(api("/api/autopost/caption"), {
+    const res = await apiFetch("/api/autopost/caption", {
       method: "POST",
       headers: { "Content-Type": "application/json", [TRACE_ID_HEADER]: traceId },
       body: JSON.stringify({
@@ -707,6 +768,18 @@ export function AutoPostComposer({
         <p className="mt-1 text-sm text-gray-600">
           Select where this post will go and how it should appear.
         </p>
+        {accountError ? (
+          <div className="mt-3 flex flex-wrap items-center justify-between gap-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-800" role="status">
+            <span>{accountError}</span>
+            <button
+              type="button"
+              onClick={() => void fetchAccounts()}
+              className="font-semibold underline underline-offset-2"
+            >
+              Check again
+            </button>
+          </div>
+        ) : null}
         {accounts.some((a) => a.status === "needs_reauth") ? (
           <p className="mt-2 text-xs text-amber-700">
             Platforms marked “needs reconnect” are not configured yet. They will be

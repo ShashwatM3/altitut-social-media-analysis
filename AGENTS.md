@@ -65,7 +65,9 @@ a side nav with two tabs (Competitors Analysis, Content Creation), and a
 content pane.
 
 - `npm install` — install dependencies
-- `npm run dev` — dev server
+- `npm run dev` — start both the Next.js web app and FastAPI API (the
+  Auto-Post, Scout, chat and help flows require both processes)
+- `npm run dev:web` / `npm run dev:api` — start only one side when debugging
 - `npm run build` / `npm run start` — production build and serve
 - `npm run seed` — (re)ingest predefined competitor/content packs + RAG chunks
   (including the platform guide) into Firestore

@@ -60,6 +60,39 @@ export async function saveSocialPost(post: SocialPost): Promise<void> {
   await setDoc(doc(db, COLLECTIONS.socialPosts, post.id), sanitized);
 }
 
+type AutopostHistoryState = Omit<
+  SocialPost,
+  "id" | "createdAt" | "status" | "vendor" | "results"
+> & {
+  postId: string;
+  createdAt?: string;
+  status?: SocialPost["status"];
+  results?: SocialPost["results"];
+};
+
+/** Mirror publish state from the browser so Post history works locally even
+ * when the FastAPI process has no Firebase Admin service-account credential. */
+export async function saveAutopostHistory(
+  state: AutopostHistoryState,
+): Promise<void> {
+  await saveSocialPost({
+    id: state.postId,
+    createdAt: state.createdAt ?? new Date().toISOString(),
+    status: state.status ?? "publishing",
+    warnings: state.warnings,
+    media: state.media,
+    brief: state.brief,
+    copy: state.copy,
+    targets: state.targets,
+    scheduledFor: state.scheduledFor,
+    timezone: state.timezone,
+    vendor: "upload_post",
+    vendorRequestId: state.vendorRequestId,
+    jobId: state.jobId,
+    results: state.results ?? [],
+  });
+}
+
 export function listenToSocialPosts(
   onChange: (posts: SocialPost[]) => void,
   onError?: (error: Error) => void,
