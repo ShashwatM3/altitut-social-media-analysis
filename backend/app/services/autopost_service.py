@@ -50,6 +50,22 @@ def _validate_limits(state: AutopostState) -> str | None:
             return "LinkedIn caption exceeds 3,000 characters."
         if target.platform == "instagram" and len(copy.caption) > 2200:
             return "Instagram caption exceeds 2,200 characters."
+        first_comment = copy.firstComment or ""
+        if target.platform == "linkedin" and len(first_comment) > 1250:
+            return "LinkedIn first comment exceeds 1,250 characters."
+        if target.platform == "instagram" and len(first_comment) > 2196:
+            return "Instagram first comment exceeds 2,196 characters."
+        if target.platform == "instagram" and target.collaborators:
+            for username in target.collaborators:
+                normalized = username.removeprefix("@")
+                if not normalized or any(
+                    not (character.isalnum() or character in "._")
+                    for character in normalized
+                ):
+                    return (
+                        f"Instagram collaborator '{username}' is invalid. "
+                        "Use public usernames without @."
+                    )
     return None
 
 
@@ -73,7 +89,36 @@ def validate_step(state: AutopostState) -> tuple[AutopostState, str | None]:
     if not state.media.urls and state.media.kind != "none":
         return state, "Media is missing a public URL. Re-upload the file."
     if has_image and len(state.media.urls) > 10:
-        return state, "Instagram carousels are limited to 10 images."
+        return state, "Image posts are limited to 10 images."
+
+    if has_image and state.media.items:
+        if len(state.media.items) != len(state.media.urls):
+            return state, "Image metadata is incomplete. Re-upload the carousel."
+        for index, item in enumerate(state.media.items, start=1):
+            if item.bytes > 8 * 1024 * 1024:
+                return state, f"Image {index} exceeds the 8 MB file-size limit."
+    elif has_image and state.media.bytes and state.media.bytes > 80 * 1024 * 1024:
+        return state, "The image set is too large. Each image must be 8 MB or smaller."
+
+    if (
+        has_image
+        and any(t.platform == "instagram" for t in state.targets)
+    ):
+        dimensions = (
+            [(item.width, item.height) for item in state.media.items]
+            if state.media.items
+            else [(state.media.width, state.media.height)]
+        )
+        for index, (width, height) in enumerate(dimensions, start=1):
+            if not width or not height:
+                if state.media.items:
+                    return state, f"Image {index} is missing dimensions. Re-upload it."
+                continue
+            aspect_ratio = width / height
+            if aspect_ratio < 0.8 or aspect_ratio > 1.91:
+                return state, (
+                    f"Instagram image {index} must be between 4:5 and 1.91:1."
+                )
 
     non_instagram = [t for t in state.targets if t.platform != "instagram"]
     if has_video and has_image and non_instagram:
@@ -121,13 +166,16 @@ def validate_step(state: AutopostState) -> tuple[AutopostState, str | None]:
                 next_state.warnings.append(f"{target.platform}: no Facebook Page found; skipped.")
                 set_result(target.platform, UploadPostResult(platform=target.platform, status="skipped", error="No Facebook Page connected to this profile."))
                 continue
-            target.pageId = (
-                account.facebookPageId
-                if target.platform == "facebook"
-                else account.linkedinPageId
-                if target.platform == "linkedin"
-                else None
-            )
+            if target.platform == "facebook":
+                target.pageId = target.pageId or account.facebookPageId
+            elif target.platform == "linkedin":
+                target.pageId = (
+                    None
+                    if target.postToProfile
+                    else target.pageId or account.linkedinPageId
+                )
+            else:
+                target.pageId = None
             ready_targets.append(target)
         except Exception as exc:
             next_state.warnings.append(f"{target.platform}: {exc}; skipped.")
@@ -170,6 +218,30 @@ def publish_step(state: AutopostState) -> tuple[AutopostState, str | None]:
         "status": status,
     })
     return next_state, None
+
+
+def retry_step(state: AutopostState) -> tuple[AutopostState, str | None]:
+    id_value = state.jobId or state.vendorRequestId
+    if not id_value:
+        return state, "No failed Upload-Post request is available to retry."
+
+    try:
+        kind = "job" if state.jobId else "request"
+        upload_post_client.retry_upload_post(id_value, kind)
+    except Exception as exc:
+        return state, str(exc)
+
+    results = [
+        result.model_copy(update={"status": "pending", "error": None})
+        if result.status == "failed"
+        else result
+        for result in (state.results or [])
+    ]
+    return state.model_copy(update={
+        "results": results,
+        "done": False,
+        "status": "scheduled" if state.scheduledFor else "publishing",
+    }), None
 
 
 def poll_step(state: AutopostState) -> tuple[AutopostState, str | None]:

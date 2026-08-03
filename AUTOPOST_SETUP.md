@@ -12,6 +12,8 @@ if a step says "click X", do exactly that.
 - A **Post** button next to every content pack that opens the same composer
   pre-filled with hashtags, tone, CTA and captions inferred from the pack.
 - A Firestore-backed **Post history** list with live status and permalinks.
+- A **Post Campaigns** pane for separate Instagram/LinkedIn campaigns, ordered
+  image carousels, drafts and per-post publishing status.
 
 You do **not** need a LinkedIn developer app or Meta App Review. Publishing
 flows through [Upload-Post](https://upload-post.com) (or the endpoint you
@@ -173,7 +175,8 @@ Storage before handing the public URL to Upload-Post.
 6. Click **Publish**.
 
 > This is the narrowest open rule that works for the browser upload path.
-> The app writes only under `/autopost/{postId}/{filename}`.
+> Standalone media is written under `/autopost/`; campaign media is written
+> under `/autopost/campaigns/{campaignId}/`.
 
 ---
 
@@ -284,8 +287,10 @@ Storage before handing the public URL to Upload-Post.
 
 ### LinkedIn is not publishing images
 
-- LinkedIn does not support image carousels through Upload-Post in this
-  integration. Use a single image or a video.
+- Image posts and multi-image posts use Upload-Post's photo endpoint. Confirm
+  every file is JPG/PNG, no file exceeds 8 MB, and reconnect LinkedIn if the
+  permission has expired. For company posts, confirm the selected page still
+  appears in the campaign editor.
 
 ### I see a different status for each platform in history
 
@@ -315,9 +320,13 @@ That is expected. Each platform is processed independently:
 
 ## Next level (optional)
 
-- The fallback / skip logic lives in `app/api/autopost/route.ts`
-  (`validateStep`). It is automatic; nothing to configure.
-- The pack-to-caption logic lives in `lib/packs.ts` and `lib/caption.ts`.
+- The fallback / skip logic lives in
+  `backend/app/services/autopost_service.py` (`validate_step`). It is automatic;
+  nothing to configure.
+- The pack-to-caption logic lives in `backend/app/services/pack_service.py` and
+  `backend/app/services/caption_service.py`.
 - To change which platforms a pack pre-selects, edit the text in the pack
   itself (the code scans for "Instagram", "Facebook", "LinkedIn", "Reel",
   etc.).
+- Campaign-specific limits and vendor behavior are recorded in
+  `docs/POST-CAMPAIGNS.md`.

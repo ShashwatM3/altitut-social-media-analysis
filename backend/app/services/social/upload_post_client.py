@@ -271,9 +271,9 @@ def publish_to_upload_post(state: AutopostState) -> dict[str, Any]:
         if target.platform == "linkedin":
             if caption:
                 _add_field("linkedin_description", caption)
-                _add_field("linkedin_title", caption)
+                _add_field("linkedin_title", caption[:400])
             _add_field("visibility", target.visibility or "PUBLIC")
-            if target.pageId:
+            if target.pageId and not target.postToProfile:
                 _add_field("target_linkedin_page_id", target.pageId)
             if first_comment:
                 _add_field("linkedin_first_comment", first_comment)
@@ -318,6 +318,13 @@ def publish_to_upload_post(state: AutopostState) -> dict[str, Any]:
                     _add_field("media_type", "STORIES")
             if first_comment:
                 _add_field("instagram_first_comment", first_comment)
+            if target.collaborators:
+                _add_field(
+                    "collaborators",
+                    ",".join(username.removeprefix("@") for username in target.collaborators),
+                )
+            if target.locationId:
+                _add_field("location_id", target.locationId)
 
     res = upload_post_fetch(path, method="POST", files=fields, idempotency_key=state.postId)
     results = _raw_results_to_array(res.get("results") or res.get("platforms"))
@@ -356,6 +363,15 @@ def check_upload_post_status(id_value: str, kind: str = "request") -> dict[str, 
         "done": done,
         "results": [r for r in (_map_raw_result(r) for r in raw_results) if r is not None],
     }
+
+
+def retry_upload_post(id_value: str, kind: str = "request") -> None:
+    key = "job_id" if kind == "job" else "request_id"
+    upload_post_fetch(
+        "/uploadposts/posts/retry",
+        method="POST",
+        json_body={key: id_value},
+    )
 
 
 def unpublish_on_upload_post(platform: Provider, provider_post_id: str, profile: str) -> None:

@@ -204,6 +204,20 @@ This ingests the predefined competitors, content packs, platform-guide chunks an
 
 Unconfigured platforms are skipped gracefully; the others still publish.
 
+### Post Campaigns
+
+1. Open **Post Campaigns** and create a platform-specific Instagram or LinkedIn
+   campaign.
+2. Open the campaign card and create a draft post with one or more ordered
+   images, copy, hashtags and an optional first comment.
+3. Add Instagram collaborators/location or select a LinkedIn profile/company
+   page, then publish.
+4. The post card tracks publishing, published and failed states and can refresh
+   a pending request or retry a vendor failure without duplicating the upload.
+
+See [docs/POST-CAMPAIGNS.md](docs/POST-CAMPAIGNS.md) for supported fields,
+limits and Upload-Post failure behavior.
+
 ### Telegram Reel Bot
 
 After the webhook is registered, send any Instagram reel link to your bot. The bot replies at each stage and finishes with a summary; the new pack appears in the **Content Creation** tab.

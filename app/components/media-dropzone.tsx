@@ -22,6 +22,12 @@ type MediaDropzoneProps = {
   files: MediaFile[];
   onChange: (files: MediaFile[] | ((prev: MediaFile[]) => MediaFile[])) => void;
   onError: (message: string) => void;
+  acceptedKinds?: Array<MediaFile["kind"]>;
+  acceptedMimeTypes?: string[];
+  maxFiles?: number;
+  storageFolder?: string;
+  title?: string;
+  hint?: string;
 };
 
 function formatBytes(bytes: number): string {
@@ -75,7 +81,17 @@ function ProgressRing({ progress }: { progress: number }) {
   );
 }
 
-export function MediaDropzone({ files, onChange, onError }: MediaDropzoneProps) {
+export function MediaDropzone({
+  files,
+  onChange,
+  onError,
+  acceptedKinds = ["video", "image"],
+  acceptedMimeTypes,
+  maxFiles = 10,
+  storageFolder = "autopost",
+  title,
+  hint,
+}: MediaDropzoneProps) {
   const [isOver, setIsOver] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -122,7 +138,11 @@ export function MediaDropzone({ files, onChange, onError }: MediaDropzoneProps) 
     if (item.kind === "image") readImageMetadata(item.url, item.id);
     else readVideoMetadata(item.url, item.id);
 
-    uploadToStorage(item.file, (progress) => updateFile(item.id, { progress }))
+    uploadToStorage(
+      item.file,
+      (progress) => updateFile(item.id, { progress }),
+      storageFolder,
+    )
       .then((result: StorageUploadResult) => {
         updateFile(item.id, {
           url: result.url,
@@ -159,6 +179,26 @@ export function MediaDropzone({ files, onChange, onError }: MediaDropzoneProps) 
       return;
     }
 
+    if (
+      (hasVideo && !acceptedKinds.includes("video")) ||
+      (hasImage && !acceptedKinds.includes("image"))
+    ) {
+      onError(
+        acceptedKinds.length === 1 && acceptedKinds[0] === "image"
+          ? "This post type accepts images only."
+          : "That media type is not supported here.",
+      );
+      return;
+    }
+
+    if (
+      acceptedMimeTypes &&
+      incoming.some((file) => !acceptedMimeTypes.includes(file.type))
+    ) {
+      onError("Use JPG or PNG images for reliable platform publishing.");
+      return;
+    }
+
     if (hasVideo && hasImage) {
       onError("A post cannot mix images and video.");
       return;
@@ -176,8 +216,8 @@ export function MediaDropzone({ files, onChange, onError }: MediaDropzoneProps) 
 
     if (hasImage) {
       const total = files.length + incoming.length;
-      if (total > 10) {
-        onError("A post cannot contain more than 10 images.");
+      if (total > maxFiles) {
+        onError(`A post cannot contain more than ${maxFiles} images.`);
         return;
       }
     }
@@ -252,7 +292,10 @@ export function MediaDropzone({ files, onChange, onError }: MediaDropzoneProps) 
         <input
           ref={inputRef}
           type="file"
-          accept="video/*,image/*"
+          accept={
+            acceptedMimeTypes?.join(",") ??
+            acceptedKinds.map((kind) => `${kind}/*`).join(",")
+          }
           multiple={existingKind !== "video"}
           className="hidden"
           onChange={(e) => handleFiles(e.target.files)}
@@ -274,12 +317,13 @@ export function MediaDropzone({ files, onChange, onError }: MediaDropzoneProps) 
           </svg>
         </div>
         <p className="mt-3 font-medium text-gray-900">
-          Drop a video or images here, or click to browse
+          {title ?? "Drop a video or images here, or click to browse"}
         </p>
         <p className="mt-1 text-sm text-gray-500">
-          {existingKind === "video"
-            ? "One video per post"
-            : "Up to 10 images; videos and images cannot be mixed"}
+          {hint ??
+            (existingKind === "video"
+              ? "One video per post"
+              : `Up to ${maxFiles} images; videos and images cannot be mixed`)}
         </p>
       </div>
 

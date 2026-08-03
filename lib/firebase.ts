@@ -27,4 +27,6 @@ export const COLLECTIONS = {
   telegramUpdates: "telegramUpdates",
   socialPosts: "socialPosts",
   socialAccounts: "socialAccounts",
+  postCampaigns: "postCampaigns",
+  campaignPosts: "campaignPosts",
 } as const;

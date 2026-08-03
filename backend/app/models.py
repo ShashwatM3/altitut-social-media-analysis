@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-from datetime import datetime
 from typing import Annotated, Any, Literal
 
 from pydantic import BaseModel, Field
@@ -194,6 +193,14 @@ class CaptionResponse(BaseModel):
     )
 
 
+class MediaItemInfo(BaseModel):
+    url: str
+    path: str
+    width: int | None = None
+    height: int | None = None
+    bytes: int
+
+
 class MediaInfo(BaseModel):
     kind: Literal["video", "image", "none"]
     urls: list[str]
@@ -202,6 +209,7 @@ class MediaInfo(BaseModel):
     height: int | None = None
     durationSec: float | None = None
     bytes: int | None = None
+    items: list[MediaItemInfo] | None = None
 
 
 class AutopostTarget(BaseModel):
@@ -209,6 +217,9 @@ class AutopostTarget(BaseModel):
     placement: Placement
     visibility: str | None = None
     pageId: str | None = None
+    postToProfile: bool = False
+    collaborators: list[str] | None = None
+    locationId: str | None = None
 
 
 class UploadPostResult(BaseModel):

@@ -79,7 +79,8 @@ content pane.
   (`lib/firebase.ts`, open rules). Collections: `competitors`, `contentPacks`
   (both rendered live via `onSnapshot` in `app/page.tsx`, with the static packs
   in `data/` as fallback), `ragChunks` (vector store), `scoutRuns`,
-  `telegramUpdates`. Pack CRUD + model-output normalization: `lib/packs.ts`.
+  `telegramUpdates`, `postCampaigns` and `campaignPosts`. Pack CRUD +
+  model-output normalization: `lib/packs.ts`.
 - **Competitor Scout** (`app/components/scout-dialog.tsx`,
   `backend/app/api/routers/scout.py`) — client-driven 8-step workflow: Exa company
   discovery → site crawl → social mapping (Apify Instagram profile scrape + Exa) →
@@ -114,6 +115,14 @@ content pane.
   pre-built from the pack. Gracefully skips any platform that is not connected
   and still publishes the rest. Setup: `AUTOPOST_SETUP.md`. Needs
   `UPLOAD_POST_API_KEY`, `UPLOAD_POST_PROFILE` and open Firebase Storage rules.
+- **Post Campaigns** (`app/components/campaigns-panel.tsx`,
+  `app/components/campaign-post-editor.tsx`, `lib/campaigns.ts`) — separate
+  Instagram and LinkedIn campaign cards with Firestore-backed drafts, ordered
+  image carousels, platform copy, hashtags and first comments. Instagram adds
+  collaborators/location; LinkedIn selects a personal profile or administered
+  company page. Publishing reuses Auto-Post validation/status polling, stable
+  idempotency keys and Upload-Post's failed-upload retry endpoint. Reference:
+  `docs/POST-CAMPAIGNS.md`.
 - **Connectors** — Python clients in `backend/app/services/{exa_client,apify_client,openai_client,telegram_client}.py`;
   shared product context in `lib/altitut.ts` (frontend) and `backend/app/services/altitut_context.py`. The old TypeScript
   connector files (`lib/exa.ts`, `lib/apify.ts`, `lib/openai.ts`) are no longer used.
