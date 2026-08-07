@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800" role="img">
+  
+  <defs>
+    <linearGradient id="sky-the-forever-mvp-failure" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#FFF1F1"/>
+    </linearGradient>
+    <radialGradient id="bloom-the-forever-mvp-failure" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#FF6B6B" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#FF6B6B" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="stroke-the-forever-mvp-failure" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FF6B6B"/>
+      <stop offset="1" stop-color="#800000"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="800" fill="url(#sky-the-forever-mvp-failure)"/>
+  <g>
+    <line x1="0" y1="0" x2="0" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.56"/>
+    <line x1="50" y1="0" x2="50" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.55"/>
+    <line x1="100" y1="0" x2="100" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.43"/>
+    <line x1="150" y1="0" x2="150" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.54"/>
+    <line x1="200" y1="0" x2="200" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.35"/>
+    <line x1="250" y1="0" x2="250" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.5"/>
+    <line x1="300" y1="0" x2="300" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.53"/>
+    <line x1="350" y1="0" x2="350" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.55"/>
+    <line x1="400" y1="0" x2="400" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.41"/>
+    <line x1="450" y1="0" x2="450" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.51"/>
+    <line x1="500" y1="0" x2="500" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.53"/>
+    <line x1="550" y1="0" x2="550" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.36"/>
+    <line x1="600" y1="0" x2="600" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.47"/>
+    <line x1="650" y1="0" x2="650" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.47"/>
+    <line x1="700" y1="0" x2="700" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.53"/>
+    <line x1="750" y1="0" x2="750" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.51"/>
+    <line x1="800" y1="0" x2="800" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.46"/>
+    <line x1="850" y1="0" x2="850" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.51"/>
+    <line x1="900" y1="0" x2="900" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.42"/>
+    <line x1="950" y1="0" x2="950" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.48"/>
+    <line x1="1000" y1="0" x2="1000" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.58"/>
+    <line x1="1050" y1="0" x2="1050" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.38"/>
+    <line x1="1100" y1="0" x2="1100" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.55"/>
+    <line x1="1150" y1="0" x2="1150" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.43"/>
+    <line x1="1200" y1="0" x2="1200" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.46"/>
+    <line x1="0" y1="0" x2="1200" y2="0" stroke="#E9ECEF" stroke-width="1" opacity="0.46"/>
+    <line x1="0" y1="50" x2="1200" y2="50" stroke="#E9ECEF" stroke-width="1" opacity="0.52"/>
+    <line x1="0" y1="100" x2="1200" y2="100" stroke="#E9ECEF" stroke-width="1" opacity="0.51"/>
+    <line x1="0" y1="150" x2="1200" y2="150" stroke="#E9ECEF" stroke-width="1" opacity="0.58"/>
+    <line x1="0" y1="200" x2="1200" y2="200" stroke="#E9ECEF" stroke-width="1" opacity="0.54"/>
+    <line x1="0" y1="250" x2="1200" y2="250" stroke="#E9ECEF" stroke-width="1" opacity="0.54"/>
+    <line x1="0" y1="300" x2="1200" y2="300" stroke="#E9ECEF" stroke-width="1" opacity="0.48"/>
+    <line x1="0" y1="350" x2="1200" y2="350" stroke="#E9ECEF" stroke-width="1" opacity="0.45"/>
+    <line x1="0" y1="400" x2="1200" y2="400" stroke="#E9ECEF" stroke-width="1" opacity="0.51"/>
+    <line x1="0" y1="450" x2="1200" y2="450" stroke="#E9ECEF" stroke-width="1" opacity="0.44"/>
+    <line x1="0" y1="500" x2="1200" y2="500" stroke="#E9ECEF" stroke-width="1" opacity="0.54"/>
+    <line x1="0" y1="550" x2="1200" y2="550" stroke="#E9ECEF" stroke-width="1" opacity="0.45"/>
+    <line x1="0" y1="600" x2="1200" y2="600" stroke="#E9ECEF" stroke-width="1" opacity="0.43"/>
+    <line x1="0" y1="650" x2="1200" y2="650" stroke="#E9ECEF" stroke-width="1" opacity="0.5"/>
+    <line x1="0" y1="700" x2="1200" y2="700" stroke="#E9ECEF" stroke-width="1" opacity="0.58"/>
+    <line x1="0" y1="750" x2="1200" y2="750" stroke="#E9ECEF" stroke-width="1" opacity="0.41"/>
+    <line x1="0" y1="800" x2="1200" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.59"/>
+  </g>
+  <g>
+    <circle cx="600" cy="400" r="400" fill="url(#bloom-the-forever-mvp-failure)"/>
+    <path d="M 710.78 402.29 L 957.13 402.29 L 936.37 520 L 704.89 435.74 Z" fill="#FF6B6B" opacity="0.39" stroke="url(#stroke-the-forever-mvp-failure)" stroke-width="1.2"/>
+    <path d="M 696.42 436.61 L 831.98 485.95 L 790.43 557.92 L 679.92 465.19 Z" fill="#FF6B6B" opacity="0.23" stroke="url(#stroke-the-forever-mvp-failure)" stroke-width="1.2"/>
+    <path d="M 671.84 465.2 L 806.47 578.17 L 739.62 634.27 L 651.74 482.06 Z" fill="#FF6B6B" opacity="0.42" stroke="url(#stroke-the-forever-mvp-failure)" stroke-width="1.2"/>
+    <path d="M 633.96 461.93 L 770.85 699.04 L 661.34 738.9 L 613.8 469.26 Z" fill="#FF6B6B" opacity="0.45" stroke="url(#stroke-the-forever-mvp-failure)" stroke-width="1.2"/>
+    <path d="M 616.03 519.22 L 648.74 704.76 L 551.26 704.76 L 583.97 519.22 Z" fill="#FF6B6B" opacity="0.39" stroke="url(#stroke-the-forever-mvp-failure)" stroke-width="1.2"/>
+    <path d="M 578.61 498.65 L 552.68 645.7 L 478.32 618.64 L 552.99 489.32 Z" fill="#FF6B6B" opacity="0.42" stroke="url(#stroke-the-forever-mvp-failure)" stroke-width="1.2"/>
+    <path d="M 547.43 480.28 L 391.25 750.79 L 290.79 666.49 L 530.06 465.71 Z" fill="#FF6B6B" opacity="0.18" stroke="url(#stroke-the-forever-mvp-failure)" stroke-width="1.2"/>
+    <path d="M 504.63 474.07 L 300.89 645.03 L 238.25 536.52 L 488.17 445.56 Z" fill="#FF6B6B" opacity="0.25" stroke="url(#stroke-the-forever-mvp-failure)" stroke-width="1.2"/>
+    <path d="M 490.69 434.1 L 228.42 529.56 L 206.52 405.35 L 485.62 405.35 Z" fill="#FF6B6B" opacity="0.4" stroke="url(#stroke-the-forever-mvp-failure)" stroke-width="1.2"/>
+    <path d="M 491.02 394.59 L 358.54 394.59 L 371.25 322.51 L 495.74 367.82 Z" fill="#FF6B6B" opacity="0.31" stroke="url(#stroke-the-forever-mvp-failure)" stroke-width="1.2"/>
+    <path d="M 510.13 365.36 L 401.98 325.99 L 436.9 265.51 L 525.06 339.49 Z" fill="#FF6B6B" opacity="0.38" stroke="url(#stroke-the-forever-mvp-failure)" stroke-width="1.2"/>
+    <path d="M 532.11 336.27 L 406.56 230.92 L 467.09 180.13 L 549.04 322.07 Z" fill="#FF6B6B" opacity="0.16" stroke="url(#stroke-the-forever-mvp-failure)" stroke-width="1.2"/>
+    <path d="M 552.49 313.16 L 465.8 163 L 550.46 132.19 L 580.57 302.94 Z" fill="#FF6B6B" opacity="0.14" stroke="url(#stroke-the-forever-mvp-failure)" stroke-width="1.2"/>
+    <path d="M 583.85 283.98 L 548.82 85.33 L 651.18 85.33 L 616.15 283.98 Z" fill="#FF6B6B" opacity="0.18" stroke="url(#stroke-the-forever-mvp-failure)" stroke-width="1.2"/>
+    <path d="M 623.74 293.79 L 676.41 -4.96 L 801.77 40.67 L 650.1 303.38 Z" fill="#FF6B6B" opacity="0.37" stroke="url(#stroke-the-forever-mvp-failure)" stroke-width="1.2"/>
+    <path d="M 639.12 334.6 L 735.07 168.42 L 804.61 226.77 L 657.61 350.11 Z" fill="#FF6B6B" opacity="0.25" stroke="url(#stroke-the-forever-mvp-failure)" stroke-width="1.2"/>
+    <path d="M 700.91 322.21 L 915.94 141.77 L 981.6 255.5 L 717.82 351.51 Z" fill="#FF6B6B" opacity="0.19" stroke="url(#stroke-the-forever-mvp-failure)" stroke-width="1.2"/>
+    <path d="M 707.56 366.63 L 1000.67 259.95 L 1024.4 394.57 L 712.49 394.57 Z" fill="#FF6B6B" opacity="0.35" stroke="url(#stroke-the-forever-mvp-failure)" stroke-width="1.2"/>
+  </g>
+</svg>

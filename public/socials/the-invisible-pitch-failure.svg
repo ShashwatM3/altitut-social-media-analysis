@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800" role="img">
+  
+  <defs>
+    <linearGradient id="sky-the-invisible-pitch-failure" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#FFF1F1"/>
+    </linearGradient>
+    <radialGradient id="bloom-the-invisible-pitch-failure" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#FF6B6B" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#FF6B6B" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="stroke-the-invisible-pitch-failure" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FF6B6B"/>
+      <stop offset="1" stop-color="#800000"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="800" fill="url(#sky-the-invisible-pitch-failure)"/>
+  <g>
+    <line x1="0" y1="0" x2="0" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.39"/>
+    <line x1="50" y1="0" x2="50" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.47"/>
+    <line x1="100" y1="0" x2="100" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.47"/>
+    <line x1="150" y1="0" x2="150" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.41"/>
+    <line x1="200" y1="0" x2="200" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.47"/>
+    <line x1="250" y1="0" x2="250" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.52"/>
+    <line x1="300" y1="0" x2="300" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.55"/>
+    <line x1="350" y1="0" x2="350" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.5"/>
+    <line x1="400" y1="0" x2="400" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.59"/>
+    <line x1="450" y1="0" x2="450" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.5"/>
+    <line x1="500" y1="0" x2="500" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.49"/>
+    <line x1="550" y1="0" x2="550" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.45"/>
+    <line x1="600" y1="0" x2="600" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.43"/>
+    <line x1="650" y1="0" x2="650" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.41"/>
+    <line x1="700" y1="0" x2="700" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.6"/>
+    <line x1="750" y1="0" x2="750" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.35"/>
+    <line x1="800" y1="0" x2="800" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.51"/>
+    <line x1="850" y1="0" x2="850" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.52"/>
+    <line x1="900" y1="0" x2="900" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.44"/>
+    <line x1="950" y1="0" x2="950" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.46"/>
+    <line x1="1000" y1="0" x2="1000" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.57"/>
+    <line x1="1050" y1="0" x2="1050" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.38"/>
+    <line x1="1100" y1="0" x2="1100" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.58"/>
+    <line x1="1150" y1="0" x2="1150" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.45"/>
+    <line x1="1200" y1="0" x2="1200" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.48"/>
+    <line x1="0" y1="0" x2="1200" y2="0" stroke="#E9ECEF" stroke-width="1" opacity="0.4"/>
+    <line x1="0" y1="50" x2="1200" y2="50" stroke="#E9ECEF" stroke-width="1" opacity="0.4"/>
+    <line x1="0" y1="100" x2="1200" y2="100" stroke="#E9ECEF" stroke-width="1" opacity="0.51"/>
+    <line x1="0" y1="150" x2="1200" y2="150" stroke="#E9ECEF" stroke-width="1" opacity="0.42"/>
+    <line x1="0" y1="200" x2="1200" y2="200" stroke="#E9ECEF" stroke-width="1" opacity="0.5"/>
+    <line x1="0" y1="250" x2="1200" y2="250" stroke="#E9ECEF" stroke-width="1" opacity="0.54"/>
+    <line x1="0" y1="300" x2="1200" y2="300" stroke="#E9ECEF" stroke-width="1" opacity="0.53"/>
+    <line x1="0" y1="350" x2="1200" y2="350" stroke="#E9ECEF" stroke-width="1" opacity="0.4"/>
+    <line x1="0" y1="400" x2="1200" y2="400" stroke="#E9ECEF" stroke-width="1" opacity="0.44"/>
+    <line x1="0" y1="450" x2="1200" y2="450" stroke="#E9ECEF" stroke-width="1" opacity="0.45"/>
+    <line x1="0" y1="500" x2="1200" y2="500" stroke="#E9ECEF" stroke-width="1" opacity="0.59"/>
+    <line x1="0" y1="550" x2="1200" y2="550" stroke="#E9ECEF" stroke-width="1" opacity="0.55"/>
+    <line x1="0" y1="600" x2="1200" y2="600" stroke="#E9ECEF" stroke-width="1" opacity="0.51"/>
+    <line x1="0" y1="650" x2="1200" y2="650" stroke="#E9ECEF" stroke-width="1" opacity="0.42"/>
+    <line x1="0" y1="700" x2="1200" y2="700" stroke="#E9ECEF" stroke-width="1" opacity="0.56"/>
+    <line x1="0" y1="750" x2="1200" y2="750" stroke="#E9ECEF" stroke-width="1" opacity="0.44"/>
+    <line x1="0" y1="800" x2="1200" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.47"/>
+  </g>
+  <g>
+    <circle cx="600" cy="400" r="400" fill="url(#bloom-the-invisible-pitch-failure)"/>
+    <path d="M 681.31 403.44 L 863.06 403.44 L 848.37 486.75 L 677.58 424.58 Z" fill="#FF6B6B" opacity="0.3" stroke="url(#stroke-the-invisible-pitch-failure)" stroke-width="1.2"/>
+    <path d="M 691.11 434.29 L 983.87 540.85 L 913.91 662.03 L 675.25 461.76 Z" fill="#FF6B6B" opacity="0.36" stroke="url(#stroke-the-invisible-pitch-failure)" stroke-width="1.2"/>
+    <path d="M 671.83 465.34 L 841.66 607.85 L 762.73 674.09 L 651.88 482.09 Z" fill="#FF6B6B" opacity="0.42" stroke="url(#stroke-the-invisible-pitch-failure)" stroke-width="1.2"/>
+    <path d="M 639.02 470.86 L 751.64 665.93 L 654.78 701.19 L 615.67 479.36 Z" fill="#FF6B6B" opacity="0.44" stroke="url(#stroke-the-invisible-pitch-failure)" stroke-width="1.2"/>
+    <path d="M 612.73 483.26 L 644.12 661.25 L 555.88 661.25 L 587.27 483.26 Z" fill="#FF6B6B" opacity="0.29" stroke="url(#stroke-the-invisible-pitch-failure)" stroke-width="1.2"/>
+    <path d="M 580.21 500.18 L 556.6 634.07 L 482.8 607.21 L 550.77 489.47 Z" fill="#FF6B6B" opacity="0.47" stroke="url(#stroke-the-invisible-pitch-failure)" stroke-width="1.2"/>
+    <path d="M 557.55 469.31 L 414.79 716.56 L 320.41 637.36 L 539.12 453.84 Z" fill="#FF6B6B" opacity="0.24" stroke="url(#stroke-the-invisible-pitch-failure)" stroke-width="1.2"/>
+    <path d="M 510.93 468.57 L 303.4 642.71 L 241.5 535.5 L 496.08 442.85 Z" fill="#FF6B6B" opacity="0.33" stroke="url(#stroke-the-invisible-pitch-failure)" stroke-width="1.2"/>
+    <path d="M 507.25 428.33 L 352.66 484.6 L 338.64 405.11 L 503.15 405.11 Z" fill="#FF6B6B" opacity="0.22" stroke="url(#stroke-the-invisible-pitch-failure)" stroke-width="1.2"/>
+    <path d="M 494.92 396.7 L 213.84 396.7 L 236 271.03 L 500.13 367.16 Z" fill="#FF6B6B" opacity="0.39" stroke="url(#stroke-the-invisible-pitch-failure)" stroke-width="1.2"/>
+    <path d="M 511.18 365.14 L 379.38 317.17 L 417.95 250.35 L 525.4 340.51 Z" fill="#FF6B6B" opacity="0.38" stroke="url(#stroke-the-invisible-pitch-failure)" stroke-width="1.2"/>
+    <path d="M 519.12 325.1 L 276.85 121.81 L 382.15 33.45 L 540.29 307.34 Z" fill="#FF6B6B" opacity="0.25" stroke="url(#stroke-the-invisible-pitch-failure)" stroke-width="1.2"/>
+    <path d="M 546.18 296.36 L 410.3 61.01 L 527.42 18.38 L 574.6 286.01 Z" fill="#FF6B6B" opacity="0.28" stroke="url(#stroke-the-invisible-pitch-failure)" stroke-width="1.2"/>
+    <path d="M 584.7 305.69 L 530.15 -3.69 L 669.85 -3.69 L 615.3 305.69 Z" fill="#FF6B6B" opacity="0.16" stroke="url(#stroke-the-invisible-pitch-failure)" stroke-width="1.2"/>
+    <path d="M 617.18 320.27 L 651.45 125.96 L 736.74 157.01 L 638.09 327.88 Z" fill="#FF6B6B" opacity="0.44" stroke="url(#stroke-the-invisible-pitch-failure)" stroke-width="1.2"/>
+    <path d="M 656.84 305.31 L 723.25 190.27 L 785.14 242.2 L 683.38 327.59 Z" fill="#FF6B6B" opacity="0.35" stroke="url(#stroke-the-invisible-pitch-failure)" stroke-width="1.2"/>
+    <path d="M 680.74 338.66 L 799.22 239.25 L 838.83 307.84 L 693.49 360.74 Z" fill="#FF6B6B" opacity="0.41" stroke="url(#stroke-the-invisible-pitch-failure)" stroke-width="1.2"/>
+    <path d="M 714.66 362.36 L 944.92 278.56 L 965.65 396.14 L 720.62 396.14 Z" fill="#FF6B6B" opacity="0.26" stroke="url(#stroke-the-invisible-pitch-failure)" stroke-width="1.2"/>
+  </g>
+</svg>

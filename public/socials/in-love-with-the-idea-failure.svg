@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800" role="img">
+  
+  <defs>
+    <linearGradient id="sky-in-love-with-the-idea-failure" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#FFF1F1"/>
+    </linearGradient>
+    <radialGradient id="bloom-in-love-with-the-idea-failure" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#FF6B6B" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#FF6B6B" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="stroke-in-love-with-the-idea-failure" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FF6B6B"/>
+      <stop offset="1" stop-color="#800000"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="800" fill="url(#sky-in-love-with-the-idea-failure)"/>
+  <g>
+    <line x1="0" y1="0" x2="0" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.36"/>
+    <line x1="50" y1="0" x2="50" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.6"/>
+    <line x1="100" y1="0" x2="100" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.37"/>
+    <line x1="150" y1="0" x2="150" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.37"/>
+    <line x1="200" y1="0" x2="200" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.44"/>
+    <line x1="250" y1="0" x2="250" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.51"/>
+    <line x1="300" y1="0" x2="300" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.44"/>
+    <line x1="350" y1="0" x2="350" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.49"/>
+    <line x1="400" y1="0" x2="400" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.46"/>
+    <line x1="450" y1="0" x2="450" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.39"/>
+    <line x1="500" y1="0" x2="500" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.52"/>
+    <line x1="550" y1="0" x2="550" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.42"/>
+    <line x1="600" y1="0" x2="600" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.48"/>
+    <line x1="650" y1="0" x2="650" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.45"/>
+    <line x1="700" y1="0" x2="700" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.49"/>
+    <line x1="750" y1="0" x2="750" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.56"/>
+    <line x1="800" y1="0" x2="800" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.57"/>
+    <line x1="850" y1="0" x2="850" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.43"/>
+    <line x1="900" y1="0" x2="900" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.54"/>
+    <line x1="950" y1="0" x2="950" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.51"/>
+    <line x1="1000" y1="0" x2="1000" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.53"/>
+    <line x1="1050" y1="0" x2="1050" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.48"/>
+    <line x1="1100" y1="0" x2="1100" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.58"/>
+    <line x1="1150" y1="0" x2="1150" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.48"/>
+    <line x1="1200" y1="0" x2="1200" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.48"/>
+    <line x1="0" y1="0" x2="1200" y2="0" stroke="#E9ECEF" stroke-width="1" opacity="0.59"/>
+    <line x1="0" y1="50" x2="1200" y2="50" stroke="#E9ECEF" stroke-width="1" opacity="0.36"/>
+    <line x1="0" y1="100" x2="1200" y2="100" stroke="#E9ECEF" stroke-width="1" opacity="0.5"/>
+    <line x1="0" y1="150" x2="1200" y2="150" stroke="#E9ECEF" stroke-width="1" opacity="0.4"/>
+    <line x1="0" y1="200" x2="1200" y2="200" stroke="#E9ECEF" stroke-width="1" opacity="0.48"/>
+    <line x1="0" y1="250" x2="1200" y2="250" stroke="#E9ECEF" stroke-width="1" opacity="0.54"/>
+    <line x1="0" y1="300" x2="1200" y2="300" stroke="#E9ECEF" stroke-width="1" opacity="0.49"/>
+    <line x1="0" y1="350" x2="1200" y2="350" stroke="#E9ECEF" stroke-width="1" opacity="0.54"/>
+    <line x1="0" y1="400" x2="1200" y2="400" stroke="#E9ECEF" stroke-width="1" opacity="0.47"/>
+    <line x1="0" y1="450" x2="1200" y2="450" stroke="#E9ECEF" stroke-width="1" opacity="0.37"/>
+    <line x1="0" y1="500" x2="1200" y2="500" stroke="#E9ECEF" stroke-width="1" opacity="0.45"/>
+    <line x1="0" y1="550" x2="1200" y2="550" stroke="#E9ECEF" stroke-width="1" opacity="0.48"/>
+    <line x1="0" y1="600" x2="1200" y2="600" stroke="#E9ECEF" stroke-width="1" opacity="0.45"/>
+    <line x1="0" y1="650" x2="1200" y2="650" stroke="#E9ECEF" stroke-width="1" opacity="0.46"/>
+    <line x1="0" y1="700" x2="1200" y2="700" stroke="#E9ECEF" stroke-width="1" opacity="0.36"/>
+    <line x1="0" y1="750" x2="1200" y2="750" stroke="#E9ECEF" stroke-width="1" opacity="0.57"/>
+    <line x1="0" y1="800" x2="1200" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.58"/>
+  </g>
+  <g>
+    <circle cx="600" cy="400" r="400" fill="url(#bloom-in-love-with-the-idea-failure)"/>
+    <path d="M 704.86 404.92 L 839.04 404.92 L 826.31 477.14 L 700.22 431.25 Z" fill="#FF6B6B" opacity="0.16" stroke="url(#stroke-in-love-with-the-idea-failure)" stroke-width="1.2"/>
+    <path d="M 696.77 440.51 L 956.52 535.06 L 895.22 641.24 L 683.47 463.56 Z" fill="#FF6B6B" opacity="0.44" stroke="url(#stroke-in-love-with-the-idea-failure)" stroke-width="1.2"/>
+    <path d="M 679.19 471.44 L 877.12 637.53 L 785.79 714.17 L 656.6 490.4 Z" fill="#FF6B6B" opacity="0.35" stroke="url(#stroke-in-love-with-the-idea-failure)" stroke-width="1.2"/>
+    <path d="M 650.32 498.22 L 765.31 697.38 L 664.52 734.07 L 624.58 507.58 Z" fill="#FF6B6B" opacity="0.27" stroke="url(#stroke-in-love-with-the-idea-failure)" stroke-width="1.2"/>
+    <path d="M 615.87 518.93 L 641.18 662.47 L 558.82 662.47 L 584.13 518.93 Z" fill="#FF6B6B" opacity="0.17" stroke="url(#stroke-in-love-with-the-idea-failure)" stroke-width="1.2"/>
+    <path d="M 575.08 513.04 L 525.11 796.43 L 402.54 751.83 L 546.43 502.61 Z" fill="#FF6B6B" opacity="0.26" stroke="url(#stroke-in-love-with-the-idea-failure)" stroke-width="1.2"/>
+    <path d="M 545.81 484.62 L 411.31 717.58 L 320.01 640.97 L 526.08 468.06 Z" fill="#FF6B6B" opacity="0.17" stroke="url(#stroke-in-love-with-the-idea-failure)" stroke-width="1.2"/>
+    <path d="M 535.26 450.48 L 345.35 609.83 L 290.95 515.62 L 523.91 430.83 Z" fill="#FF6B6B" opacity="0.21" stroke="url(#stroke-in-love-with-the-idea-failure)" stroke-width="1.2"/>
+    <path d="M 486.62 437.15 L 337.97 491.25 L 322.57 403.87 L 480.75 403.87 Z" fill="#FF6B6B" opacity="0.42" stroke="url(#stroke-in-love-with-the-idea-failure)" stroke-width="1.2"/>
+    <path d="M 507.19 397.2 L 211.76 397.2 L 234.21 269.85 L 511.83 370.89 Z" fill="#FF6B6B" opacity="0.17" stroke="url(#stroke-in-love-with-the-idea-failure)" stroke-width="1.2"/>
+    <path d="M 525.29 370.99 L 398.61 324.89 L 434.26 263.14 L 537.53 349.8 Z" fill="#FF6B6B" opacity="0.44" stroke="url(#stroke-in-love-with-the-idea-failure)" stroke-width="1.2"/>
+    <path d="M 519.58 325.43 L 355.28 187.57 L 433.29 122.11 L 540.53 307.85 Z" fill="#FF6B6B" opacity="0.26" stroke="url(#stroke-in-love-with-the-idea-failure)" stroke-width="1.2"/>
+    <path d="M 548.22 299.29 L 403.67 48.92 L 524.73 4.85 L 574.93 289.57 Z" fill="#FF6B6B" opacity="0.17" stroke="url(#stroke-in-love-with-the-idea-failure)" stroke-width="1.2"/>
+    <path d="M 584.26 292.72 L 546.3 77.44 L 653.7 77.44 L 615.74 292.72 Z" fill="#FF6B6B" opacity="0.43" stroke="url(#stroke-in-love-with-the-idea-failure)" stroke-width="1.2"/>
+    <path d="M 617.08 310.2 L 644.72 153.41 L 724.24 182.36 L 644.64 320.23 Z" fill="#FF6B6B" opacity="0.31" stroke="url(#stroke-in-love-with-the-idea-failure)" stroke-width="1.2"/>
+    <path d="M 664.59 297.45 L 735.36 174.88 L 798.19 227.61 L 689.77 318.58 Z" fill="#FF6B6B" opacity="0.25" stroke="url(#stroke-in-love-with-the-idea-failure)" stroke-width="1.2"/>
+    <path d="M 682.75 332.38 L 803.22 231.29 L 847.72 308.36 L 699.93 362.15 Z" fill="#FF6B6B" opacity="0.35" stroke="url(#stroke-in-love-with-the-idea-failure)" stroke-width="1.2"/>
+    <path d="M 680.82 374.68 L 900.37 294.77 L 918.24 396.14 L 684.61 396.14 Z" fill="#FF6B6B" opacity="0.18" stroke="url(#stroke-in-love-with-the-idea-failure)" stroke-width="1.2"/>
+  </g>
+</svg>

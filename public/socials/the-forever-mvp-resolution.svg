@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800" role="img">
+  
+  <defs>
+    <linearGradient id="sky-the-forever-mvp-resolution" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#E6F4EA"/>
+    </linearGradient>
+    <radialGradient id="bloom-the-forever-mvp-resolution" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#00B86B" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#00B86B" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="stroke-the-forever-mvp-resolution" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#00B86B"/>
+      <stop offset="1" stop-color="#005A6A"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="800" fill="url(#sky-the-forever-mvp-resolution)"/>
+  <g>
+    <line x1="0" y1="0" x2="0" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.5"/>
+    <line x1="50" y1="0" x2="50" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.48"/>
+    <line x1="100" y1="0" x2="100" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.45"/>
+    <line x1="150" y1="0" x2="150" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.39"/>
+    <line x1="200" y1="0" x2="200" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.44"/>
+    <line x1="250" y1="0" x2="250" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.36"/>
+    <line x1="300" y1="0" x2="300" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.59"/>
+    <line x1="350" y1="0" x2="350" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.38"/>
+    <line x1="400" y1="0" x2="400" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.39"/>
+    <line x1="450" y1="0" x2="450" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.37"/>
+    <line x1="500" y1="0" x2="500" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.46"/>
+    <line x1="550" y1="0" x2="550" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.4"/>
+    <line x1="600" y1="0" x2="600" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.55"/>
+    <line x1="650" y1="0" x2="650" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.54"/>
+    <line x1="700" y1="0" x2="700" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.52"/>
+    <line x1="750" y1="0" x2="750" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.43"/>
+    <line x1="800" y1="0" x2="800" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.55"/>
+    <line x1="850" y1="0" x2="850" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.42"/>
+    <line x1="900" y1="0" x2="900" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.52"/>
+    <line x1="950" y1="0" x2="950" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.54"/>
+    <line x1="1000" y1="0" x2="1000" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.48"/>
+    <line x1="1050" y1="0" x2="1050" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.6"/>
+    <line x1="1100" y1="0" x2="1100" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.54"/>
+    <line x1="1150" y1="0" x2="1150" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.51"/>
+    <line x1="1200" y1="0" x2="1200" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.39"/>
+    <line x1="0" y1="0" x2="1200" y2="0" stroke="#E9ECEF" stroke-width="1" opacity="0.5"/>
+    <line x1="0" y1="50" x2="1200" y2="50" stroke="#E9ECEF" stroke-width="1" opacity="0.53"/>
+    <line x1="0" y1="100" x2="1200" y2="100" stroke="#E9ECEF" stroke-width="1" opacity="0.52"/>
+    <line x1="0" y1="150" x2="1200" y2="150" stroke="#E9ECEF" stroke-width="1" opacity="0.42"/>
+    <line x1="0" y1="200" x2="1200" y2="200" stroke="#E9ECEF" stroke-width="1" opacity="0.36"/>
+    <line x1="0" y1="250" x2="1200" y2="250" stroke="#E9ECEF" stroke-width="1" opacity="0.49"/>
+    <line x1="0" y1="300" x2="1200" y2="300" stroke="#E9ECEF" stroke-width="1" opacity="0.41"/>
+    <line x1="0" y1="350" x2="1200" y2="350" stroke="#E9ECEF" stroke-width="1" opacity="0.57"/>
+    <line x1="0" y1="400" x2="1200" y2="400" stroke="#E9ECEF" stroke-width="1" opacity="0.56"/>
+    <line x1="0" y1="450" x2="1200" y2="450" stroke="#E9ECEF" stroke-width="1" opacity="0.48"/>
+    <line x1="0" y1="500" x2="1200" y2="500" stroke="#E9ECEF" stroke-width="1" opacity="0.4"/>
+    <line x1="0" y1="550" x2="1200" y2="550" stroke="#E9ECEF" stroke-width="1" opacity="0.39"/>
+    <line x1="0" y1="600" x2="1200" y2="600" stroke="#E9ECEF" stroke-width="1" opacity="0.59"/>
+    <line x1="0" y1="650" x2="1200" y2="650" stroke="#E9ECEF" stroke-width="1" opacity="0.55"/>
+    <line x1="0" y1="700" x2="1200" y2="700" stroke="#E9ECEF" stroke-width="1" opacity="0.55"/>
+    <line x1="0" y1="750" x2="1200" y2="750" stroke="#E9ECEF" stroke-width="1" opacity="0.44"/>
+    <line x1="0" y1="800" x2="1200" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.56"/>
+  </g>
+  <g>
+    <rect x="0" y="280" width="1200" height="520" fill="url(#bloom-the-forever-mvp-resolution)"/>
+    <rect x="60" y="651.17" width="21.76" height="58.83" rx="6" fill="url(#stroke-the-forever-mvp-resolution)" opacity="0.3"/>
+    <rect x="91.76" y="619.79" width="21.76" height="90.21" rx="6" fill="url(#stroke-the-forever-mvp-resolution)" opacity="0.3"/>
+    <rect x="123.53" y="645.56" width="21.76" height="64.44" rx="6" fill="url(#stroke-the-forever-mvp-resolution)" opacity="0.31"/>
+    <rect x="155.29" y="645.44" width="21.76" height="64.56" rx="6" fill="url(#stroke-the-forever-mvp-resolution)" opacity="0.31"/>
+    <rect x="187.06" y="611.51" width="21.76" height="98.49" rx="6" fill="url(#stroke-the-forever-mvp-resolution)" opacity="0.32"/>
+    <rect x="218.82" y="615.67" width="21.76" height="94.33" rx="6" fill="url(#stroke-the-forever-mvp-resolution)" opacity="0.33"/>
+    <rect x="250.59" y="606.87" width="21.76" height="103.13" rx="6" fill="url(#stroke-the-forever-mvp-resolution)" opacity="0.34"/>
+    <rect x="282.35" y="586.57" width="21.76" height="123.43" rx="6" fill="url(#stroke-the-forever-mvp-resolution)" opacity="0.35"/>
+    <rect x="314.12" y="576.16" width="21.76" height="133.84" rx="6" fill="url(#stroke-the-forever-mvp-resolution)" opacity="0.36"/>
+    <rect x="345.88" y="578.51" width="21.76" height="131.49" rx="6" fill="url(#stroke-the-forever-mvp-resolution)" opacity="0.37"/>
+    <rect x="377.65" y="549.98" width="21.76" height="160.02" rx="6" fill="url(#stroke-the-forever-mvp-resolution)" opacity="0.39"/>
+    <rect x="409.41" y="572.41" width="21.76" height="137.59" rx="6" fill="url(#stroke-the-forever-mvp-resolution)" opacity="0.4"/>
+    <rect x="441.18" y="576.21" width="21.76" height="133.79" rx="6" fill="url(#stroke-the-forever-mvp-resolution)" opacity="0.42"/>
+    <rect x="472.94" y="557.09" width="21.76" height="152.91" rx="6" fill="url(#stroke-the-forever-mvp-resolution)" opacity="0.44"/>
+    <rect x="504.71" y="525.41" width="21.76" height="184.59" rx="6" fill="url(#stroke-the-forever-mvp-resolution)" opacity="0.45"/>
+    <rect x="536.47" y="512.28" width="21.76" height="197.72" rx="6" fill="url(#stroke-the-forever-mvp-resolution)" opacity="0.47"/>
+    <rect x="568.24" y="514.66" width="21.76" height="195.34" rx="6" fill="url(#stroke-the-forever-mvp-resolution)" opacity="0.49"/>
+    <rect x="600" y="488.01" width="21.76" height="221.99" rx="6" fill="url(#stroke-the-forever-mvp-resolution)" opacity="0.52"/>
+    <rect x="631.76" y="436.23" width="21.76" height="273.77" rx="6" fill="url(#stroke-the-forever-mvp-resolution)" opacity="0.54"/>
+    <rect x="663.53" y="430.66" width="21.76" height="279.34" rx="6" fill="url(#stroke-the-forever-mvp-resolution)" opacity="0.56"/>
+    <rect x="695.29" y="418.05" width="21.76" height="291.95" rx="6" fill="url(#stroke-the-forever-mvp-resolution)" opacity="0.58"/>
+    <rect x="727.06" y="433.83" width="21.76" height="276.17" rx="6" fill="url(#stroke-the-forever-mvp-resolution)" opacity="0.61"/>
+    <rect x="758.82" y="414.95" width="21.76" height="295.05" rx="6" fill="url(#stroke-the-forever-mvp-resolution)" opacity="0.63"/>
+    <rect x="790.59" y="385.5" width="21.76" height="324.5" rx="6" fill="url(#stroke-the-forever-mvp-resolution)" opacity="0.66"/>
+    <rect x="822.35" y="322.75" width="21.76" height="387.25" rx="6" fill="url(#stroke-the-forever-mvp-resolution)" opacity="0.69"/>
+    <rect x="854.12" y="355.64" width="21.76" height="354.36" rx="6" fill="url(#stroke-the-forever-mvp-resolution)" opacity="0.72"/>
+    <rect x="885.88" y="324.8" width="21.76" height="385.2" rx="6" fill="url(#stroke-the-forever-mvp-resolution)" opacity="0.74"/>
+    <rect x="917.65" y="279.44" width="21.76" height="430.56" rx="6" fill="url(#stroke-the-forever-mvp-resolution)" opacity="0.77"/>
+    <rect x="949.41" y="288.85" width="21.76" height="421.15" rx="6" fill="url(#stroke-the-forever-mvp-resolution)" opacity="0.8"/>
+    <rect x="981.18" y="239.71" width="21.76" height="470.29" rx="6" fill="url(#stroke-the-forever-mvp-resolution)" opacity="0.83"/>
+    <rect x="1012.94" y="191.43" width="21.76" height="518.57" rx="6" fill="url(#stroke-the-forever-mvp-resolution)" opacity="0.87"/>
+    <rect x="1044.71" y="196.2" width="21.76" height="513.8" rx="6" fill="url(#stroke-the-forever-mvp-resolution)" opacity="0.9"/>
+    <rect x="1076.47" y="167.7" width="21.76" height="542.3" rx="6" fill="url(#stroke-the-forever-mvp-resolution)" opacity="0.93"/>
+    <rect x="1108.24" y="158.39" width="21.76" height="551.61" rx="6" fill="url(#stroke-the-forever-mvp-resolution)" opacity="0.97"/>
+    <line x1="40" y1="710" x2="1160" y2="710" stroke="#1F2937" stroke-width="2" opacity="0.4"/>
+  </g>
+</svg>

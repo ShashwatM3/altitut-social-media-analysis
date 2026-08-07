@@ -52,6 +52,26 @@ module.exports = {
           "0%": { transform: "scaleX(0)" },
           "100%": { transform: "scaleX(1)" },
         },
+        "orbit-spin": {
+          "0%": { transform: "rotate(0deg)" },
+          "100%": { transform: "rotate(360deg)" },
+        },
+        "halo-breathe": {
+          "0%, 100%": { opacity: "0.25", transform: "scale(1)" },
+          "50%": { opacity: "0.6", transform: "scale(1.08)" },
+        },
+        "aurora-drift": {
+          "0%, 100%": { transform: "translate3d(-4%, 0, 0) scale(1)" },
+          "50%": { transform: "translate3d(4%, -2%, 0) scale(1.06)" },
+        },
+        "float-slow": {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-10px)" },
+        },
+        "hint-slide": {
+          "0%, 100%": { transform: "translateX(0)", opacity: "0.45" },
+          "50%": { transform: "translateX(6px)", opacity: "1" },
+        },
       },
       animation: {
         "pulse-gentle": "pulse-gentle 2s ease-in-out infinite",
@@ -59,6 +79,11 @@ module.exports = {
         rain: "rain 3s linear infinite",
         shimmer: "shimmer 1.5s infinite",
         "home-startup-progress": "home-startup-progress 6s linear",
+        "orbit-spin": "orbit-spin 24s linear infinite",
+        "halo-breathe": "halo-breathe 6s ease-in-out infinite",
+        "aurora-drift": "aurora-drift 18s ease-in-out infinite",
+        "float-slow": "float-slow 7s ease-in-out infinite",
+        "hint-slide": "hint-slide 2.4s ease-in-out infinite",
       },
       fontFamily: {
         sans: [

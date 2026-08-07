@@ -1,0 +1,151 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800" role="img">
+  
+  <defs>
+    <linearGradient id="sky-the-lonely-founder-horizon" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#E6F4EA"/>
+    </linearGradient>
+    <radialGradient id="bloom-the-lonely-founder-horizon" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#00B86B" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#00B86B" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="stroke-the-lonely-founder-horizon" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#00B86B"/>
+      <stop offset="1" stop-color="#005A6A"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="800" fill="url(#sky-the-lonely-founder-horizon)"/>
+  <g>
+    <line x1="0" y1="0" x2="0" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.4"/>
+    <line x1="50" y1="0" x2="50" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.39"/>
+    <line x1="100" y1="0" x2="100" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.46"/>
+    <line x1="150" y1="0" x2="150" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.36"/>
+    <line x1="200" y1="0" x2="200" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.5"/>
+    <line x1="250" y1="0" x2="250" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.41"/>
+    <line x1="300" y1="0" x2="300" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.42"/>
+    <line x1="350" y1="0" x2="350" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.59"/>
+    <line x1="400" y1="0" x2="400" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.51"/>
+    <line x1="450" y1="0" x2="450" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.55"/>
+    <line x1="500" y1="0" x2="500" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.51"/>
+    <line x1="550" y1="0" x2="550" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.38"/>
+    <line x1="600" y1="0" x2="600" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.46"/>
+    <line x1="650" y1="0" x2="650" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.56"/>
+    <line x1="700" y1="0" x2="700" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.49"/>
+    <line x1="750" y1="0" x2="750" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.58"/>
+    <line x1="800" y1="0" x2="800" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.53"/>
+    <line x1="850" y1="0" x2="850" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.45"/>
+    <line x1="900" y1="0" x2="900" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.59"/>
+    <line x1="950" y1="0" x2="950" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.36"/>
+    <line x1="1000" y1="0" x2="1000" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.46"/>
+    <line x1="1050" y1="0" x2="1050" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.55"/>
+    <line x1="1100" y1="0" x2="1100" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.49"/>
+    <line x1="1150" y1="0" x2="1150" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.58"/>
+    <line x1="1200" y1="0" x2="1200" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.49"/>
+    <line x1="0" y1="0" x2="1200" y2="0" stroke="#E9ECEF" stroke-width="1" opacity="0.45"/>
+    <line x1="0" y1="50" x2="1200" y2="50" stroke="#E9ECEF" stroke-width="1" opacity="0.56"/>
+    <line x1="0" y1="100" x2="1200" y2="100" stroke="#E9ECEF" stroke-width="1" opacity="0.53"/>
+    <line x1="0" y1="150" x2="1200" y2="150" stroke="#E9ECEF" stroke-width="1" opacity="0.58"/>
+    <line x1="0" y1="200" x2="1200" y2="200" stroke="#E9ECEF" stroke-width="1" opacity="0.49"/>
+    <line x1="0" y1="250" x2="1200" y2="250" stroke="#E9ECEF" stroke-width="1" opacity="0.47"/>
+    <line x1="0" y1="300" x2="1200" y2="300" stroke="#E9ECEF" stroke-width="1" opacity="0.41"/>
+    <line x1="0" y1="350" x2="1200" y2="350" stroke="#E9ECEF" stroke-width="1" opacity="0.46"/>
+    <line x1="0" y1="400" x2="1200" y2="400" stroke="#E9ECEF" stroke-width="1" opacity="0.56"/>
+    <line x1="0" y1="450" x2="1200" y2="450" stroke="#E9ECEF" stroke-width="1" opacity="0.54"/>
+    <line x1="0" y1="500" x2="1200" y2="500" stroke="#E9ECEF" stroke-width="1" opacity="0.5"/>
+    <line x1="0" y1="550" x2="1200" y2="550" stroke="#E9ECEF" stroke-width="1" opacity="0.58"/>
+    <line x1="0" y1="600" x2="1200" y2="600" stroke="#E9ECEF" stroke-width="1" opacity="0.6"/>
+    <line x1="0" y1="650" x2="1200" y2="650" stroke="#E9ECEF" stroke-width="1" opacity="0.37"/>
+    <line x1="0" y1="700" x2="1200" y2="700" stroke="#E9ECEF" stroke-width="1" opacity="0.42"/>
+    <line x1="0" y1="750" x2="1200" y2="750" stroke="#E9ECEF" stroke-width="1" opacity="0.48"/>
+    <line x1="0" y1="800" x2="1200" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.36"/>
+  </g>
+  <g>
+    <ellipse cx="600" cy="336" rx="520" ry="240" fill="url(#bloom-the-lonely-founder-horizon)"/>
+    <circle cx="351.44" cy="139.89" r="3.67" fill="#005A6A" opacity="0.4"/>
+    <circle cx="229.04" cy="126" r="2.51" fill="#005A6A" opacity="0.52"/>
+    <circle cx="647.92" cy="22.46" r="3.37" fill="#005A6A" opacity="0.41"/>
+    <circle cx="415.58" cy="298.88" r="4.2" fill="#005A6A" opacity="0.42"/>
+    <circle cx="927.31" cy="118.27" r="3.03" fill="#005A6A" opacity="0.84"/>
+    <circle cx="543.34" cy="329.32" r="2.26" fill="#005A6A" opacity="0.48"/>
+    <circle cx="787.41" cy="287.08" r="1.53" fill="#005A6A" opacity="0.74"/>
+    <circle cx="105.98" cy="175.54" r="3.94" fill="#005A6A" opacity="0.84"/>
+    <circle cx="319.06" cy="47.56" r="2.84" fill="#005A6A" opacity="0.65"/>
+    <circle cx="466.49" cy="95.19" r="2.2" fill="#005A6A" opacity="0.83"/>
+    <circle cx="476.24" cy="174.96" r="3.21" fill="#005A6A" opacity="0.53"/>
+    <circle cx="961.08" cy="142.34" r="1.23" fill="#005A6A" opacity="0.82"/>
+    <circle cx="35.84" cy="33.3" r="3.43" fill="#005A6A" opacity="0.39"/>
+    <circle cx="960.62" cy="333.48" r="3.03" fill="#005A6A" opacity="0.8"/>
+    <circle cx="567.14" cy="281.59" r="3.8" fill="#005A6A" opacity="0.59"/>
+    <circle cx="1148.5" cy="298.66" r="3.06" fill="#005A6A" opacity="0.82"/>
+    <circle cx="884.29" cy="231.74" r="3.73" fill="#005A6A" opacity="0.59"/>
+    <circle cx="819.1" cy="240.47" r="1.86" fill="#005A6A" opacity="0.66"/>
+    <circle cx="824.41" cy="325.83" r="3.94" fill="#005A6A" opacity="0.53"/>
+    <circle cx="613.06" cy="33.86" r="2.42" fill="#005A6A" opacity="0.61"/>
+    <circle cx="607.89" cy="266.01" r="3.53" fill="#005A6A" opacity="0.4"/>
+    <circle cx="1005.11" cy="10.12" r="3.04" fill="#005A6A" opacity="0.63"/>
+    <circle cx="819.95" cy="70.9" r="2.86" fill="#005A6A" opacity="0.44"/>
+    <circle cx="298.16" cy="111.33" r="1.71" fill="#005A6A" opacity="0.39"/>
+    <circle cx="1104.15" cy="96.58" r="3.17" fill="#005A6A" opacity="0.42"/>
+    <circle cx="525.03" cy="83.65" r="2.08" fill="#005A6A" opacity="0.82"/>
+    <circle cx="569.51" cy="235.82" r="2.46" fill="#005A6A" opacity="0.57"/>
+    <circle cx="1189.37" cy="182.16" r="2.48" fill="#005A6A" opacity="0.39"/>
+    <circle cx="224.4" cy="53.13" r="3.6" fill="#005A6A" opacity="0.67"/>
+    <circle cx="983.64" cy="124.95" r="2.17" fill="#005A6A" opacity="0.36"/>
+    <circle cx="589.48" cy="156.31" r="1.88" fill="#005A6A" opacity="0.52"/>
+    <circle cx="939.19" cy="30.43" r="2.33" fill="#005A6A" opacity="0.84"/>
+    <circle cx="135.68" cy="52.3" r="1.42" fill="#005A6A" opacity="0.38"/>
+    <circle cx="307.06" cy="329.57" r="3.91" fill="#005A6A" opacity="0.78"/>
+    <circle cx="934.39" cy="215.55" r="3.13" fill="#005A6A" opacity="0.5"/>
+    <circle cx="335.3" cy="134" r="2.89" fill="#005A6A" opacity="0.83"/>
+    <circle cx="970.42" cy="268.53" r="3.02" fill="#005A6A" opacity="0.37"/>
+    <circle cx="1125.85" cy="247.79" r="2.46" fill="#005A6A" opacity="0.73"/>
+    <circle cx="1019.9" cy="41.05" r="1.56" fill="#005A6A" opacity="0.62"/>
+    <circle cx="806.73" cy="83.66" r="2.56" fill="#005A6A" opacity="0.84"/>
+    <line x1="600" y1="336" x2="-1480" y2="800" stroke="url(#stroke-the-lonely-founder-horizon)" stroke-width="1.4" opacity="0.39"/>
+    <line x1="600" y1="336" x2="-1350" y2="800" stroke="url(#stroke-the-lonely-founder-horizon)" stroke-width="1.4" opacity="0.31"/>
+    <line x1="600" y1="336" x2="-1220" y2="800" stroke="url(#stroke-the-lonely-founder-horizon)" stroke-width="1.4" opacity="0.28"/>
+    <line x1="600" y1="336" x2="-1090" y2="800" stroke="url(#stroke-the-lonely-founder-horizon)" stroke-width="1.4" opacity="0.55"/>
+    <line x1="600" y1="336" x2="-960" y2="800" stroke="url(#stroke-the-lonely-founder-horizon)" stroke-width="1.4" opacity="0.54"/>
+    <line x1="600" y1="336" x2="-830" y2="800" stroke="url(#stroke-the-lonely-founder-horizon)" stroke-width="1.4" opacity="0.5"/>
+    <line x1="600" y1="336" x2="-700" y2="800" stroke="url(#stroke-the-lonely-founder-horizon)" stroke-width="1.4" opacity="0.59"/>
+    <line x1="600" y1="336" x2="-570" y2="800" stroke="url(#stroke-the-lonely-founder-horizon)" stroke-width="1.4" opacity="0.38"/>
+    <line x1="600" y1="336" x2="-440" y2="800" stroke="url(#stroke-the-lonely-founder-horizon)" stroke-width="1.4" opacity="0.48"/>
+    <line x1="600" y1="336" x2="-310" y2="800" stroke="url(#stroke-the-lonely-founder-horizon)" stroke-width="1.4" opacity="0.45"/>
+    <line x1="600" y1="336" x2="-180" y2="800" stroke="url(#stroke-the-lonely-founder-horizon)" stroke-width="1.4" opacity="0.56"/>
+    <line x1="600" y1="336" x2="-50" y2="800" stroke="url(#stroke-the-lonely-founder-horizon)" stroke-width="1.4" opacity="0.54"/>
+    <line x1="600" y1="336" x2="80" y2="800" stroke="url(#stroke-the-lonely-founder-horizon)" stroke-width="1.4" opacity="0.22"/>
+    <line x1="600" y1="336" x2="210" y2="800" stroke="url(#stroke-the-lonely-founder-horizon)" stroke-width="1.4" opacity="0.56"/>
+    <line x1="600" y1="336" x2="340" y2="800" stroke="url(#stroke-the-lonely-founder-horizon)" stroke-width="1.4" opacity="0.32"/>
+    <line x1="600" y1="336" x2="470" y2="800" stroke="url(#stroke-the-lonely-founder-horizon)" stroke-width="1.4" opacity="0.39"/>
+    <line x1="600" y1="336" x2="600" y2="800" stroke="url(#stroke-the-lonely-founder-horizon)" stroke-width="1.4" opacity="0.51"/>
+    <line x1="600" y1="336" x2="730" y2="800" stroke="url(#stroke-the-lonely-founder-horizon)" stroke-width="1.4" opacity="0.58"/>
+    <line x1="600" y1="336" x2="860" y2="800" stroke="url(#stroke-the-lonely-founder-horizon)" stroke-width="1.4" opacity="0.2"/>
+    <line x1="600" y1="336" x2="990" y2="800" stroke="url(#stroke-the-lonely-founder-horizon)" stroke-width="1.4" opacity="0.54"/>
+    <line x1="600" y1="336" x2="1120" y2="800" stroke="url(#stroke-the-lonely-founder-horizon)" stroke-width="1.4" opacity="0.27"/>
+    <line x1="600" y1="336" x2="1250" y2="800" stroke="url(#stroke-the-lonely-founder-horizon)" stroke-width="1.4" opacity="0.5"/>
+    <line x1="600" y1="336" x2="1380" y2="800" stroke="url(#stroke-the-lonely-founder-horizon)" stroke-width="1.4" opacity="0.27"/>
+    <line x1="600" y1="336" x2="1510" y2="800" stroke="url(#stroke-the-lonely-founder-horizon)" stroke-width="1.4" opacity="0.42"/>
+    <line x1="600" y1="336" x2="1640" y2="800" stroke="url(#stroke-the-lonely-founder-horizon)" stroke-width="1.4" opacity="0.39"/>
+    <line x1="600" y1="336" x2="1770" y2="800" stroke="url(#stroke-the-lonely-founder-horizon)" stroke-width="1.4" opacity="0.48"/>
+    <line x1="600" y1="336" x2="1900" y2="800" stroke="url(#stroke-the-lonely-founder-horizon)" stroke-width="1.4" opacity="0.32"/>
+    <line x1="600" y1="336" x2="2030" y2="800" stroke="url(#stroke-the-lonely-founder-horizon)" stroke-width="1.4" opacity="0.5"/>
+    <line x1="600" y1="336" x2="2160" y2="800" stroke="url(#stroke-the-lonely-founder-horizon)" stroke-width="1.4" opacity="0.33"/>
+    <line x1="600" y1="336" x2="2290" y2="800" stroke="url(#stroke-the-lonely-founder-horizon)" stroke-width="1.4" opacity="0.36"/>
+    <line x1="600" y1="336" x2="2420" y2="800" stroke="url(#stroke-the-lonely-founder-horizon)" stroke-width="1.4" opacity="0.3"/>
+    <line x1="600" y1="336" x2="2550" y2="800" stroke="url(#stroke-the-lonely-founder-horizon)" stroke-width="1.4" opacity="0.45"/>
+    <line x1="600" y1="336" x2="2680" y2="800" stroke="url(#stroke-the-lonely-founder-horizon)" stroke-width="1.4" opacity="0.41"/>
+    <line x1="0" y1="337.19" x2="1200" y2="337.19" stroke="#00B86B" stroke-width="1.22" opacity="0.21"/>
+    <line x1="0" y1="342.29" x2="1200" y2="342.29" stroke="#00B86B" stroke-width="1.44" opacity="0.26"/>
+    <line x1="0" y1="352.66" x2="1200" y2="352.66" stroke="#00B86B" stroke-width="1.66" opacity="0.31"/>
+    <line x1="0" y1="369.22" x2="1200" y2="369.22" stroke="#00B86B" stroke-width="1.88" opacity="0.36"/>
+    <line x1="0" y1="392.76" x2="1200" y2="392.76" stroke="#00B86B" stroke-width="2.1" opacity="0.41"/>
+    <line x1="0" y1="423.91" x2="1200" y2="423.91" stroke="#00B86B" stroke-width="2.32" opacity="0.46"/>
+    <line x1="0" y1="463.27" x2="1200" y2="463.27" stroke="#00B86B" stroke-width="2.54" opacity="0.51"/>
+    <line x1="0" y1="511.35" x2="1200" y2="511.35" stroke="#00B86B" stroke-width="2.76" opacity="0.56"/>
+    <line x1="0" y1="568.63" x2="1200" y2="568.63" stroke="#00B86B" stroke-width="2.98" opacity="0.61"/>
+    <line x1="0" y1="635.56" x2="1200" y2="635.56" stroke="#00B86B" stroke-width="3.2" opacity="0.66"/>
+    <line x1="0" y1="712.55" x2="1200" y2="712.55" stroke="#00B86B" stroke-width="3.42" opacity="0.71"/>
+    <line x1="0" y1="800" x2="1200" y2="800" stroke="#00B86B" stroke-width="3.64" opacity="0.76"/>
+    <circle cx="600" cy="336" r="27.09" fill="#00B86B" opacity="0.85"/>
+  </g>
+</svg>
