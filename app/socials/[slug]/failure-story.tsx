@@ -108,7 +108,7 @@ export function FailureStory({
         aria-hidden="true"
       />
 
-      <header className="sticky top-0 z-30 border-b border-gray-100 bg-white/80 backdrop-blur-subtle">
+      <header className="sticky top-0 z-30 border-b border-gray-100 bg-white/95 backdrop-blur-md">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
           <Link
             href="/socials"

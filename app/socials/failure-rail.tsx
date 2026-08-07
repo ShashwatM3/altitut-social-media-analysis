@@ -15,6 +15,8 @@ import { FAILURES } from "./failures";
 import { toneFor } from "./tones";
 
 const FALLOFF = 0.62;
+/** Pointer travel, in px, before a press on an orb counts as a drag. */
+const DRAG_SLOP = 6;
 
 type WipeState = {
   left: number;
@@ -30,6 +32,7 @@ export function FailureRail() {
   const railRef = useRef<HTMLDivElement>(null);
   const orbRefs = useRef<Array<HTMLAnchorElement | null>>([]);
   const frameRef = useRef<number | null>(null);
+  const draggedRef = useRef(false);
   const [activeIndex, setActiveIndex] = useState(
     Math.floor(FAILURES.length / 2),
   );
@@ -127,11 +130,91 @@ export function FailureRail() {
     });
   }, []);
 
+  /** Settle a free-form drag onto whichever orb ended up nearest the centre. */
+  const centreOnNearest = useCallback(() => {
+    const rail = railRef.current;
+    if (!rail) return;
+    const railCentre = rail.getBoundingClientRect().width / 2;
+    let nearest = 0;
+    let nearestDistance = Number.POSITIVE_INFINITY;
+    orbRefs.current.forEach((orb, index) => {
+      if (!orb) return;
+      const distance = Math.abs(
+        orb.offsetLeft + orb.offsetWidth / 2 - rail.scrollLeft - railCentre,
+      );
+      if (distance < nearestDistance) {
+        nearestDistance = distance;
+        nearest = index;
+      }
+    });
+    centreOn(nearest);
+  }, [centreOn]);
+
+  /**
+   * Click-and-drag pans the rail, which desktop browsers do not do natively.
+   * Travel past `DRAG_SLOP` marks the gesture as a drag so releasing on an orb
+   * pans instead of opening its story.
+   */
+  useEffect(() => {
+    const rail = railRef.current;
+    if (!rail) return;
+
+    let pointerId: number | null = null;
+    let startX = 0;
+    let startScroll = 0;
+
+    const onPointerDown = (event: PointerEvent) => {
+      if (event.pointerType !== "mouse" || event.button !== 0) return;
+      pointerId = event.pointerId;
+      startX = event.clientX;
+      startScroll = rail.scrollLeft;
+      draggedRef.current = false;
+    };
+
+    const onPointerMove = (event: PointerEvent) => {
+      if (pointerId !== event.pointerId) return;
+      const travel = event.clientX - startX;
+      if (!draggedRef.current) {
+        if (Math.abs(travel) < DRAG_SLOP) return;
+        draggedRef.current = true;
+        rail.setPointerCapture(event.pointerId);
+      }
+      event.preventDefault();
+      rail.scrollLeft = startScroll - travel;
+    };
+
+    const onPointerUp = (event: PointerEvent) => {
+      if (pointerId !== event.pointerId) return;
+      pointerId = null;
+      if (rail.hasPointerCapture(event.pointerId)) {
+        rail.releasePointerCapture(event.pointerId);
+      }
+      if (!draggedRef.current) return;
+      centreOnNearest();
+      // Cleared after the click event that follows this release.
+      window.setTimeout(() => {
+        draggedRef.current = false;
+      }, 0);
+    };
+
+    rail.addEventListener("pointerdown", onPointerDown);
+    rail.addEventListener("pointermove", onPointerMove);
+    rail.addEventListener("pointerup", onPointerUp);
+    rail.addEventListener("pointercancel", onPointerUp);
+    return () => {
+      rail.removeEventListener("pointerdown", onPointerDown);
+      rail.removeEventListener("pointermove", onPointerMove);
+      rail.removeEventListener("pointerup", onPointerUp);
+      rail.removeEventListener("pointercancel", onPointerUp);
+    };
+  }, [centreOnNearest]);
+
   /** Expand the clicked orb into a full-bleed wipe, then route to its story. */
   const openFailure = useCallback(
     (event: ReactMouseEvent<HTMLAnchorElement>, index: number) => {
       if (event.metaKey || event.ctrlKey || event.shiftKey) return;
       event.preventDefault();
+      if (draggedRef.current) return;
       const orb = orbRefs.current[index];
       const failure = FAILURES[index];
       if (!orb) {
@@ -204,7 +287,7 @@ export function FailureRail() {
         <div
           ref={railRef}
           onScroll={schedulePaint}
-          className="scrollbar-hide mt-4 flex snap-x snap-mandatory items-center gap-6 overflow-x-auto overscroll-x-contain px-[calc(50vw-104px)] py-12 sm:gap-10 sm:px-[calc(50vw-144px)] lg:px-[calc(50vw-160px)]"
+          className="scrollbar-hide mt-4 flex cursor-grab select-none snap-x snap-mandatory items-center gap-6 active:cursor-grabbing overflow-x-auto overscroll-x-contain px-[calc(50vw-104px)] py-12 sm:gap-10 sm:px-[calc(50vw-144px)] lg:px-[calc(50vw-160px)]"
           role="list"
           aria-label="Founder failures"
         >
@@ -219,6 +302,9 @@ export function FailureRail() {
                 }}
                 onClick={(event) => openFailure(event, index)}
                 onFocus={() => centreOn(index)}
+                /* Otherwise the browser starts a native link drag and the
+                   rail's pointer gesture is cancelled. */
+                draggable={false}
                 role="listitem"
                 aria-label={`${failure.title} — ${failure.kicker}`}
                 className="orb group relative flex h-52 w-52 flex-none snap-center items-center justify-center rounded-full outline-none sm:h-64 sm:w-64 lg:h-72 lg:w-72"
