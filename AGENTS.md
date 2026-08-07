@@ -114,6 +114,15 @@ content pane.
   pre-built from the pack. Gracefully skips any platform that is not connected
   and still publishes the rest. Setup: `AUTOPOST_SETUP.md`. Needs
   `UPLOAD_POST_API_KEY`, `UPLOAD_POST_PROFILE` and open Firebase Storage rules.
+- **`/socials` — The Founder Failure Index** (`app/socials/`) — a public,
+  pure-white marketing surface (not part of the dashboard shell). `/socials`
+  renders a horizontally scrollable rail of nine circular "failure" orbs that
+  scale down with distance from the viewport centre; clicking one plays a
+  circular wipe and routes to `/socials/<slug>`, a long-form deep dive
+  (narrative, anatomy timeline, generated artwork, the three Altitut surfaces
+  that intercept that failure, CTAs back to `/`). Copy lives in
+  `app/socials/failures.ts`; the SVG artwork in `public/socials/` is generated
+  deterministically by `node scripts/generate-failure-art.mjs`.
 - **Connectors** — Python clients in `backend/app/services/{exa_client,apify_client,openai_client,telegram_client}.py`;
   shared product context in `lib/altitut.ts` (frontend) and `backend/app/services/altitut_context.py`. The old TypeScript
   connector files (`lib/exa.ts`, `lib/apify.ts`, `lib/openai.ts`) are no longer used.
