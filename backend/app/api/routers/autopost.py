@@ -6,21 +6,38 @@ import uuid
 from typing import Any
 
 from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
-from app.config import settings
-from app.models import AutopostState, CaptionRequest, CaptionResponse, MediaInfo, SocialPost
+from app.firebase_client import COLLECTIONS
+from app.models import (
+    AutopostState,
+    CaptionRequest,
+    CaptionResponse,
+    MediaInfo,
+    Provider,
+    SocialPost,
+)
 from app.services.autopost_service import (
     delete_step,
     poll_step,
     publish_step,
+    retry_step,
     save_step,
     validate_step,
 )
 from app.services.caption_service import generate_captions
-from app.firebase_client import COLLECTIONS, db
-from app.services.pack_service import derive_media_kind_from_pack, derive_placement_from_pack, derive_platforms_from_pack, pack_to_brief, pack_to_ground_truth
-from app.services.social.accounts import get_social_account, resolve_social_account, set_social_account_page
+from app.services.pack_service import (
+    derive_media_kind_from_pack,
+    derive_placement_from_pack,
+    derive_platforms_from_pack,
+    pack_to_brief,
+    pack_to_ground_truth,
+)
+from app.services.social.accounts import (
+    get_social_account,
+    resolve_social_accounts,
+    set_social_account_page,
+)
 from app.services.social.posts import get_social_post
 
 router = APIRouter()
@@ -32,21 +49,44 @@ def caption(req: CaptionRequest) -> CaptionResponse:
 
 
 class ListAccountsRequest(BaseModel):
-    platforms: list[str] | None = None
+    platforms: list[Provider] | None = None
+    include_pages: bool = Field(False, alias="includePages")
 
 
 @router.post("/accounts")
 def list_accounts(req: ListAccountsRequest | None = None) -> dict[str, Any]:
     platforms = req.platforms if req and req.platforms else ["linkedin", "facebook", "instagram"]
+    try:
+        resolved = resolve_social_accounts(platforms)
+        resolve_error: Exception | None = None
+    except Exception as exc:
+        resolved = {}
+        resolve_error = exc
     accounts = []
     for provider in platforms:
-        try:
-            account = resolve_social_account(provider)  # refresh from Upload-Post
-        except Exception as exc:
+        account = resolved.get(provider)
+        if not account:
             account = get_social_account(provider)
-            if not account:
-                raise HTTPException(status_code=502, detail=str(exc))
-        accounts.append(account.model_dump(mode="json", exclude_none=True))
+        if not account:
+            raise HTTPException(
+                status_code=502,
+                detail=str(resolve_error or "Could not resolve the social account."),
+            )
+        data = account.model_dump(mode="json", exclude_none=True)
+        if (
+            req
+            and req.include_pages
+            and provider == "linkedin"
+            and account.status == "active"
+        ):
+            try:
+                from app.services.social.upload_post_client import list_linkedin_pages
+
+                data["availablePages"] = list_linkedin_pages(account.uploadPostProfile)
+            except Exception as exc:
+                data["availablePages"] = []
+                data["pagesError"] = str(exc)
+        accounts.append(data)
     return {"accounts": accounts}
 
 
@@ -75,6 +115,8 @@ async def autopost_step(req: AutopostStepRequest) -> dict[str, Any]:
         next_state, error = publish_step(state)
     elif step == "poll":
         next_state, error = poll_step(state)
+    elif step == "retry":
+        next_state, error = retry_step(state)
     elif step == "save":
         next_state, error = save_step(state)
     elif step == "delete":
@@ -96,7 +138,6 @@ def get_post(post_id: str) -> SocialPost | None:
 @router.post("/from-pack")
 def build_autopost_state_from_pack(pack_id: str) -> dict[str, Any]:
     """Helper: given a content-pack id, pre-build an AutopostState the frontend can use."""
-    from app.firebase_client import COLLECTIONS
     from app.services.pack_service import fetch_packs
 
     for collection in (COLLECTIONS["contentPacks"], COLLECTIONS["competitors"]):

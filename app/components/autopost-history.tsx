@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { api } from "../../lib/api";
+import { apiFetch } from "../../lib/api";
+import { parseApiError } from "../../lib/trace";
 import {
   deleteSocialPost,
   listenToSocialPosts,
@@ -12,14 +13,19 @@ import {
 export function AutoPostHistory() {
   const [posts, setPosts] = useState<SocialPost[]>([]);
   const [loading, setLoading] = useState(true);
+  const [historyError, setHistoryError] = useState<string | null>(null);
 
   useEffect(() => {
     const unsubscribe = listenToSocialPosts(
       (next) => {
         setPosts(next);
+        setHistoryError(null);
         setLoading(false);
       },
-      () => setLoading(false),
+      (error) => {
+        setHistoryError(`Post history could not load: ${error.message}`);
+        setLoading(false);
+      },
     );
     return unsubscribe;
   }, []);
@@ -36,7 +42,9 @@ export function AutoPostHistory() {
   if (posts.length === 0) {
     return (
       <div className="rounded-xl border border-gray-200 bg-white p-8 text-center shadow-sm">
-        <p className="text-sm text-gray-600">No posts yet. Publish one from the composer above.</p>
+        <p className={`text-sm ${historyError ? "text-red-600" : "text-gray-600"}`} role={historyError ? "alert" : undefined}>
+          {historyError ?? "No posts yet. Publish one from the composer above."}
+        </p>
       </div>
     );
   }
@@ -46,6 +54,9 @@ export function AutoPostHistory() {
       <div className="border-b border-gray-200 px-5 py-4">
         <h3 className="text-base font-semibold text-gray-900">Post history</h3>
         <p className="text-xs text-gray-500">Live status from Firestore.</p>
+        {historyError ? (
+          <p className="mt-2 text-xs text-red-600" role="alert">{historyError}</p>
+        ) : null}
       </div>
       <div className="hidden lg:block">
         <table className="w-full text-left text-sm">
@@ -151,17 +162,27 @@ function MediaPreview({ post }: { post: SocialPost }) {
 
 function DeleteButton({ post }: { post: SocialPost }) {
   const [confirming, setConfirming] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
 
   async function handleDelete() {
+    setDeleting(true);
+    setDeleteError(null);
     try {
-      await fetch(api("/api/autopost"), {
+      const response = await apiFetch("/api/autopost", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ step: "delete", state: post }),
       });
+      if (!response.ok) {
+        const parsed = await parseApiError(response, "Could not remove the live post.");
+        throw new Error(parsed.message);
+      }
       await deleteSocialPost(post.id);
     } catch (error) {
-      console.error("[history] delete failed:", error);
+      setDeleteError(error instanceof Error ? error.message : "Could not delete this post.");
+    } finally {
+      setDeleting(false);
     }
   }
 
@@ -185,21 +206,28 @@ function DeleteButton({ post }: { post: SocialPost }) {
 
   if (confirming) {
     return (
-      <div className="flex items-center gap-2">
-        <button
-          type="button"
-          onClick={handleDelete}
-          className="text-xs font-semibold text-red-600 hover:underline"
-        >
-          Confirm
-        </button>
-        <button
-          type="button"
-          onClick={() => setConfirming(false)}
-          className="text-xs text-gray-500 hover:underline"
-        >
-          Cancel
-        </button>
+      <div>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => void handleDelete()}
+            disabled={deleting}
+            className="text-xs font-semibold text-red-600 hover:underline disabled:opacity-50"
+          >
+            {deleting ? "Deleting…" : "Confirm"}
+          </button>
+          <button
+            type="button"
+            onClick={() => setConfirming(false)}
+            disabled={deleting}
+            className="text-xs text-gray-500 hover:underline disabled:opacity-50"
+          >
+            Cancel
+          </button>
+        </div>
+        {deleteError ? (
+          <p className="mt-1 max-w-44 text-xs text-red-600" role="alert">{deleteError}</p>
+        ) : null}
       </div>
     );
   }

@@ -65,7 +65,9 @@ a side nav with two tabs (Competitors Analysis, Content Creation), and a
 content pane.
 
 - `npm install` — install dependencies
-- `npm run dev` — dev server
+- `npm run dev` — start both the Next.js web app and FastAPI API (the
+  Auto-Post, Scout, chat and help flows require both processes)
+- `npm run dev:web` / `npm run dev:api` — start only one side when debugging
 - `npm run build` / `npm run start` — production build and serve
 - `npm run seed` — (re)ingest predefined competitor/content packs + RAG chunks
   (including the platform guide) into Firestore
@@ -79,7 +81,8 @@ content pane.
   (`lib/firebase.ts`, open rules). Collections: `competitors`, `contentPacks`
   (both rendered live via `onSnapshot` in `app/page.tsx`, with the static packs
   in `data/` as fallback), `ragChunks` (vector store), `scoutRuns`,
-  `telegramUpdates`. Pack CRUD + model-output normalization: `lib/packs.ts`.
+  `telegramUpdates`, `postCampaigns` and `campaignPosts`. Pack CRUD +
+  model-output normalization: `lib/packs.ts`.
 - **Competitor Scout** (`app/components/scout-dialog.tsx`,
   `backend/app/api/routers/scout.py`) — client-driven 8-step workflow: Exa company
   discovery → site crawl → social mapping (Apify Instagram profile scrape + Exa) →
@@ -123,6 +126,14 @@ content pane.
   that intercept that failure, CTAs back to `/`). Copy lives in
   `app/socials/failures.ts`; the SVG artwork in `public/socials/` is generated
   deterministically by `node scripts/generate-failure-art.mjs`.
+- **Post Campaigns** (`app/components/campaigns-panel.tsx`,
+  `app/components/campaign-post-editor.tsx`, `lib/campaigns.ts`) — separate
+  Instagram and LinkedIn campaign cards with Firestore-backed drafts, ordered
+  image carousels, platform copy, hashtags and first comments. Instagram adds
+  collaborators/location; LinkedIn selects a personal profile or administered
+  company page. Publishing reuses Auto-Post validation/status polling, stable
+  idempotency keys and Upload-Post's failed-upload retry endpoint. Reference:
+  `docs/POST-CAMPAIGNS.md`.
 - **Connectors** — Python clients in `backend/app/services/{exa_client,apify_client,openai_client,telegram_client}.py`;
   shared product context in `lib/altitut.ts` (frontend) and `backend/app/services/altitut_context.py`. The old TypeScript
   connector files (`lib/exa.ts`, `lib/apify.ts`, `lib/openai.ts`) are no longer used.

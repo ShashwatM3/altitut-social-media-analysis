@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import { api } from "./api";
+import { apiFetch } from "./api";
 import { newTraceId, raiseForTrace, TRACE_ID_HEADER, TraceableError } from "./trace";
 
 type ChatMessagePart = { type: "text"; text: string };
@@ -42,7 +42,7 @@ export function useStreamingChat({ api: path }: { api: string }) {
 
       const traceId = newTraceId();
       try {
-        const response = await fetch(api(path), {
+        const response = await apiFetch(path, {
           method: "POST",
           headers: { "Content-Type": "application/json", [TRACE_ID_HEADER]: traceId },
           body: JSON.stringify({ messages: history }),
@@ -121,7 +121,7 @@ export function useStreamingChat({ api: path }: { api: string }) {
         );
       }
     },
-    [api, path, messages, clearError],
+    [path, messages, clearError],
   );
 
   return {

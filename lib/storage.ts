@@ -11,8 +11,10 @@ export type StorageUploadResult = {
 export function uploadToStorage(
   file: File,
   onProgress: (pct: number) => void,
+  folder = "autopost",
 ): Promise<StorageUploadResult> {
-  const path = `autopost/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, "_")}`;
+  const safeFolder = folder.replace(/[^a-zA-Z0-9/_-]/g, "");
+  const path = `${safeFolder}/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, "_")}`;
   const task = uploadBytesResumable(ref(getStorage(firebaseApp), path), file, {
     contentType: file.type,
   });

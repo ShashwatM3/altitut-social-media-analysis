@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useRef, useState } from "react";
-import { api } from "../../lib/api";
+import { apiFetch } from "../../lib/api";
 import { newTraceId, TRACE_ID_HEADER, TraceableError } from "../../lib/trace";
 import { DEFAULT_ALTITUT_DESCRIPTION } from "../../lib/altitut";
 import type { StoredPack } from "../../lib/packs";
@@ -112,7 +112,7 @@ export function RunCompetitorScout({ existingNames, onComplete }: ScoutRunnerPro
         for (let index = startIndex; index < WORKFLOW_STEPS.length; index += 1) {
           const step = WORKFLOW_STEPS[index];
           setStepStatus(step.id, "running");
-          const response = await fetch(api("/api/scout"), {
+          const response = await apiFetch("/api/scout", {
             method: "POST",
             headers: { "Content-Type": "application/json", [TRACE_ID_HEADER]: runTraceId },
             body: JSON.stringify({ step: step.id, state: stateRef.current }),
