@@ -13,6 +13,7 @@ import {
   deleteCampaign,
   deleteCampaignPost,
   duplicateCampaign,
+  duplicateCampaignPost,
   generateCampaignId,
   listenToCampaignPosts,
   listenToCampaigns,
@@ -143,6 +144,9 @@ export function CampaignsPanel() {
   const [duplicatingCampaignId, setDuplicatingCampaignId] = useState<string | null>(
     null,
   );
+  const [duplicatingPostId, setDuplicatingPostId] = useState<string | null>(null);
+  const [campaignBeingDuplicated, setCampaignBeingDuplicated] =
+    useState<PostCampaign | null>(null);
 
   useEffect(() => {
     let campaignsReady = false;
@@ -218,13 +222,17 @@ export function CampaignsPanel() {
     }
   }
 
-  async function handleDuplicateCampaign(campaign: PostCampaign) {
+  async function handleDuplicateCampaign(
+    campaign: PostCampaign,
+    platform: CampaignPlatform,
+  ) {
     setDuplicatingCampaignId(campaign.id);
     setLoadError(null);
     try {
       const duplicate = await duplicateCampaign(
         campaign,
         posts.filter((post) => post.campaignId === campaign.id),
+        platform,
       );
       setCampaigns((current) => [
         duplicate.campaign,
@@ -235,6 +243,7 @@ export function CampaignsPanel() {
         ...duplicate.posts,
         ...current.filter((post) => !duplicatePostIds.has(post.id)),
       ]);
+      setCampaignBeingDuplicated(null);
       setSelectedCampaignId(duplicate.campaign.id);
     } catch (caught) {
       setLoadError(
@@ -244,6 +253,42 @@ export function CampaignsPanel() {
       );
     } finally {
       setDuplicatingCampaignId(null);
+    }
+  }
+
+  async function handleRemovePost(post: CampaignPost) {
+    const confirmed = window.confirm(
+      `Remove “${post.title || "this post"}” from the campaign? Live social posts stay online.`,
+    );
+    if (!confirmed) return;
+    try {
+      await deleteCampaignPost(post.id);
+    } catch (caught) {
+      setLoadError(
+        caught instanceof Error
+          ? caught.message
+          : "Could not remove the post from the campaign.",
+      );
+    }
+  }
+
+  async function handleDuplicatePost(post: CampaignPost) {
+    setDuplicatingPostId(post.id);
+    setLoadError(null);
+    try {
+      const duplicate = await duplicateCampaignPost(post);
+      setPosts((current) => [
+        duplicate,
+        ...current.filter((item) => item.id !== duplicate.id),
+      ]);
+    } catch (caught) {
+      setLoadError(
+        caught instanceof Error
+          ? caught.message
+          : "Could not duplicate the post.",
+      );
+    } finally {
+      setDuplicatingPostId(null);
     }
   }
 
@@ -343,12 +388,14 @@ export function CampaignsPanel() {
             setCampaignDialogOpen(true);
           }}
           onDeleteCampaign={() => void handleDeleteCampaign(selectedCampaign)}
-          onDuplicateCampaign={() => void handleDuplicateCampaign(selectedCampaign)}
+          onDuplicateCampaign={() => setCampaignBeingDuplicated(selectedCampaign)}
           duplicating={duplicatingCampaignId === selectedCampaign.id}
           onEdit={(post) => setEditorPost(post)}
           onPublish={(post) => void handlePublish(post)}
           onRefresh={(post) => void handleRefresh(post)}
-          onDelete={(post) => void deleteCampaignPost(post.id)}
+          onDuplicate={(post) => void handleDuplicatePost(post)}
+          duplicatingPostId={duplicatingPostId}
+          onRemove={(post) => void handleRemovePost(post)}
         />
         {editorPost !== undefined ? (
           <CampaignPostEditor
@@ -363,6 +410,16 @@ export function CampaignsPanel() {
             campaign={campaignBeingEdited ?? undefined}
             onClose={() => setCampaignDialogOpen(false)}
             onCreated={() => setCampaignDialogOpen(false)}
+          />
+        ) : null}
+        {campaignBeingDuplicated ? (
+          <DuplicateCampaignDialog
+            campaign={campaignBeingDuplicated}
+            saving={duplicatingCampaignId === campaignBeingDuplicated.id}
+            onClose={() => setCampaignBeingDuplicated(null)}
+            onConfirm={(platform) =>
+              void handleDuplicateCampaign(campaignBeingDuplicated, platform)
+            }
           />
         ) : null}
       </>
@@ -493,7 +550,9 @@ function CampaignDetail({
   onEdit,
   onPublish,
   onRefresh,
-  onDelete,
+  onDuplicate,
+  duplicatingPostId,
+  onRemove,
 }: {
   campaign: PostCampaign;
   posts: CampaignPost[];
@@ -506,7 +565,9 @@ function CampaignDetail({
   onEdit: (post: CampaignPost) => void;
   onPublish: (post: CampaignPost) => void;
   onRefresh: (post: CampaignPost) => void;
-  onDelete: (post: CampaignPost) => void;
+  onDuplicate: (post: CampaignPost) => void;
+  duplicatingPostId: string | null;
+  onRemove: (post: CampaignPost) => void;
 }) {
   const published = posts.filter((post) => post.status === "published").length;
   const progress = posts.length ? Math.round((published / posts.length) * 100) : 0;
@@ -606,7 +667,9 @@ function CampaignDetail({
                 onEdit={() => onEdit(post)}
                 onPublish={() => onPublish(post)}
                 onRefresh={() => onRefresh(post)}
-                onDelete={() => onDelete(post)}
+                onDuplicate={() => onDuplicate(post)}
+                duplicating={duplicatingPostId === post.id}
+                onRemove={() => onRemove(post)}
               />
             ))}
           </div>
@@ -622,14 +685,18 @@ function CampaignPostCard({
   onEdit,
   onPublish,
   onRefresh,
-  onDelete,
+  onDuplicate,
+  duplicating,
+  onRemove,
 }: {
   post: CampaignPost;
   sequence: number;
   onEdit: () => void;
   onPublish: () => void;
   onRefresh: () => void;
-  onDelete: () => void;
+  onDuplicate: () => void;
+  duplicating: boolean;
+  onRemove: () => void;
 }) {
   return (
     <article className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm md:p-5">
@@ -695,14 +762,66 @@ function CampaignPostCard({
                 : "Resume publish"}
             </button>
           ) : null}
-          {post.status === "draft" ? (
-            <button type="button" onClick={onDelete} className="px-3 py-1 text-xs font-medium text-red-600 hover:underline">
-              Delete draft
-            </button>
-          ) : null}
+          <button
+            type="button"
+            onClick={onDuplicate}
+            disabled={duplicating}
+            aria-label="Duplicate post"
+            title="Duplicate post"
+            className="inline-flex items-center justify-center rounded-lg p-2 text-gray-500 transition-colors hover:bg-gray-100 hover:text-deep-teal disabled:cursor-wait disabled:opacity-60"
+          >
+            <DuplicateIcon />
+          </button>
+          <button
+            type="button"
+            onClick={onRemove}
+            aria-label="Remove from campaign"
+            title="Remove from campaign"
+            className="inline-flex items-center justify-center rounded-lg p-2 text-red-500 transition-colors hover:bg-red-50 hover:text-red-600"
+          >
+            <TrashIcon />
+          </button>
         </div>
       </div>
     </article>
+  );
+}
+
+function DuplicateIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <rect
+        x="5.5"
+        y="5.5"
+        width="8"
+        height="8"
+        rx="1.25"
+        stroke="currentColor"
+        strokeWidth="1.4"
+      />
+      <path
+        d="M10.5 5.5V3.75A1.25 1.25 0 0 0 9.25 2.5H3.75A1.25 1.25 0 0 0 2.5 3.75v5.5A1.25 1.25 0 0 0 3.75 10.5H5.5"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function TrashIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path
+        d="M3.5 4.5h9M6 4.5V3.25A.75.75 0 0 1 6.75 2.5h2.5a.75.75 0 0 1 .75.75V4.5m1.5 0V12.5a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1V4.5"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path d="M6.5 7v4M9.5 7v4" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+    </svg>
   );
 }
 
@@ -775,6 +894,100 @@ function EmptyCampaigns({ onCreate }: { onCreate: () => void }) {
       <button type="button" onClick={onCreate} className="mt-6 rounded-lg bg-deep-teal px-5 py-2.5 text-sm font-semibold text-white hover:bg-darker-teal">
         New campaign
       </button>
+    </div>
+  );
+}
+
+function DuplicateCampaignDialog({
+  campaign,
+  saving,
+  onClose,
+  onConfirm,
+}: {
+  campaign: PostCampaign;
+  saving: boolean;
+  onClose: () => void;
+  onConfirm: (platform: CampaignPlatform) => void;
+}) {
+  const [platform, setPlatform] = useState<CampaignPlatform>(campaign.platform);
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/55 p-4 backdrop-blur-subtle"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="duplicate-campaign-title"
+    >
+      <div className="w-full max-w-lg rounded-2xl bg-white p-6 shadow-modern-lg">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <h2 id="duplicate-campaign-title" className="text-xl font-semibold text-gray-900">
+              Duplicate campaign
+            </h2>
+            <p className="mt-1 text-sm text-gray-600">
+              Copy “{campaign.name}” and its posts as drafts. You can keep the
+              same platform or switch it for the new campaign.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            disabled={saving}
+            aria-label="Close duplicate campaign dialog"
+            className="rounded-full p-2 text-gray-500 hover:bg-gray-100 disabled:opacity-50"
+          >
+            ×
+          </button>
+        </div>
+
+        <fieldset className="mt-6">
+          <legend className="text-sm font-medium text-gray-800">
+            Platform for the copy
+          </legend>
+          <div className="mt-2 grid grid-cols-2 gap-3">
+            {(["instagram", "linkedin"] as CampaignPlatform[]).map((candidate) => (
+              <button
+                key={candidate}
+                type="button"
+                aria-pressed={platform === candidate}
+                disabled={saving}
+                onClick={() => setPlatform(candidate)}
+                className={`rounded-xl border p-4 text-left transition disabled:cursor-wait disabled:opacity-60 ${
+                  platform === candidate
+                    ? "border-deep-teal bg-teal-50 ring-2 ring-teal-500/20"
+                    : "border-gray-200 hover:border-gray-300"
+                }`}
+              >
+                <PlatformPill platform={candidate} />
+                <p className="mt-2 text-xs text-gray-600">
+                  {candidate === "instagram"
+                    ? "Carousels, hashtags, collaborators"
+                    : "Profile or company-page posts"}
+                </p>
+              </button>
+            ))}
+          </div>
+        </fieldset>
+
+        <div className="mt-6 flex justify-end gap-3">
+          <button
+            type="button"
+            onClick={onClose}
+            disabled={saving}
+            className="rounded-lg border border-gray-300 px-5 py-2.5 text-sm font-semibold text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            onClick={() => onConfirm(platform)}
+            disabled={saving}
+            className="rounded-lg bg-teal-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-teal-700 disabled:opacity-50"
+          >
+            {saving ? "Duplicating…" : "Duplicate"}
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

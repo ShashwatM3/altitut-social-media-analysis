@@ -151,9 +151,35 @@ export async function deleteCampaign(
   }
 }
 
+function adaptPostPlatformFields(
+  post: CampaignPost,
+  platform: CampaignPlatform,
+): Pick<CampaignPost, "platform" | "linkedin" | "instagram"> {
+  if (platform === "linkedin") {
+    return {
+      platform,
+      linkedin: post.linkedin
+        ? { ...post.linkedin }
+        : { destination: "profile" },
+      instagram: undefined,
+    };
+  }
+  return {
+    platform,
+    linkedin: undefined,
+    instagram: post.instagram
+      ? {
+          ...post.instagram,
+          collaborators: [...post.instagram.collaborators],
+        }
+      : { collaborators: [] },
+  };
+}
+
 export function buildCampaignDuplicate(
   campaign: PostCampaign,
   posts: CampaignPost[],
+  platform: CampaignPlatform = campaign.platform,
 ): { campaign: PostCampaign; posts: CampaignPost[] } {
   const now = Date.now();
   const campaignId = generateCampaignId();
@@ -161,15 +187,16 @@ export function buildCampaignDuplicate(
     ...campaign,
     id: campaignId,
     name: `${campaign.name} (Copy)`,
+    platform,
     createdAt: new Date(now).toISOString(),
     updatedAt: new Date(now).toISOString(),
   };
   const duplicatedPosts = posts.map((post, index): CampaignPost => {
     const timestamp = new Date(now - index).toISOString();
+    const platformFields = adaptPostPlatformFields(post, platform);
     return {
       id: generateCampaignId(),
       campaignId,
-      platform: post.platform,
       title: post.title,
       description: post.description,
       hashtags: [...post.hashtags],
@@ -179,13 +206,7 @@ export function buildCampaignDuplicate(
         storagePaths: [...post.media.storagePaths],
         items: post.media.items?.map((item) => ({ ...item })),
       },
-      linkedin: post.linkedin ? { ...post.linkedin } : undefined,
-      instagram: post.instagram
-        ? {
-            ...post.instagram,
-            collaborators: [...post.instagram.collaborators],
-          }
-        : undefined,
+      ...platformFields,
       status: "draft",
       createdAt: timestamp,
       updatedAt: timestamp,
@@ -197,8 +218,9 @@ export function buildCampaignDuplicate(
 export async function duplicateCampaign(
   campaign: PostCampaign,
   posts: CampaignPost[],
+  platform: CampaignPlatform = campaign.platform,
 ): Promise<{ campaign: PostCampaign; posts: CampaignPost[] }> {
-  const duplicate = buildCampaignDuplicate(campaign, posts);
+  const duplicate = buildCampaignDuplicate(campaign, posts, platform);
   await saveCampaign(duplicate.campaign);
   for (let offset = 0; offset < duplicate.posts.length; offset += 500) {
     const batch = writeBatch(db);
@@ -210,6 +232,36 @@ export async function duplicateCampaign(
     }
     await batch.commit();
   }
+  return duplicate;
+}
+
+export function buildCampaignPostDuplicate(post: CampaignPost): CampaignPost {
+  const now = new Date().toISOString();
+  const platformFields = adaptPostPlatformFields(post, post.platform);
+  return {
+    id: generateCampaignId(),
+    campaignId: post.campaignId,
+    title: post.title ? `${post.title} (Copy)` : "Untitled (Copy)",
+    description: post.description,
+    hashtags: [...post.hashtags],
+    firstComment: post.firstComment,
+    media: {
+      urls: [...post.media.urls],
+      storagePaths: [...post.media.storagePaths],
+      items: post.media.items?.map((item) => ({ ...item })),
+    },
+    ...platformFields,
+    status: "draft",
+    createdAt: now,
+    updatedAt: now,
+  };
+}
+
+export async function duplicateCampaignPost(
+  post: CampaignPost,
+): Promise<CampaignPost> {
+  const duplicate = buildCampaignPostDuplicate(post);
+  await saveCampaignPost(duplicate);
   return duplicate;
 }
 

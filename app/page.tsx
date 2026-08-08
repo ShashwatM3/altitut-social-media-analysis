@@ -70,7 +70,31 @@ export default function Home() {
               Competitor insights and content creation ideas for Altitut
             </p>
           </div>
-          <HelpButton />
+          <div className="flex flex-none flex-wrap items-center gap-2">
+            <a
+              href="https://altitut-sma.mintlify.app"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-lg border border-gray-300 px-4 py-2 font-semibold text-gray-700 transition-colors hover:bg-gray-50"
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
+                aria-hidden="true"
+              >
+                <path
+                  d="M3 2.5h4.5A2.5 2.5 0 0 1 10 5v8.5H5A2 2 0 0 0 3 15.5v-13zM13 2.5H8.5A2.5 2.5 0 0 0 6 5v8.5h5A2 2 0 0 1 13 15.5v-13z"
+                  stroke="currentColor"
+                  strokeWidth="1.3"
+                  strokeLinejoin="round"
+                />
+              </svg>
+              Docs
+            </a>
+            <HelpButton />
+          </div>
         </div>
       </header>
       <div className="mx-auto flex w-full max-w-7xl flex-1 gap-8 px-4 py-6 sm:px-6 lg:px-8">

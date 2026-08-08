@@ -278,15 +278,7 @@ export function HelpButton() {
                   How to use this platform
                 </h2>
                 <p className="mt-1 text-sm text-gray-600">
-                  Read the guide, or ask the help assistant in natural language.{" "}
-                  <a
-                    href="https://altitut-sma.mintlify.app"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="font-semibold text-deep-teal underline-offset-2 hover:underline"
-                  >
-                    Open full documentation
-                  </a>
+                  Read the guide, or ask the help assistant in natural language.
                 </p>
               </div>
               <button
