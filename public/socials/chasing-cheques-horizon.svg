@@ -1,0 +1,151 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800" role="img">
+  
+  <defs>
+    <linearGradient id="sky-chasing-cheques-horizon" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#E6F4EA"/>
+    </linearGradient>
+    <radialGradient id="bloom-chasing-cheques-horizon" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#00B86B" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#00B86B" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="stroke-chasing-cheques-horizon" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#00B86B"/>
+      <stop offset="1" stop-color="#005A6A"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="800" fill="url(#sky-chasing-cheques-horizon)"/>
+  <g>
+    <line x1="0" y1="0" x2="0" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.42"/>
+    <line x1="50" y1="0" x2="50" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.48"/>
+    <line x1="100" y1="0" x2="100" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.55"/>
+    <line x1="150" y1="0" x2="150" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.48"/>
+    <line x1="200" y1="0" x2="200" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.35"/>
+    <line x1="250" y1="0" x2="250" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.53"/>
+    <line x1="300" y1="0" x2="300" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.48"/>
+    <line x1="350" y1="0" x2="350" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.49"/>
+    <line x1="400" y1="0" x2="400" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.43"/>
+    <line x1="450" y1="0" x2="450" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.38"/>
+    <line x1="500" y1="0" x2="500" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.54"/>
+    <line x1="550" y1="0" x2="550" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.38"/>
+    <line x1="600" y1="0" x2="600" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.56"/>
+    <line x1="650" y1="0" x2="650" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.37"/>
+    <line x1="700" y1="0" x2="700" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.45"/>
+    <line x1="750" y1="0" x2="750" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.54"/>
+    <line x1="800" y1="0" x2="800" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.39"/>
+    <line x1="850" y1="0" x2="850" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.53"/>
+    <line x1="900" y1="0" x2="900" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.53"/>
+    <line x1="950" y1="0" x2="950" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.48"/>
+    <line x1="1000" y1="0" x2="1000" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.4"/>
+    <line x1="1050" y1="0" x2="1050" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.36"/>
+    <line x1="1100" y1="0" x2="1100" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.46"/>
+    <line x1="1150" y1="0" x2="1150" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.37"/>
+    <line x1="1200" y1="0" x2="1200" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.39"/>
+    <line x1="0" y1="0" x2="1200" y2="0" stroke="#E9ECEF" stroke-width="1" opacity="0.57"/>
+    <line x1="0" y1="50" x2="1200" y2="50" stroke="#E9ECEF" stroke-width="1" opacity="0.4"/>
+    <line x1="0" y1="100" x2="1200" y2="100" stroke="#E9ECEF" stroke-width="1" opacity="0.6"/>
+    <line x1="0" y1="150" x2="1200" y2="150" stroke="#E9ECEF" stroke-width="1" opacity="0.59"/>
+    <line x1="0" y1="200" x2="1200" y2="200" stroke="#E9ECEF" stroke-width="1" opacity="0.38"/>
+    <line x1="0" y1="250" x2="1200" y2="250" stroke="#E9ECEF" stroke-width="1" opacity="0.44"/>
+    <line x1="0" y1="300" x2="1200" y2="300" stroke="#E9ECEF" stroke-width="1" opacity="0.54"/>
+    <line x1="0" y1="350" x2="1200" y2="350" stroke="#E9ECEF" stroke-width="1" opacity="0.37"/>
+    <line x1="0" y1="400" x2="1200" y2="400" stroke="#E9ECEF" stroke-width="1" opacity="0.39"/>
+    <line x1="0" y1="450" x2="1200" y2="450" stroke="#E9ECEF" stroke-width="1" opacity="0.57"/>
+    <line x1="0" y1="500" x2="1200" y2="500" stroke="#E9ECEF" stroke-width="1" opacity="0.37"/>
+    <line x1="0" y1="550" x2="1200" y2="550" stroke="#E9ECEF" stroke-width="1" opacity="0.51"/>
+    <line x1="0" y1="600" x2="1200" y2="600" stroke="#E9ECEF" stroke-width="1" opacity="0.5"/>
+    <line x1="0" y1="650" x2="1200" y2="650" stroke="#E9ECEF" stroke-width="1" opacity="0.54"/>
+    <line x1="0" y1="700" x2="1200" y2="700" stroke="#E9ECEF" stroke-width="1" opacity="0.59"/>
+    <line x1="0" y1="750" x2="1200" y2="750" stroke="#E9ECEF" stroke-width="1" opacity="0.52"/>
+    <line x1="0" y1="800" x2="1200" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.59"/>
+  </g>
+  <g>
+    <ellipse cx="600" cy="336" rx="520" ry="240" fill="url(#bloom-chasing-cheques-horizon)"/>
+    <circle cx="554.61" cy="329.34" r="3.75" fill="#005A6A" opacity="0.44"/>
+    <circle cx="698.47" cy="39.68" r="3.02" fill="#005A6A" opacity="0.39"/>
+    <circle cx="483.21" cy="174.47" r="3.93" fill="#005A6A" opacity="0.79"/>
+    <circle cx="1060.7" cy="155.11" r="3.21" fill="#005A6A" opacity="0.65"/>
+    <circle cx="536.09" cy="148.86" r="2.4" fill="#005A6A" opacity="0.36"/>
+    <circle cx="1105.05" cy="325.96" r="3.15" fill="#005A6A" opacity="0.53"/>
+    <circle cx="137.06" cy="142.3" r="3.45" fill="#005A6A" opacity="0.85"/>
+    <circle cx="978.49" cy="289.15" r="3.41" fill="#005A6A" opacity="0.8"/>
+    <circle cx="610.88" cy="169.65" r="2.79" fill="#005A6A" opacity="0.45"/>
+    <circle cx="851.5" cy="97.06" r="2.25" fill="#005A6A" opacity="0.58"/>
+    <circle cx="828.46" cy="259.19" r="2.89" fill="#005A6A" opacity="0.65"/>
+    <circle cx="1190.3" cy="176.59" r="2.21" fill="#005A6A" opacity="0.62"/>
+    <circle cx="1128.96" cy="323.62" r="1.95" fill="#005A6A" opacity="0.77"/>
+    <circle cx="486.84" cy="267.18" r="1.82" fill="#005A6A" opacity="0.47"/>
+    <circle cx="418.69" cy="111.57" r="3.48" fill="#005A6A" opacity="0.74"/>
+    <circle cx="286.28" cy="96.93" r="2.19" fill="#005A6A" opacity="0.66"/>
+    <circle cx="807.36" cy="113.79" r="1.2" fill="#005A6A" opacity="0.54"/>
+    <circle cx="307.74" cy="175.56" r="4.01" fill="#005A6A" opacity="0.51"/>
+    <circle cx="385.74" cy="217.79" r="2.69" fill="#005A6A" opacity="0.59"/>
+    <circle cx="215.18" cy="32.26" r="3.82" fill="#005A6A" opacity="0.71"/>
+    <circle cx="89.66" cy="180.19" r="4.11" fill="#005A6A" opacity="0.74"/>
+    <circle cx="919.55" cy="250.19" r="2.65" fill="#005A6A" opacity="0.67"/>
+    <circle cx="1123.46" cy="36.75" r="2.57" fill="#005A6A" opacity="0.66"/>
+    <circle cx="431.18" cy="81.63" r="3.56" fill="#005A6A" opacity="0.59"/>
+    <circle cx="1040.77" cy="301.89" r="2.81" fill="#005A6A" opacity="0.71"/>
+    <circle cx="819.33" cy="311.39" r="3.86" fill="#005A6A" opacity="0.61"/>
+    <circle cx="753.79" cy="186.7" r="3.92" fill="#005A6A" opacity="0.83"/>
+    <circle cx="1126.15" cy="319.6" r="2.25" fill="#005A6A" opacity="0.84"/>
+    <circle cx="472.58" cy="45.07" r="3.84" fill="#005A6A" opacity="0.74"/>
+    <circle cx="865.57" cy="156.8" r="1.73" fill="#005A6A" opacity="0.78"/>
+    <circle cx="393.13" cy="14.94" r="2.96" fill="#005A6A" opacity="0.67"/>
+    <circle cx="795.5" cy="167.37" r="3.35" fill="#005A6A" opacity="0.68"/>
+    <circle cx="464.33" cy="214.56" r="1.66" fill="#005A6A" opacity="0.82"/>
+    <circle cx="918.7" cy="276.38" r="4.05" fill="#005A6A" opacity="0.72"/>
+    <circle cx="335.22" cy="232.22" r="2.66" fill="#005A6A" opacity="0.42"/>
+    <circle cx="956.4" cy="17.1" r="2.24" fill="#005A6A" opacity="0.79"/>
+    <circle cx="328.85" cy="169.94" r="3.98" fill="#005A6A" opacity="0.82"/>
+    <circle cx="987.71" cy="303.87" r="3.88" fill="#005A6A" opacity="0.63"/>
+    <circle cx="865.52" cy="265.49" r="3.01" fill="#005A6A" opacity="0.76"/>
+    <circle cx="257.06" cy="145.48" r="4.16" fill="#005A6A" opacity="0.73"/>
+    <line x1="600" y1="336" x2="-1480" y2="800" stroke="url(#stroke-chasing-cheques-horizon)" stroke-width="1.4" opacity="0.53"/>
+    <line x1="600" y1="336" x2="-1350" y2="800" stroke="url(#stroke-chasing-cheques-horizon)" stroke-width="1.4" opacity="0.22"/>
+    <line x1="600" y1="336" x2="-1220" y2="800" stroke="url(#stroke-chasing-cheques-horizon)" stroke-width="1.4" opacity="0.57"/>
+    <line x1="600" y1="336" x2="-1090" y2="800" stroke="url(#stroke-chasing-cheques-horizon)" stroke-width="1.4" opacity="0.53"/>
+    <line x1="600" y1="336" x2="-960" y2="800" stroke="url(#stroke-chasing-cheques-horizon)" stroke-width="1.4" opacity="0.55"/>
+    <line x1="600" y1="336" x2="-830" y2="800" stroke="url(#stroke-chasing-cheques-horizon)" stroke-width="1.4" opacity="0.31"/>
+    <line x1="600" y1="336" x2="-700" y2="800" stroke="url(#stroke-chasing-cheques-horizon)" stroke-width="1.4" opacity="0.29"/>
+    <line x1="600" y1="336" x2="-570" y2="800" stroke="url(#stroke-chasing-cheques-horizon)" stroke-width="1.4" opacity="0.42"/>
+    <line x1="600" y1="336" x2="-440" y2="800" stroke="url(#stroke-chasing-cheques-horizon)" stroke-width="1.4" opacity="0.35"/>
+    <line x1="600" y1="336" x2="-310" y2="800" stroke="url(#stroke-chasing-cheques-horizon)" stroke-width="1.4" opacity="0.23"/>
+    <line x1="600" y1="336" x2="-180" y2="800" stroke="url(#stroke-chasing-cheques-horizon)" stroke-width="1.4" opacity="0.38"/>
+    <line x1="600" y1="336" x2="-50" y2="800" stroke="url(#stroke-chasing-cheques-horizon)" stroke-width="1.4" opacity="0.57"/>
+    <line x1="600" y1="336" x2="80" y2="800" stroke="url(#stroke-chasing-cheques-horizon)" stroke-width="1.4" opacity="0.6"/>
+    <line x1="600" y1="336" x2="210" y2="800" stroke="url(#stroke-chasing-cheques-horizon)" stroke-width="1.4" opacity="0.43"/>
+    <line x1="600" y1="336" x2="340" y2="800" stroke="url(#stroke-chasing-cheques-horizon)" stroke-width="1.4" opacity="0.58"/>
+    <line x1="600" y1="336" x2="470" y2="800" stroke="url(#stroke-chasing-cheques-horizon)" stroke-width="1.4" opacity="0.31"/>
+    <line x1="600" y1="336" x2="600" y2="800" stroke="url(#stroke-chasing-cheques-horizon)" stroke-width="1.4" opacity="0.33"/>
+    <line x1="600" y1="336" x2="730" y2="800" stroke="url(#stroke-chasing-cheques-horizon)" stroke-width="1.4" opacity="0.57"/>
+    <line x1="600" y1="336" x2="860" y2="800" stroke="url(#stroke-chasing-cheques-horizon)" stroke-width="1.4" opacity="0.33"/>
+    <line x1="600" y1="336" x2="990" y2="800" stroke="url(#stroke-chasing-cheques-horizon)" stroke-width="1.4" opacity="0.32"/>
+    <line x1="600" y1="336" x2="1120" y2="800" stroke="url(#stroke-chasing-cheques-horizon)" stroke-width="1.4" opacity="0.4"/>
+    <line x1="600" y1="336" x2="1250" y2="800" stroke="url(#stroke-chasing-cheques-horizon)" stroke-width="1.4" opacity="0.47"/>
+    <line x1="600" y1="336" x2="1380" y2="800" stroke="url(#stroke-chasing-cheques-horizon)" stroke-width="1.4" opacity="0.6"/>
+    <line x1="600" y1="336" x2="1510" y2="800" stroke="url(#stroke-chasing-cheques-horizon)" stroke-width="1.4" opacity="0.32"/>
+    <line x1="600" y1="336" x2="1640" y2="800" stroke="url(#stroke-chasing-cheques-horizon)" stroke-width="1.4" opacity="0.45"/>
+    <line x1="600" y1="336" x2="1770" y2="800" stroke="url(#stroke-chasing-cheques-horizon)" stroke-width="1.4" opacity="0.43"/>
+    <line x1="600" y1="336" x2="1900" y2="800" stroke="url(#stroke-chasing-cheques-horizon)" stroke-width="1.4" opacity="0.35"/>
+    <line x1="600" y1="336" x2="2030" y2="800" stroke="url(#stroke-chasing-cheques-horizon)" stroke-width="1.4" opacity="0.53"/>
+    <line x1="600" y1="336" x2="2160" y2="800" stroke="url(#stroke-chasing-cheques-horizon)" stroke-width="1.4" opacity="0.55"/>
+    <line x1="600" y1="336" x2="2290" y2="800" stroke="url(#stroke-chasing-cheques-horizon)" stroke-width="1.4" opacity="0.35"/>
+    <line x1="600" y1="336" x2="2420" y2="800" stroke="url(#stroke-chasing-cheques-horizon)" stroke-width="1.4" opacity="0.55"/>
+    <line x1="600" y1="336" x2="2550" y2="800" stroke="url(#stroke-chasing-cheques-horizon)" stroke-width="1.4" opacity="0.45"/>
+    <line x1="600" y1="336" x2="2680" y2="800" stroke="url(#stroke-chasing-cheques-horizon)" stroke-width="1.4" opacity="0.52"/>
+    <line x1="0" y1="337.19" x2="1200" y2="337.19" stroke="#00B86B" stroke-width="1.22" opacity="0.21"/>
+    <line x1="0" y1="342.29" x2="1200" y2="342.29" stroke="#00B86B" stroke-width="1.44" opacity="0.26"/>
+    <line x1="0" y1="352.66" x2="1200" y2="352.66" stroke="#00B86B" stroke-width="1.66" opacity="0.31"/>
+    <line x1="0" y1="369.22" x2="1200" y2="369.22" stroke="#00B86B" stroke-width="1.88" opacity="0.36"/>
+    <line x1="0" y1="392.76" x2="1200" y2="392.76" stroke="#00B86B" stroke-width="2.1" opacity="0.41"/>
+    <line x1="0" y1="423.91" x2="1200" y2="423.91" stroke="#00B86B" stroke-width="2.32" opacity="0.46"/>
+    <line x1="0" y1="463.27" x2="1200" y2="463.27" stroke="#00B86B" stroke-width="2.54" opacity="0.51"/>
+    <line x1="0" y1="511.35" x2="1200" y2="511.35" stroke="#00B86B" stroke-width="2.76" opacity="0.56"/>
+    <line x1="0" y1="568.63" x2="1200" y2="568.63" stroke="#00B86B" stroke-width="2.98" opacity="0.61"/>
+    <line x1="0" y1="635.56" x2="1200" y2="635.56" stroke="#00B86B" stroke-width="3.2" opacity="0.66"/>
+    <line x1="0" y1="712.55" x2="1200" y2="712.55" stroke="#00B86B" stroke-width="3.42" opacity="0.71"/>
+    <line x1="0" y1="800" x2="1200" y2="800" stroke="#00B86B" stroke-width="3.64" opacity="0.76"/>
+    <circle cx="600" cy="336" r="27.28" fill="#00B86B" opacity="0.85"/>
+  </g>
+</svg>

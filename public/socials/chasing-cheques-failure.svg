@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800" role="img">
+  
+  <defs>
+    <linearGradient id="sky-chasing-cheques-failure" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#FFF1F1"/>
+    </linearGradient>
+    <radialGradient id="bloom-chasing-cheques-failure" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#FF6B6B" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#FF6B6B" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="stroke-chasing-cheques-failure" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FF6B6B"/>
+      <stop offset="1" stop-color="#800000"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="800" fill="url(#sky-chasing-cheques-failure)"/>
+  <g>
+    <line x1="0" y1="0" x2="0" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.36"/>
+    <line x1="50" y1="0" x2="50" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.38"/>
+    <line x1="100" y1="0" x2="100" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.45"/>
+    <line x1="150" y1="0" x2="150" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.57"/>
+    <line x1="200" y1="0" x2="200" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.54"/>
+    <line x1="250" y1="0" x2="250" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.36"/>
+    <line x1="300" y1="0" x2="300" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.52"/>
+    <line x1="350" y1="0" x2="350" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.49"/>
+    <line x1="400" y1="0" x2="400" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.38"/>
+    <line x1="450" y1="0" x2="450" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.41"/>
+    <line x1="500" y1="0" x2="500" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.53"/>
+    <line x1="550" y1="0" x2="550" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.51"/>
+    <line x1="600" y1="0" x2="600" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.57"/>
+    <line x1="650" y1="0" x2="650" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.55"/>
+    <line x1="700" y1="0" x2="700" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.39"/>
+    <line x1="750" y1="0" x2="750" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.39"/>
+    <line x1="800" y1="0" x2="800" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.44"/>
+    <line x1="850" y1="0" x2="850" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.58"/>
+    <line x1="900" y1="0" x2="900" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.55"/>
+    <line x1="950" y1="0" x2="950" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.45"/>
+    <line x1="1000" y1="0" x2="1000" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.43"/>
+    <line x1="1050" y1="0" x2="1050" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.53"/>
+    <line x1="1100" y1="0" x2="1100" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.55"/>
+    <line x1="1150" y1="0" x2="1150" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.49"/>
+    <line x1="1200" y1="0" x2="1200" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.4"/>
+    <line x1="0" y1="0" x2="1200" y2="0" stroke="#E9ECEF" stroke-width="1" opacity="0.5"/>
+    <line x1="0" y1="50" x2="1200" y2="50" stroke="#E9ECEF" stroke-width="1" opacity="0.48"/>
+    <line x1="0" y1="100" x2="1200" y2="100" stroke="#E9ECEF" stroke-width="1" opacity="0.54"/>
+    <line x1="0" y1="150" x2="1200" y2="150" stroke="#E9ECEF" stroke-width="1" opacity="0.47"/>
+    <line x1="0" y1="200" x2="1200" y2="200" stroke="#E9ECEF" stroke-width="1" opacity="0.36"/>
+    <line x1="0" y1="250" x2="1200" y2="250" stroke="#E9ECEF" stroke-width="1" opacity="0.54"/>
+    <line x1="0" y1="300" x2="1200" y2="300" stroke="#E9ECEF" stroke-width="1" opacity="0.44"/>
+    <line x1="0" y1="350" x2="1200" y2="350" stroke="#E9ECEF" stroke-width="1" opacity="0.42"/>
+    <line x1="0" y1="400" x2="1200" y2="400" stroke="#E9ECEF" stroke-width="1" opacity="0.52"/>
+    <line x1="0" y1="450" x2="1200" y2="450" stroke="#E9ECEF" stroke-width="1" opacity="0.47"/>
+    <line x1="0" y1="500" x2="1200" y2="500" stroke="#E9ECEF" stroke-width="1" opacity="0.56"/>
+    <line x1="0" y1="550" x2="1200" y2="550" stroke="#E9ECEF" stroke-width="1" opacity="0.56"/>
+    <line x1="0" y1="600" x2="1200" y2="600" stroke="#E9ECEF" stroke-width="1" opacity="0.57"/>
+    <line x1="0" y1="650" x2="1200" y2="650" stroke="#E9ECEF" stroke-width="1" opacity="0.58"/>
+    <line x1="0" y1="700" x2="1200" y2="700" stroke="#E9ECEF" stroke-width="1" opacity="0.51"/>
+    <line x1="0" y1="750" x2="1200" y2="750" stroke="#E9ECEF" stroke-width="1" opacity="0.47"/>
+    <line x1="0" y1="800" x2="1200" y2="800" stroke="#E9ECEF" stroke-width="1" opacity="0.47"/>
+  </g>
+  <g>
+    <circle cx="600" cy="400" r="400" fill="url(#bloom-chasing-cheques-failure)"/>
+    <path d="M 709.42 401.99 L 901.56 401.99 L 884.05 501.28 L 703.5 435.56 Z" fill="#FF6B6B" opacity="0.32" stroke="url(#stroke-chasing-cheques-failure)" stroke-width="1.2"/>
+    <path d="M 687.3 435.6 L 956.94 533.74 L 894.29 642.26 L 674.47 457.81 Z" fill="#FF6B6B" opacity="0.27" stroke="url(#stroke-chasing-cheques-failure)" stroke-width="1.2"/>
+    <path d="M 689.52 481.55 L 787.37 563.66 L 728.63 612.94 L 664.77 502.33 Z" fill="#FF6B6B" opacity="0.4" stroke="url(#stroke-chasing-cheques-failure)" stroke-width="1.2"/>
+    <path d="M 651.47 499.52 L 748.62 667.8 L 658.28 700.68 L 624.54 509.32 Z" fill="#FF6B6B" opacity="0.46" stroke="url(#stroke-chasing-cheques-failure)" stroke-width="1.2"/>
+    <path d="M 613.95 506.36 L 656.14 745.6 L 543.86 745.6 L 586.05 506.36 Z" fill="#FF6B6B" opacity="0.28" stroke="url(#stroke-chasing-cheques-failure)" stroke-width="1.2"/>
+    <path d="M 579.7 491.93 L 556.51 623.48 L 489.67 599.15 L 556.45 483.47 Z" fill="#FF6B6B" opacity="0.39" stroke="url(#stroke-chasing-cheques-failure)" stroke-width="1.2"/>
+    <path d="M 554.7 474.48 L 470.27 620.71 L 405.17 566.09 L 534.52 457.55 Z" fill="#FF6B6B" opacity="0.3" stroke="url(#stroke-chasing-cheques-failure)" stroke-width="1.2"/>
+    <path d="M 523.55 462.5 L 367.81 593.19 L 316.59 504.48 L 507.64 434.95 Z" fill="#FF6B6B" opacity="0.23" stroke="url(#stroke-chasing-cheques-failure)" stroke-width="1.2"/>
+    <path d="M 487.95 435.59 L 356.78 483.33 L 342.95 404.89 L 482.54 404.89 Z" fill="#FF6B6B" opacity="0.15" stroke="url(#stroke-chasing-cheques-failure)" stroke-width="1.2"/>
+    <path d="M 514.78 397.21 L 339.94 397.21 L 354.67 313.67 L 518.96 373.47 Z" fill="#FF6B6B" opacity="0.17" stroke="url(#stroke-chasing-cheques-failure)" stroke-width="1.2"/>
+    <path d="M 504.98 363.45 L 369.53 314.15 L 410.42 243.33 L 520.84 335.98 Z" fill="#FF6B6B" opacity="0.47" stroke="url(#stroke-chasing-cheques-failure)" stroke-width="1.2"/>
+    <path d="M 506.73 315.41 L 352.88 186.32 L 432.48 119.52 L 532.9 293.46 Z" fill="#FF6B6B" opacity="0.36" stroke="url(#stroke-chasing-cheques-failure)" stroke-width="1.2"/>
+    <path d="M 558.76 318.48 L 434.45 103.16 L 536.02 66.19 L 579.19 311.04 Z" fill="#FF6B6B" opacity="0.28" stroke="url(#stroke-chasing-cheques-failure)" stroke-width="1.2"/>
+    <path d="M 583.2 284.73 L 528.11 -27.69 L 671.89 -27.69 L 616.8 284.73 Z" fill="#FF6B6B" opacity="0.32" stroke="url(#stroke-chasing-cheques-failure)" stroke-width="1.2"/>
+    <path d="M 618.97 317.04 L 660.38 82.19 L 758.03 117.73 L 638.79 324.25 Z" fill="#FF6B6B" opacity="0.28" stroke="url(#stroke-chasing-cheques-failure)" stroke-width="1.2"/>
+    <path d="M 657.44 311.09 L 756.07 140.25 L 828.7 201.19 L 677.58 327.99 Z" fill="#FF6B6B" opacity="0.23" stroke="url(#stroke-chasing-cheques-failure)" stroke-width="1.2"/>
+    <path d="M 672.3 346.22 L 940.06 121.54 L 1011.18 244.73 L 682.73 364.28 Z" fill="#FF6B6B" opacity="0.36" stroke="url(#stroke-chasing-cheques-failure)" stroke-width="1.2"/>
+    <path d="M 679.35 373.46 L 963.29 270.12 L 985.8 397.8 L 683.64 397.8 Z" fill="#FF6B6B" opacity="0.38" stroke="url(#stroke-chasing-cheques-failure)" stroke-width="1.2"/>
+  </g>
+</svg>

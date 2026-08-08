@@ -108,6 +108,140 @@ button {
   }
 }
 
+/* ---------------------------------------------------------------------------
+   /socials — the failure rail and failure deep-dive pages.
+   The orb transforms are driven by CSS custom properties that the rail sets
+   per element from its scroll position (see app/socials/failure-rail.tsx).
+   --------------------------------------------------------------------------- */
+
+.orb {
+  --orb-scale: 1;
+  --orb-lift: 0px;
+  --orb-opacity: 1;
+  --orb-blur: 0px;
+  transform: translateY(var(--orb-lift)) scale(var(--orb-scale));
+  opacity: var(--orb-opacity);
+  filter: blur(var(--orb-blur));
+  transition:
+    transform 620ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 620ms cubic-bezier(0.22, 1, 0.36, 1),
+    filter 620ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform, opacity, filter;
+}
+
+.orb-skin {
+  background:
+    radial-gradient(
+      circle at 30% 24%,
+      rgba(255, 255, 255, 0.9) 0%,
+      rgba(255, 255, 255, 0.14) 26%,
+      rgba(255, 255, 255, 0) 46%
+    ),
+    radial-gradient(
+      circle at 72% 78%,
+      var(--orb-to, #ff6b6b) 0%,
+      var(--orb-from, #005a6a) 62%,
+      #00424f 100%
+    );
+  box-shadow:
+    0 30px 70px -24px rgba(0, 90, 106, 0.45),
+    0 10px 24px -12px rgba(0, 90, 106, 0.3),
+    inset 0 1px 1px rgba(255, 255, 255, 0.4);
+}
+
+.orb-halo {
+  background: radial-gradient(
+    circle,
+    var(--orb-from, #005a6a) 0%,
+    rgba(255, 255, 255, 0) 68%
+  );
+}
+
+/* Long white-canvas aurora: barely-there brand light behind the content. */
+.socials-aurora {
+  background:
+    radial-gradient(
+      42% 46% at 18% 22%,
+      rgba(0, 90, 106, 0.055) 0%,
+      rgba(255, 255, 255, 0) 100%
+    ),
+    radial-gradient(
+      38% 40% at 82% 34%,
+      rgba(255, 107, 107, 0.05) 0%,
+      rgba(255, 255, 255, 0) 100%
+    ),
+    radial-gradient(
+      50% 50% at 50% 92%,
+      rgba(0, 184, 107, 0.04) 0%,
+      rgba(255, 255, 255, 0) 100%
+    );
+}
+
+/* Hairline brand grid — the "instrument" texture from the artwork. */
+.socials-grid {
+  background-image:
+    linear-gradient(to right, rgba(0, 90, 106, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 90, 106, 0.05) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(70% 60% at 50% 45%, black 0%, transparent 100%);
+  -webkit-mask-image: radial-gradient(
+    70% 60% at 50% 45%,
+    black 0%,
+    transparent 100%
+  );
+}
+
+/* Scroll-triggered entrance used across the deep-dive pages. */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 700ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Full-bleed circular wipe played while a ball expands into its page. */
+.orb-wipe {
+  position: fixed;
+  border-radius: 9999px;
+  z-index: 60;
+  pointer-events: none;
+  transform-origin: center;
+  animation: orb-wipe 620ms cubic-bezier(0.6, 0, 0.3, 1) forwards;
+}
+
+@keyframes orb-wipe {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    transform: scale(var(--wipe-scale, 30));
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orb,
+  .reveal {
+    transition-duration: 1ms;
+  }
+  .orb-wipe {
+    animation-duration: 1ms;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 /* Markdown rendering inside the competitor-analysis chat */
 .chat-markdown > *:first-child {
   margin-top: 0;
